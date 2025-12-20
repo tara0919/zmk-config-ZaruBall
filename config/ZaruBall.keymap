@@ -20,9 +20,9 @@
 
 &trackball_listener {
     input-processors = <
-                         &zip_xy_scaler 1 12
-                         &zip_xy_scaler 12 1
-                         &zip_temp_layer MOUSE 500
+                         &zip_xy_scaler 1 16
+                         &zip_xy_scaler 16 1
+                         &zip_temp_layer_vibration_guard MOUSE 500
     >;
 
     scroller {
@@ -33,10 +33,6 @@
                             &zip_xy_to_scroll_mapper
         >;
     };
-};
-
-&zip_temp_layer {
-    require-prior-idle-ms = <500>;
 };
 
 / {
@@ -99,7 +95,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
-            tapping-term-ms = <170>;
+            tapping-term-ms = <150>;
             bindings = <&mo>, <&kp>;
         };
 
@@ -107,9 +103,15 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
-            tapping-term-ms = <150>;
-            quick-tap-ms = <200>;
+            tapping-term-ms = <130>;
+            quick-tap-ms = <180>;
             bindings = <&kp>, <&kp>;
+        };
+
+        zip_temp_layer_vibration_guard: zip_temp_layer_vibration_guard {
+            compatible = "zmk,input-processor-temp-layer";
+            #input-processor-cells = <2>;
+            require-prior-idle-ms = <500>;
         };
     };
 };
