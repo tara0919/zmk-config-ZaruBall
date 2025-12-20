@@ -10,7 +10,6 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
-#include "zmk_ja.h"
 
 #define BASE     0
 #define MOUSE    1
@@ -131,10 +130,10 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &kp JA_N1   &kp JA_N2  &kp JA_N3                  &kp JA_N4  &kp JA_N5                   &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &kp JA_N6     &kp JA_N7  &kp JA_N8  &kp JA_N9  &kp JA_N0  &kp PRINTSCREEN
+&kp ESC         &kp N1      &kp N2     &kp N3                     &kp N4     &kp N5                      &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &kp N6        &kp N7     &kp N8     &kp N9     &kp N0     &kp PRINTSCREEN
 &kp LEFT_ALT    &kp Q       &kp W      &kp E                      &kp R      &kp T                       &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y         &kp U      &kp I      &kp O      &kp P      &kp DEL
-&kp LEFT_SHIFT  &kp A       &kp S      &kp D                      &kp F      &kp G      &kp JA_LPAR      &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS      &kp JA_RPAR     &lt SCROLL H  &mt RALT J &kp K      &kp L      &kp JA_MINUS &kp JA_SLASH
-&kp LCTRL       &kp Z       &kp X      &kp C                      &kp V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS       &mo 3           &kp N         &kp M      &kp JA_COMM &kp JA_DOT &kp JA_SEMI &kp JA_COLON
+&kp LEFT_SHIFT  &kp A       &kp S      &kp D                      &kp F      &kp G      &kp LPAR         &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS      &kp RPAR        &lt SCROLL H  &mt RALT J &kp K      &kp L      &kp MINUS  &kp SLASH
+&kp LCTRL       &kp Z       &kp X      &kp C                      &kp V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS       &mo 3           &kp N         &kp M      &kp COMMA  &kp DOT    &kp SEMI   &kp SQT
 &kp LEFT_GUI    &kp C_MUTE             &trans                     &kp GRAVE  &kp ENTER  &kp BACKSPACE                                                            &kp RIGHT_ALT   &kp SPACE                                            &kp TAB
             >;
         };
@@ -143,10 +142,10 @@
             display-name = "Mouse";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&to_layer_0 ESC     &to_layer_0 JA_N1  &to_layer_0 JA_N2  &to_layer_0 JA_N3  &to_layer_0 JA_N4  &to_layer_0 JA_N5                  &trans  &trans  &trans  &trans                     &to_layer_0 JA_N6  &to_layer_0 JA_N7  &to_layer_0 JA_N8  &to_layer_0 JA_N9    &to_layer_0 JA_N0    &to_layer_0 JA_MINUS
-&to_layer_0 TAB     &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E      &to_layer_0 R      &to_layer_0 T                      &trans  &trans  &trans  &trans                     &to_layer_0 Y      &to_layer_0 U      &to_layer_0 I      &to_layer_0 O         &to_layer_0 P         &to_layer_0 JA_EQL
-&to_layer_0 CAPS    &to_layer_0 A      &mkp RCLK          &mkp MCLK          &mkp LCLK          &msc SCRL_UP    &msc SCRL_LEFT     &trans  &trans  &trans  &trans    &msc SCRL_LEFT   &lt SCROLL H       &mkp LCLK          &mkp MCLK          &mkp RCLK             &to_layer_0 JA_MINUS &to_layer_0 JA_SEMI
-&to_layer_0 LSHIFT  &to_layer_0 Z      &to_layer_0 X      &mkp MB4           &mkp MB5           &msc SCRL_DOWN  &msc SCRL_RIGHT    &trans  &trans  &trans  &trans    &msc SCRL_RIGHT  &to_layer_0 N      &mkp MB4           &mkp MB5           &to_layer_0 JA_DOT    &to_layer_0 JA_SLASH &lt SCROLL JA_BSLS
+&to_layer_0 ESC     &to_layer_0 N1     &to_layer_0 N2     &to_layer_0 N3     &to_layer_0 N4     &to_layer_0 N5                     &trans  &trans  &trans  &trans                     &to_layer_0 N6     &to_layer_0 N7     &to_layer_0 N8     &to_layer_0 N9       &to_layer_0 N0       &to_layer_0 MINUS
+&to_layer_0 TAB     &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E      &to_layer_0 R      &to_layer_0 T                      &trans  &trans  &trans  &trans                     &to_layer_0 Y      &to_layer_0 U      &to_layer_0 I      &to_layer_0 O         &to_layer_0 P         &to_layer_0 EQUAL
+&to_layer_0 CAPS    &to_layer_0 A      &mkp RCLK          &mkp MCLK          &mkp LCLK          &msc SCRL_UP    &msc SCRL_LEFT     &trans  &trans  &trans  &trans    &msc SCRL_LEFT   &lt SCROLL H       &mkp LCLK          &mkp MCLK          &mkp RCLK             &to_layer_0 MINUS    &to_layer_0 SEMICOLON
+&to_layer_0 LSHIFT  &to_layer_0 Z      &to_layer_0 X      &mkp MB4           &mkp MB5           &msc SCRL_DOWN  &msc SCRL_RIGHT    &trans  &trans  &trans  &trans    &msc SCRL_RIGHT  &to_layer_0 N      &mkp MB4           &mkp MB5           &to_layer_0 DOT       &to_layer_0 SLASH    &lt SCROLL BACKSLASH
 &trans              &trans                          &trans          &trans          &trans          &trans                                               &trans           &to 0                                                                                         &trans
             >;
         };
