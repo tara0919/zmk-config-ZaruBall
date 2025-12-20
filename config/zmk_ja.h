@@ -18,8 +18,8 @@
 #define JA_EQL   LS(MINUS)       // = (Shift + -)
 #define JA_CARET EQUAL           // ^ ~
 #define JA_TILDE LS(EQUAL)       // ~ (Shift + ^)
-#define JA_YEN   INT_3           // ¥ |
-#define JA_PIPE  LS(INT_3)       // | (Shift + ¥)
+#define JA_YEN   INT3            // ¥ |
+#define JA_PIPE  LS(INT3)        // | (Shift + ¥)
 
 #define JA_AT    LBKT            // @ `
 #define JA_GRAVE LS(LBKT)        // ` (Shift + @)
@@ -39,8 +39,8 @@
 #define JA_GT    LS(DOT)         // > (Shift + .)
 #define JA_SLASH SLASH           // / ?
 #define JA_QUES  LS(SLASH)       // ? (Shift + /)
-#define JA_BSLS  INT_1           // \ _
-#define JA_UNDS  LS(INT_1)       // _ (Shift + \)
+#define JA_BSLS  INT1            // \ _
+#define JA_UNDS  LS(INT1)        // _ (Shift + \)
 
 #define JA_LPAR  LS(N8)          // ( (Shift + 8)
 #define JA_RPAR  LS(N9)          // ) (Shift + 9)
