@@ -181,7 +181,7 @@
 &kp LEFT_ALT    &kp Q       &kp W   &kp E   &kp R      &kp T                       &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY              &kp Y      &kp U       &kp I         &kp O    &kp P      &kp DEL
 &kp LEFT_SHIFT  &kp A       &kp S   &ht_win_d 0 D   &kp F      &kp G      &kp LPAR         &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR  &kp H      &mt RALT J  &lt SCROLL K  &kp L    &kp MINUS  &kp SLASH
 &kp LCTRL       &kp Z       &kp X   &kp C   &kp V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1     &kp N      &kp M       &kp COMMA     &kp DOT  &kp SEMI   &kp SQT
-&kp LEFT_GUI    &kp C_MUTE          &mo 0   &kp LA(GRAVE)  &kp ENTER  &kp BACKSPACE                                                            &ht_win_tab 0 TAB   &lt 2 SPACE                                                &to 4
+&kp LEFT_GUI    &kp C_MUTE          &mo 0   &kp GRAVE  &kp ENTER  &kp BACKSPACE                                                            &ht_win_tab 0 TAB   &lt 2 SPACE                                                &to 4
             >;
         };
 
