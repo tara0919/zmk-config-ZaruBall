@@ -18,28 +18,6 @@
 #define ADJUST   4
 #define SCROLL   2
 
-// OS設定を日本語キーボードのまま使用するための変換定義
-#define JP_DQUOTE       AT                // "
-#define JP_AMPERSAND    CARET             // &
-#define JP_QUOTE        AMPERSAND         // '
-#define JP_EQUAL        UNDER             // =
-#define JP_CARET        EQUAL             // ^
-#define JP_YEN          0x89              // ¥
-#define JP_PLUS         COLON             // +
-#define JP_TILDE        PLUS              // ~
-#define JP_PIPE         LS(0x89)          // |
-#define JP_AT           LEFT_BRACKET      // @
-#define JP_COLON        SINGLE_QUOTE      // :
-#define JP_ASTERISK     DOUBLE_QUOTES     // *
-#define JP_BACKQUOTE    LEFT_BRACE        // `
-#define JP_UNDERSCORE   LS(0x87)          // _
-#define JP_LBRACKET     RIGHT_BRACKET     // [
-#define JP_RBRACKET     BACKSLASH         // ]
-#define JP_LPAREN       ASTERISK          // (
-#define JP_RPAREN       LEFT_PARENTHESIS  // )
-#define JP_LBRACE       RIGHT_BRACE       // {
-#define JP_RBRACE       PIPE              // }
-
 &trackball_listener {
     input-processors = <
                          &zip_xy_scaler 1 12
@@ -158,7 +136,7 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &kp JP_DQUOTE      &kp N2     &kp N3                     &kp N4     &kp N5                      &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &kp N6        &kp N7     &kp N8     &kp N9     &kp N0     &kp PRINTSCREEN
+&kp ESC         &kp N1      &kp N2     &kp N3                     &kp N4     &kp N5                      &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &kp N6        &kp N7     &kp N8     &kp N9     &kp N0     &kp PRINTSCREEN
 &kp LEFT_ALT    &kp Q       &kp W      &kp E                      &kp R      &kp T                       &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y         &kp U      &kp I      &kp O      &kp P      &kp DEL
 &kp LEFT_SHIFT  &kp A       &kp S      &kp D                      &kp F      &kp G      &kp LPAR         &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS      &kp RPAR        &kp H         &mt RALT J &lt SCROLL K  &kp L      &kp MINUS  &kp SLASH
 &kp LCTRL       &kp Z       &kp X      &kp C                      &kp V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS       &mo 3           &kp N         &kp M      &kp COMMA  &kp DOT    &kp SEMI   &kp SQT
