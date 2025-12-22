@@ -106,6 +106,14 @@
             tapping-term-ms = <200>;
             bindings = <&macro_win_d>, <&kp>;
         };
+
+        ht_mouse_win_d: ht_mouse_win_d {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&to_layer_0_win_d>, <&to_layer_0>;
+        };
     };
 };
 
@@ -151,6 +159,13 @@
             #binding-cells = <0>;
             bindings = <&kp LG(D)>;
         };
+
+        to_layer_0_win_d: to_layer_0_win_d {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&tog MOUSE &kp LG(D)>;
+            label = "TO_L0_WIN_D";
+        };
     };
 };
 
@@ -176,7 +191,7 @@
             bindings = <
 &to_layer_0 ESC         &to_layer_0 N1  &to_layer_0 N2  &to_layer_0 N3  &to_layer_0 N4  &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
 &to_layer_0 LEFT_ALT    &to_layer_0 Q   &to_layer_0 W   &to_layer_0 E   &to_layer_0 R   &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &to_layer_0 I   &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&to_layer_0 LEFT_SHIFT  &to_layer_0 A   &to_layer_0 S   &to_layer_0 D   &to_layer_0 F   &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &mkp MCLK              &to_layer_0 SLASH
+&to_layer_0 LEFT_SHIFT  &to_layer_0 A   &to_layer_0 S   &ht_mouse_win_d 0 D   &to_layer_0 F   &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &mkp MCLK              &to_layer_0 SLASH
 &to_layer_0 LCTRL       &to_layer_0 Z   &to_layer_0 X   &to_layer_0 C   &to_layer_0 V   &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
 &to_layer_0 LEFT_GUI    &trans                          &to 0           &trans          &trans          &trans                                      &trans  &to 0                                                                                   &trans
             >;
