@@ -114,6 +114,46 @@
             tapping-term-ms = <200>;
             bindings = <&to_layer_0_win_d>, <&to_layer_0>;
         };
+
+        ht_l0_alt: ht_l0_alt {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&l0_alt>, <&kp>;
+        };
+
+        ht_l0_ctrl_a: ht_l0_ctrl_a {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&l0_ctrl_a>, <&kp>;
+        };
+
+        ht_l0_ctrl_x: ht_l0_ctrl_x {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&l0_ctrl_x>, <&kp>;
+        };
+
+        ht_l0_ctrl_c: ht_l0_ctrl_c {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&l0_ctrl_c>, <&kp>;
+        };
+
+        ht_l0_ctrl_v: ht_l0_ctrl_v {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&l0_ctrl_v>, <&kp>;
+        };
     };
 };
 
@@ -166,6 +206,41 @@
             bindings = <&tog MOUSE &kp LG(D)>;
             label = "TO_L0_WIN_D";
         };
+
+        l0_alt: l0_alt {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &macro_press &kp LALT>, <&macro_pause_for_release>, <&macro_release &kp LALT>;
+            label = "L0_ALT";
+        };
+
+        l0_ctrl_a: l0_ctrl_a {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &kp LC(A)>;
+            label = "L0_CTRL_A";
+        };
+
+        l0_ctrl_x: l0_ctrl_x {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &kp LC(X)>;
+            label = "L0_CTRL_X";
+        };
+
+        l0_ctrl_c: l0_ctrl_c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &kp LC(C)>;
+            label = "L0_CTRL_C";
+        };
+
+        l0_ctrl_v: l0_ctrl_v {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &kp LC(V)>;
+            label = "L0_CTRL_V";
+        };
     };
 };
 
@@ -179,9 +254,9 @@
             bindings = <
 &kp ESC         &kp N1      &kp N2  &kp N3  &kp N4     &kp N5                      &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                &kp N6     &kp N7      &kp N8        &kp N9   &kp N0     &kp PRINTSCREEN
 &kp LEFT_ALT    &kp Q       &kp W   &kp E   &kp R      &kp T                       &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY              &kp Y      &kp U       &kp I         &kp O    &kp P      &kp DEL
-&kp LEFT_SHIFT  &kp A       &kp S   &ht_win_d 0 D   &kp F      &kp G      &kp LPAR         &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR  &kp H      &mt RALT J  &lt SCROLL K  &kp L    &kp MINUS  &kp SLASH
-&kp LCTRL       &kp Z       &kp X   &kp C   &kp V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1     &kp N      &kp M       &kp COMMA     &kp DOT  &kp SEMI   &kp SQT
-&kp LEFT_GUI    &kp C_MUTE          &mo 0   &kp LC(SPACE)  &kp ENTER  &kp BACKSPACE                                                            &ht_win_tab 0 TAB   &lt 2 SPACE                                                &to 4
+&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A       &kp S   &ht_win_d 0 D   &ht_l0_alt 0 F      &kp G      &kp LPAR         &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR  &kp H      &kp J  &lt SCROLL K  &kp L    &kp MINUS  &kp SLASH
+&kp LCTRL       &kp Z       &ht_l0_ctrl_x 0 X   &ht_l0_ctrl_c 0 C   &ht_l0_ctrl_v 0 V      &kp B      &lt_to 3 2       &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1     &kp N      &kp M       &kp COMMA     &kp DOT  &kp SEMI   &kp SQT
+&kp LEFT_GUI    &kp C_MUTE          &mo 0   &kp LC(SPACE)  &kp ENTER  &ht_win_tab 0 TAB                                                            &kp BACKSPACE   &lt 2 SPACE                                                &to 4
             >;
         };
 
@@ -191,12 +266,11 @@
             bindings = <
 &to_layer_0 ESC         &to_layer_0 N1  &to_layer_0 N2  &to_layer_0 N3  &to_layer_0 N4  &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
 &to_layer_0 LEFT_ALT    &to_layer_0 Q   &to_layer_0 W   &to_layer_0 E   &to_layer_0 R   &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &to_layer_0 I   &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&to_layer_0 LEFT_SHIFT  &to_layer_0 A   &to_layer_0 S   &ht_mouse_win_d 0 D   &to_layer_0 F   &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &mkp MCLK              &to_layer_0 SLASH
-&to_layer_0 LCTRL       &to_layer_0 Z   &to_layer_0 X   &to_layer_0 C   &to_layer_0 V   &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
+&to_layer_0 LEFT_SHIFT  &ht_l0_ctrl_a 0 A   &to_layer_0 S   &ht_mouse_win_d 0 D   &ht_l0_alt 0 F   &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &mkp MCLK              &to_layer_0 SLASH
+&to_layer_0 LCTRL       &to_layer_0 Z   &ht_l0_ctrl_x 0 X   &ht_l0_ctrl_c 0 C   &ht_l0_ctrl_v 0 V   &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
 &to_layer_0 LEFT_GUI    &trans                          &to 0           &trans          &trans          &trans                                      &trans  &to 0                                                                                   &trans
             >;
         };
-
         lower_layer {
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
