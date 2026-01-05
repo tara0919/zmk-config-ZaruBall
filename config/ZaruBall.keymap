@@ -186,6 +186,70 @@
             tapping-term-ms = <200>;
             bindings = <&l0_ctrl_v>, <&kp>;
         };
+
+        // US Keycap Emulation for JIS OS
+        mm_n2: mm_n2 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F2 N2>, <&kp JP_AT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_n6: mm_n6 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F6 N6>, <&kp JP_CARET>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_n7: mm_n7 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F7 N7>, <&kp JP_AMPERSAND>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_n8: mm_n8 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F8 N8>, <&kp JP_ASTERISK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_n9: mm_n9 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F9 N9>, <&kp JP_LPAREN>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_n0: mm_n0 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mt F10 N0>, <&kp JP_RPAREN>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_semi: mm_semi {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp SEMI>, <&kp JP_COLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_quote: mm_quote {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp JP_QUOTE>, <&kp JP_DQUOTE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_minus: mm_minus {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp MINUS>, <&kp JP_UNDERSCORE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
     };
 };
 
@@ -291,10 +355,10 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &mt F1 N1          &mt JP_DQUOTE N2          &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mt JP_CARET N6    &mt JP_AMPERSAND N7  &mt JP_ASTERISK N8     &mt JP_LPAREN N9  &mt JP_RPAREN N0  &mt CAPSLOCK PRINTSCREEN
+&kp ESC         &mt F1 N1          &mm_n2             &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mm_n6       &mm_n7     &mm_n8        &mm_n9     &mm_n0     &mt CAPSLOCK PRINTSCREEN
 &kp LEFT_ALT    &kp Q              &kp W              &kp E              &kp R              &kp T                           &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y        &kp U      &kp I         &kp O      &kp P       &kp DEL
-&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &kp S              &ht_win_d 0 D      &ht_l0_alt 0 F     &kp G      &kp LPAR             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR       &kp H        &kp J      &lt SCROLL K  &kp L      &mt JP_UNDERSCORE MINUS   &kp SLASH
-&kp LCTRL       &kp Z              &ht_l0_ctrl_x 0 X  &ht_l0_ctrl_c 0 C  &ht_l0_ctrl_v 0 V  &kp B      &lt_to 3 2           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1          &kp N        &kp M      &kp COMMA     &kp DOT    &kp SEMI    &kp SQT
+&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &kp S              &ht_win_d 0 D      &ht_l0_alt 0 F     &kp G      &kp LPAR             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR       &kp H        &kp J      &lt SCROLL K  &kp L      &mm_minus  &kp SLASH
+&kp LCTRL       &kp Z              &ht_l0_ctrl_x 0 X  &ht_l0_ctrl_c 0 C  &ht_l0_ctrl_v 0 V  &kp B      &lt_to 3 2           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1          &kp N        &kp M      &kp COMMA     &kp DOT    &mm_semi   &mm_quote
 &kp LEFT_GUI    &kp C_MUTE                            &mo 0              &td_lang           &kp ENTER  &ht_win_tab 0 TAB                                                            &kp BACKSPACE  &lt 2 SPACE                                                  &to 4
             >;
         };
