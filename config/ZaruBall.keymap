@@ -18,6 +18,31 @@
 #define ADJUST   4
 #define SCROLL   2
 
+// OS設定を日本語キーボードのまま使用するための変換定義
+#define JP_DQUOTE       AT                // "
+#define JP_AMPERSAND    CARET             // &
+#define JP_QUOTE        AMPERSAND         // '
+#define JP_EQUAL        UNDER             // =
+#define JP_CARET        EQUAL             // ^
+#define JP_YEN          0x89              // ¥
+#define JP_PLUS         COLON             // +
+#define JP_TILDE        PLUS              // ~
+#define JP_PIPE         LS(0x89)          // |
+#define JP_AT           LEFT_BRACKET      // @
+#define JP_COLON        SINGLE_QUOTE      // :
+#define JP_ASTERISK     DOUBLE_QUOTES     // *
+#define JP_BACKQUOTE    LEFT_BRACE        // `
+#define JP_UNDERSCORE   LS(0x87)          // _
+#define JP_LBRACKET     RIGHT_BRACKET     // [
+#define JP_RBRACKET     BACKSLASH         // ]
+#define JP_LPAREN       ASTERISK          // (
+#define JP_RPAREN       LEFT_PARENTHESIS  // )
+#define JP_LBRACE       RIGHT_BRACE       // {
+#define JP_RBRACE       PIPE              // }
+#define JP_KANA         LANGUAGE_1        // かな
+#define JP_EISU         LANGUAGE_2        // 英数
+#define JP_HANZEN       GRAVE             // 半角/全角
+
 &trackball_listener {
     input-processors = <
                          &zip_xy_scaler 1 12
@@ -259,9 +284,9 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &mt F1 N1          &mt F2 N2          &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mt F6 N6    &mt F7 N7  &mt F8 N8     &mt F9 N9  &mt F10 N0  &mt CAPSLOCK PRINTSCREEN
+&kp ESC         &mt F1 N1          &mt JP_DQUOTE N2          &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mt JP_CARET N6    &mt JP_AMPERSAND N7  &mt JP_ASTERISK N8     &mt JP_LPAREN N9  &mt JP_RPAREN N0  &mt CAPSLOCK PRINTSCREEN
 &kp LEFT_ALT    &kp Q              &kp W              &kp E              &kp R              &kp T                           &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y        &kp U      &kp I         &kp O      &kp P       &kp DEL
-&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &kp S              &ht_win_d 0 D      &ht_l0_alt 0 F     &kp G      &kp LPAR             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR       &kp H        &kp J      &lt SCROLL K  &kp L      &kp MINUS   &kp SLASH
+&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &kp S              &ht_win_d 0 D      &ht_l0_alt 0 F     &kp G      &kp LPAR             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp RPAR       &kp H        &kp J      &lt SCROLL K  &kp L      &mt JP_UNDERSCORE MINUS   &kp SLASH
 &kp LCTRL       &kp Z              &ht_l0_ctrl_x 0 X  &ht_l0_ctrl_c 0 C  &ht_l0_ctrl_v 0 V  &kp B      &lt_to 3 2           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1          &kp N        &kp M      &kp COMMA     &kp DOT    &kp SEMI    &kp SQT
 &kp LEFT_GUI    &kp C_MUTE                            &mo 0              &kp LC(SPACE)      &kp ENTER  &ht_win_tab 0 TAB                                                            &kp BACKSPACE  &lt 2 SPACE                                                  &to 4
             >;
