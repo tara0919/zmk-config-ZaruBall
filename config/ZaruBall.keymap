@@ -357,9 +357,21 @@
             bindings = <
 &kp ESC         &mt F1 N1          &mm_n2             &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mm_n6       &mm_n7     &mm_n8        &mm_n9     &mm_n0     &mt CAPSLOCK PRINTSCREEN
 &kp LEFT_ALT    &kp Q              &kp W              &kp E              &kp R              &kp T                           &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y        &kp U      &kp I         &kp O      &kp P       &kp DEL
-&kp LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &kp S              &ht_win_d BASE D      &ht_l0_alt BASE F     &kp G      &kp JP_LPAREN             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN       &kp H        &kp J      &lt SCROLL K  &kp L      &mm_minus  &kp SLASH
-&kp LCTRL       &kp Z              &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &kp B      &lt_to RAISE LOWER           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to MOUSE          &kp N        &kp M      &kp COMMA     &kp DOT    &mm_semi   &mm_quote
-&kp LEFT_GUI    &kp C_MUTE                            &mo BASE              &td_lang           &kp ENTER  &ht_win_tab BASE TAB                                                            &kp BACKSPACE  &lt LOWER SPACE                                                  &to ADJUST
+&kp LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &kp S              &ht_win_d 0 D      &ht_l0_alt 0 F     &kp G      &kp JP_LPAREN             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN       &kp H        &kp J      &lt SCROLL K  &kp L      &mm_minus  &kp SLASH
+&kp LCTRL       &kp Z              &ht_l0_ctrl_x 0 X  &ht_l0_ctrl_c 0 C  &ht_l0_ctrl_v 0 V  &kp B      &lt_to 3 2           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to 1          &kp N        &kp M      &kp COMMA     &kp DOT    &mm_semi   &mm_quote
+&kp LEFT_GUI    &kp C_MUTE                            &mo 0              &td_lang           &lt 2 ENTER  &ht_win_tab 0 TAB                                                            &kp BACKSPACE  &kp SPACE                                                  &to 4
+            >;
+        };
+
+        mouse_layer {
+            display-name = "Mouse";
+            sensor-bindings = <&scroll_down_up>;
+            bindings = <
+&to_layer_0 ESC         &to_layer_0 N1     &to_layer_0 N2     &to_layer_0 N3       &to_layer_0 N4     &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
+&to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &mkp MCLK       &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
+&to_layer_0 LEFT_SHIFT  &ht_l0_ctrl_a 0 A  &to_layer_0 S      &ht_mouse_win_d 0 D  &ht_l0_alt 0 F     &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &to_layer_0 mm_minus   &to_layer_0 SLASH
+&to_layer_0 LCTRL       &to_layer_0 Z      &ht_l0_ctrl_x 0 X  &ht_l0_ctrl_c 0 C    &ht_l0_ctrl_v 0 V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
+&to_layer_0 LEFT_GUI    &trans                                &to 0                &trans             &trans          &trans                                      &trans  &to 0                                                                                   &trans
             >;
         };
 
@@ -371,7 +383,7 @@
 &trans      &trans     &kp KP_N4  &kp KP_N5    &kp KP_N6        &kp KP_MULTIPLY                   &trans  &trans  &trans  &trans              &kp LA(F1)    &kp KP_N4   &kp UP     &kp KP_N6     &kp KP_MULTIPLY  &none
 &kp LSHIFT  &trans     &kp KP_N1  &kp KP_N2    &kp KP_NUMBER_3  &kp KP_MINUS     &kp PG_UP        &trans  &trans  &trans  &trans    &kp JP_LPAREN  &kp C_VOL_UP  &kp LEFT    &kp DOWN   &kp RIGHT     &kp KP_MINUS     &none
 &trans      &none      &kp KP_N0  &key_repeat  &kp DOT          &kp KP_PLUS      &kp PG_DN        &trans  &trans  &trans  &trans    &kp JP_RPAREN  &kp C_VOL_DN  &kp KP_DOT  &kp KP_N0  &kp KP_EQUAL  &kp KP_PLUS      &none
-&trans      &kp RSHFT             &to BASE        &trans           &kp KP_EQUAL     &kp BACKSPACE                                      &trans    &kp SPACE                                                           &studio_unlock
+&trans      &kp RSHFT             &to 0        &trans           &kp KP_EQUAL     &kp BACKSPACE                                      &trans    &kp SPACE                                                           &studio_unlock
             >;
         };
 
@@ -383,7 +395,7 @@
 &kp LEFT_ALT  &none   &none   &none      &none      &none                              &trans  &trans  &trans  &trans               &none     &none     &none     &none      &none    &none
 &trans        &none   &none   &mkp RCLK  &mkp LCLK  &msc SCRL_UP    &msc SCRL_LEFT     &trans  &trans  &trans  &trans    &kp PG_UP  &kp HOME  &none     &kp UP    &none      &none    &none
 &trans        &none   &none   &mkp MB4   &mkp MB5   &msc SCRL_DOWN  &msc SCRL_RIGHT    &trans  &trans  &trans  &trans    &kp PG_DN  &kp END   &kp LEFT  &kp DOWN  &kp RIGHT  &none    &none
-&trans        &none           &to BASE      &trans     &trans          &trans                                               &trans     &kp DEL                                           &trans
+&trans        &none           &to 0      &trans     &trans          &trans                                               &trans     &kp DEL                                           &trans
             >;
         };
 
@@ -395,30 +407,7 @@
 &trans  &none         &none         &none         &none         &none                   &trans  &trans  &trans  &trans              &bt BT_CLR      &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_bat  &out OUT_TOG    &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_con  &studio_unlock  &none  &none  &none  &none  &none
-&trans  &kp C_MUTE                  &to BASE         &trans        &trans        &trans                                      &trans    &kp DEL                                     &trans
-            >;
-        };
-
-        mouse_layer {
-            display-name = "Mouse";
-            sensor-bindings = <&scroll_down_up>;
-            bindings = <
-&to_layer_0 ESC         &to_layer_0 N1     &to_layer_0 N2     &to_layer_0 N3       &to_layer_0 N4     &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
-&to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &to_layer_0 I   &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&to_layer_0 LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &to_layer_0 S      &ht_mouse_win_d BASE D  &ht_l0_alt BASE F     &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &lt SCROLL K    &mkp RCLK        &mkp MCLK              &to_layer_0 SLASH
-&to_layer_0 LCTRL       &to_layer_0 Z      &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
-&to_layer_0 LEFT_GUI    &trans                                &to BASE                &trans             &trans          &trans                                      &trans  &to BASE                                                                                   &trans
-            >;
-        };
-
-        scroll_layer {
-            display-name = "Scroll";
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                          &trans
+&trans  &kp C_MUTE                  &to 0         &trans        &trans        &trans                                      &trans    &kp DEL                                     &trans
             >;
         };
 
