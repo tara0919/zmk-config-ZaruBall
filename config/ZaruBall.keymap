@@ -45,8 +45,6 @@
 
 &trackball_listener {
     input-processors = <
-                         &zip_xy_scaler 1 12
-                         &zip_xy_scaler 12 1
                          &zip_temp_layer MOUSE 1000
     >;
 
