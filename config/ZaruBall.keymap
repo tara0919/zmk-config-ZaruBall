@@ -109,6 +109,13 @@
             bindings = <&mkp MB4>, <&mkp MB5>;
         };
 
+        td_mouse_main: td_mouse_main {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&mkp_exit_AML LCLK>, <&mkp_exit_AML MCLK>;
+        };
+
         // Customed Hold-Tap for SandS
 
         SandS: SandS {
@@ -128,6 +135,15 @@
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             bindings = <&mo>, <&to>;
+        };
+
+        ht_mouse_main: ht_mouse_main {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&mo>, <&td_mouse_main>;
         };
 
         ht_win_d: ht_win_d {
@@ -400,7 +416,7 @@
 &to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &to_layer_0 I   &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
 &to_layer_0 LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &to_layer_0 S   &ht_mouse_win_d BASE D  &ht_l0_alt BASE F  &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &to_layer_0 J   &to_layer_0 K    &to_layer_0 L    &to_layer_0 MINUS      &to_layer_0 SLASH
 &to_layer_0 LCTRL       &to_layer_0 Z      &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5         &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
-&to_layer_0 LEFT_GUI    &to_layer_0 C_MUTE                    &to BASE                &td_mb45           &mkp RCLK       &lt SCROLL LCLK                             &trans  &to BASE                                                                               &trans
+&to_layer_0 LEFT_GUI    &to_layer_0 C_MUTE                    &to BASE                &td_mb45           &mkp_exit_AML RCLK  &ht_mouse_main SCROLL 0                     &trans  &to BASE                                                                               &trans
             >;
         };
 
