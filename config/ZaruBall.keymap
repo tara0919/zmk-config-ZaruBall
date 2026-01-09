@@ -278,7 +278,7 @@
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&tog MOUSE &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            bindings = <&to BASE &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_layer_0";
         };
 
@@ -308,7 +308,7 @@
         to_layer_0_win_d: to_layer_0_win_d {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog MOUSE &kp LG(D)>;
+            bindings = <&to BASE &kp LG(D)>;
             label = "TO_L0_WIN_D";
         };
 
