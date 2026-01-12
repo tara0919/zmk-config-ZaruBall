@@ -63,8 +63,7 @@
     sniper {
         layers = <SNIPER>;
         input-processors = <
-                            &zip_xy_scaler 1 36
-                            &zip_xy_scaler 36 1
+                            &zip_xy_scaler 1 4
         >;
     };
 };
