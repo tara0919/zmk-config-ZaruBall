@@ -271,6 +271,8 @@
 
 &zip_temp_layer { require-prior-idle-ms = <150>; };
 
+&mt { tapping-term-ms = <100>; };
+
 &sl { release-after-ms = <250>; }; // time needed for double click (for mkp_exit_AML)
 / {
     macros {
