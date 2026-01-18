@@ -22,3 +22,12 @@
 &left_encoder {
     status = "okay";
 };
+
+// Disable SPI/trackball on left side to fix wakeup issue
+&spi0 {
+    status = "disabled";
+};
+
+&trackball {
+    status = "disabled";
+};
