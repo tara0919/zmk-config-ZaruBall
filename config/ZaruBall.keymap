@@ -12,6 +12,18 @@
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 
+/* ジェスチャー用ホールドタップ設定の修正 (モジュール側の不足分) */
+&mouse_gesture_mkp {
+    tapping-term-ms = <200>;
+    quick-tap-ms = <100>;
+};
+
+&mouse_gesture_kp {
+    tapping-term-ms = <200>;
+    quick-tap-ms = <100>;
+};
+
+
 #define BASE     0
 #define LOWER    1
 #define RAISE    2
