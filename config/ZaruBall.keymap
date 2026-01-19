@@ -1,6 +1,6 @@
 ﻿// スクロール量の設定
 
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 100
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 50
 
 #include <behaviors/rgbled_widget.dtsi>
 #include <input/processors.dtsi>
@@ -127,7 +127,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&mo>, <&to>;
         };
 
@@ -135,7 +135,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&macro_win_tab>, <&kp>;
         };
 
@@ -151,7 +151,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&to_layer_0_win_d>, <&to_layer_0>;
         };
 
@@ -159,7 +159,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&l0_alt>, <&kp>;
         };
 
@@ -167,7 +167,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&l0_ctrl_a>, <&kp>;
         };
 
@@ -175,7 +175,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&l0_ctrl_x>, <&kp>;
         };
 
@@ -183,7 +183,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&l0_ctrl_c>, <&kp>;
         };
 
@@ -191,7 +191,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <125>;
+            tapping-term-ms = <150>;
             bindings = <&l0_ctrl_v>, <&kp>;
         };
 
@@ -271,7 +271,7 @@
 
 &zip_temp_layer { require-prior-idle-ms = <150>; };
 
-&mt { tapping-term-ms = <125>; };
+&mt { tapping-term-ms = <150>; };
 
 &sl { release-after-ms = <250>; }; // time needed for double click (for mkp_exit_AML)
 / {
@@ -375,7 +375,7 @@
             bindings = <
 &kp ESC         &mt F1 N1          &mm_n2             &mt F3 N3          &mt F4 N4          &mt F5 N5                       &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mm_n6       &mm_n7     &mm_n8        &mm_n9     &mm_n0     &mt CAPSLOCK PRINTSCREEN
 &kp LEFT_ALT    &kp Q              &kp W              &kp E              &kp R              &kp T                           &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y        &kp U      &kp I         &kp O      &kp P       &kp DEL
-&kp LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &kp S              &ht_win_d BASE D      &ht_l0_alt BASE F     &kp G      &kp JP_LPAREN             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN       &kp H        &kp J      &lt SCROLL K  &kp L      &mm_minus  &kp SLASH
+&kp LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &kp S              &ht_win_d BASE D      &ht_l0_alt BASE F     &kp G      &kp JP_LPAREN             &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN       &kp H        &kp J      &kp K        &kp L      &mm_minus  &kp SLASH
 &kp LCTRL       &kp Z              &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &kp B      &lt_to RAISE LOWER           &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &to MOUSE          &kp N        &kp M      &kp COMMA     &kp DOT    &mm_semi   &mm_quote
 &kp LEFT_GUI    &kp C_MUTE                            &mo BASE              &td_lang           &lt LOWER ENTER  &ht_win_tab BASE TAB                                                            &kp BACKSPACE  &kp SPACE                                                  &to ADJUST
             >;
