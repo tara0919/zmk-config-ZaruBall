@@ -59,7 +59,7 @@
 
 // ジェスチャー設定
 &zip_mouse_gesture {
-    stroke-size = <200>;
+    stroke-size = <150>;
     enable-eager-mode;
     
     // 上: Win+Tab (タスクビュー)
@@ -68,34 +68,22 @@
         bindings = <&kp LG(TAB)>;
     };
     
-    // 下: Win+D (デスクトップ表示)
-    show_desktop {
+    // 下: Win+3
+    win3 {
         pattern = <GESTURE_DOWN>;
-        bindings = <&kp LG(D)>;
+        bindings = <&kp LG(N3)>;
     };
     
-    // 左: Alt+Left (ブラウザ戻る)
-    browser_back {
+    // 左: Win+2
+    win2 {
         pattern = <GESTURE_LEFT>;
-        bindings = <&kp LA(LEFT)>;
+        bindings = <&kp LG(N2)>;
     };
     
-    // 右: Alt+Right (ブラウザ進む)
-    browser_forward {
+    // 右: Win+4
+    win4 {
         pattern = <GESTURE_RIGHT>;
-        bindings = <&kp LA(RIGHT)>;
-    };
-    
-    // 下→右: タブを閉じる (Ctrl+W)
-    close_tab {
-        pattern = <GESTURE_DOWN GESTURE_RIGHT>;
-        bindings = <&kp LC(W)>;
-    };
-    
-    // 下→左: 新しいタブ (Ctrl+T)
-    new_tab {
-        pattern = <GESTURE_DOWN GESTURE_LEFT>;
-        bindings = <&kp LC(T)>;
+        bindings = <&kp LG(N4)>;
     };
 };
 
@@ -478,9 +466,9 @@
             sensor-bindings = <&scroll_down_up>;
             bindings = <
 &to_layer_0 ESC         &to_layer_0 N1     &to_layer_0 N2     &to_layer_0 N3       &to_layer_0 N4     &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
-&to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &mouse_gesture_mkp 0 MCLK  &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
+&to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &mkp MCLK       &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
 &kp LEFT_SHIFT          &ht_l0_ctrl_a BASE A  &to_layer_0 S      &ht_mouse_win_d BASE D  &ht_l0_alt BASE F     &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &ht_rclk_scroll SCROLL RCLK    &mo SNIPER       &to_layer_0 MINUS  &to_layer_0 SLASH
-&kp LCTRL               &to_layer_0 Z      &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mkp MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
+&kp LCTRL               &to_layer_0 Z      &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mouse_gesture_mkp 0 MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
 &to_layer_0 LEFT_GUI    &trans                                &to BASE                &trans             &trans          &trans                                      &trans  &to BASE                                                                                   &trans
             >;
         };
