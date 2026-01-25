@@ -463,11 +463,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans      &trans  &trans           &trans           &trans           &kp KP_SLASH                      &trans  &trans  &trans  &trans                   &trans     &trans     &trans               &trans               &trans           &trans
-&trans      &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY                   &trans  &trans  &trans  &trans                   &trans     &trans     &kp UP               &trans               &trans           &trans
-&kp LSHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans           &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT   &kp DOWN             &kp RIGHT            &trans           &trans
-&kp LCTRL   &trans  &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS      &trans           &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)  &kp LG(KP_NUMBER_2)  &kp LG(KP_NUMBER_3)  &kp KP_NUMBER_4  &trans
-&trans      &trans                   &kp KP_N0        &kp DOT          &kp ENTER        &kp BACKSPACE                                      &kp BACKSPACE  &kp SPACE                                                                        &studio_unlock
+&trans      &trans  &trans           &trans           &trans           &kp KP_SLASH                &trans  &trans  &trans  &trans                   &trans     &trans    &trans    &trans     &trans  &trans
+&trans      &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY             &trans  &trans  &trans  &trans                   &trans     &trans    &kp UP    &trans     &trans  &trans
+&kp LSHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
+&kp LCTRL   &trans  &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS      &trans     &trans  &trans  &trans  &trans    &trans         &trans     &trans    &trans    &trans     &trans  &trans
+&trans      &trans                   &kp KP_N0        &kp DOT          &kp ENTER        &kp TAB                                      &kp BACKSPACE  &kp SPACE                                         &to 0
             >;
         };
 
@@ -479,7 +479,7 @@
 &kp LEFT_ALT  &none   &none   &none      &none      &none                              &trans  &trans  &trans  &trans               &none     &none     &none     &none      &none    &none
 &trans        &none   &none   &mkp RCLK  &mkp LCLK  &msc SCRL_UP    &msc SCRL_LEFT     &trans  &trans  &trans  &trans    &kp PG_UP  &kp HOME  &none     &kp UP    &none      &none    &none
 &trans        &none   &none   &mkp MB4   &mkp MB5   &msc SCRL_DOWN  &msc SCRL_RIGHT    &trans  &trans  &trans  &trans    &kp PG_DN  &kp END   &kp LEFT  &kp DOWN  &kp RIGHT  &none    &none
-&trans        &none           &to BASE   &trans     &trans          &trans                                               &trans     &kp DEL                                           &trans
+&trans        &none           &to BASE   &trans     &trans          &trans                                               &trans     &kp DEL                                           &to 0
             >;
         };
 
@@ -491,7 +491,7 @@
 &trans  &none         &none         &none         &none         &none                   &trans  &trans  &trans  &trans              &bt BT_CLR      &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_bat  &out OUT_TOG    &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_con  &studio_unlock  &none  &none  &none  &none  &none
-&trans  &kp C_MUTE                  &to BASE      &trans        &trans        &trans                                      &trans    &kp DEL                                     &trans
+&trans  &kp C_MUTE                  &to BASE      &trans        &trans        &trans                                      &trans    &kp DEL                                     &to 0
             >;
         };
 
@@ -499,22 +499,22 @@
             display-name = "Mouse";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&to_layer_0 ESC       &to_layer_0 N1        &to_layer_0 N2        &to_layer_0 N3        &to_layer_0 N4        &to_layer_0 N5                        &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8               &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
-&to_layer_0 LEFT_ALT  &to_layer_0 Q         &to_layer_0 W         &to_layer_0 E         &to_layer_0 R         &to_layer_0 T                         &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &mkp MCLK                    &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &to_layer_0 S         &to_layer_0 D         &to_layer_0 F         &to_layer_0 G      &trans             &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo SNIPER       &to_layer_0 MINUS      &to_layer_0 SLASH
-&kp LCTRL             &to_layer_0 Z         &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &to_layer_0 B      &trans             &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mouse_gesture_mkp 0 MB5     &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
-&to_layer_0 LEFT_GUI  &trans                                      &to 0                 &mo 5                 &to_layer_0 ENTER  &to_layer_0 TAB                                      &trans  &to BASE                                                                                             &trans
+&to_layer_0 ESC       &to_layer_0 N1        &to_layer_0 N2        &to_layer_0 N3        &to_layer_0 N4        &to_layer_0 N5                     &trans  &trans  &trans  &trans                           &to_layer_0 N6     &to_layer_0 N7  &to_layer_0 N8               &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
+&to_layer_0 LEFT_ALT  &to_layer_0 Q         &to_layer_0 W         &to_layer_0 E         &to_layer_0 R         &to_layer_0 T                      &trans  &trans  &trans  &trans                           &to_layer_0 Y      &to_layer_0 U   &mkp MCLK                    &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
+&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &to_layer_0 S         &to_layer_0 D         &to_layer_0 F         &to_layer_0 G   &trans             &trans  &trans  &trans  &trans    &trans                 &to_layer_0 H      &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo 6            &to_layer_0 MINUS      &to_layer_0 SLASH
+&kp LCTRL             &to_layer_0 Z         &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans             &trans  &trans  &trans  &trans    &trans                 &to_layer_0 N      &mkp MB4        &mouse_gesture_mkp 0 MB5     &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
+&to_layer_0 LEFT_GUI  &trans                                      &to 6                 &mo 6                 &lt 5 ENTER     &to_layer_0 TAB                                      &to_layer_0 BACKSPACE  &to_layer_0 SPACE                                                                                       &to 0
             >;
         };
 
         scroll_layer {
             display-name = "Scroll";
             bindings = <
-&trans          &trans  &trans           &trans           &trans           &kp KP_SLASH               &trans  &trans  &trans  &trans                   &trans     &trans     &trans               &trans               &trans               &trans
-&trans          &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans                   &trans     &trans     &kp UP               &trans               &trans               &trans
-&kp LEFT_SHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT   &kp DOWN             &kp RIGHT            &trans               &trans
-&kp LCTRL       &trans  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)  &kp LG(KP_NUMBER_2)  &kp LG(KP_NUMBER_3)  &kp LG(KP_NUMBER_4)  &trans
-&trans          &trans                   &kp KP_NUMBER_0  &kp DOT          &kp ENTER        &trans                                      &kp BACKSPACE  &kp SPACE                                                                            &trans
+&trans          &trans  &trans           &trans           &trans           &kp KP_SLASH                &trans  &trans  &trans  &trans                   &trans     &trans     &trans               &trans               &trans               &trans
+&trans          &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY             &trans  &trans  &trans  &trans                   &trans     &trans     &kp UP               &trans               &trans               &trans
+&kp LEFT_SHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT   &kp DOWN             &kp RIGHT            &trans               &trans
+&kp LCTRL       &trans  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_PLUS      &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)  &kp LG(KP_NUMBER_2)  &kp LG(KP_NUMBER_3)  &kp LG(KP_NUMBER_4)  &trans
+&trans          &trans                   &kp KP_NUMBER_0  &kp DOT          &kp ENTER        &kp TAB                                      &kp BACKSPACE  &kp SPACE                                                                            &to 0
             >;
         };
 
@@ -525,7 +525,7 @@
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                  &trans
+&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                  &to 0
             >;
         };
 
@@ -537,7 +537,7 @@
 &trans          &trans  &trans  &trans     &trans     &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans     &trans     &trans  &trans
 &kp LEFT_SHIFT  &trans  &trans  &mkp LCLK  &mkp RCLK  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &mkp LCLK  &mkp RCLK  &trans  &trans
 &kp LCTRL       &trans  &trans  &trans     &trans     &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans     &trans     &trans  &trans
-&trans          &trans          &trans     &trans     &trans  &trans                                      &trans  &trans                                        &trans
+&trans          &trans          &trans     &trans     &trans  &trans                                      &trans  &trans                                        &to 0
             >;
         };
 
