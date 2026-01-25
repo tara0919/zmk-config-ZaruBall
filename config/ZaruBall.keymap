@@ -483,18 +483,18 @@
             bindings = <
 &to_layer_0 ESC         &to_layer_0 N1     &to_layer_0 N2     &to_layer_0 N3       &to_layer_0 N4     &to_layer_0 N5            &trans  &trans  &trans  &trans            &to_layer_0 N6  &to_layer_0 N7  &to_layer_0 N8  &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
 &to_layer_0 LEFT_ALT    &to_layer_0 Q      &to_layer_0 W      &to_layer_0 E        &to_layer_0 R      &to_layer_0 T             &trans  &trans  &trans  &trans            &to_layer_0 Y   &to_layer_0 U   &mkp MCLK       &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&kp LEFT_SHIFT          &ht_l0_ctrl_a BASE A  &to_layer_0 S      &ht_mouse_win_d BASE D  &ht_l0_alt BASE F     &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &ht_rclk_scroll SCROLL RCLK    &mo SNIPER       &to_layer_0 MINUS  &to_layer_0 SLASH
+&kp LEFT_SHIFT          &ht_l0_ctrl_a BASE A  &to_layer_0 S      &mo SCROLL           &trans                &to_layer_0 G   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 H   &mkp LCLK       &ht_rclk_scroll SCROLL RCLK    &mo SNIPER       &to_layer_0 MINUS  &to_layer_0 SLASH
 &kp LCTRL               &to_layer_0 Z      &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans    &trans  &trans  &trans  &trans    &trans  &to_layer_0 N   &mkp MB4        &mouse_gesture_mkp 0 MB5        &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
-&to_layer_0 LEFT_GUI    &trans                                &to BASE                &trans             &trans          &trans                                      &trans  &to BASE                                                                                   &trans
+&to_layer_0 LEFT_GUI    &trans                                &mo SNIPER              &trans             &trans          &trans                                      &trans  &to BASE                                                                                   &trans
             >;
         };
 
         scroll_layer {
             display-name = "Scroll";
             bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &kp LC(TAB)  &trans  &kp LC(LS(TAB))  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&kp LEFT_SHIFT  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &mo H_SCROLL  &trans  &trans
+&kp LEFT_SHIFT  &trans  &trans  &trans  &mo H_SCROLL  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &kp LG(E)  &kp LG(N2)  &trans  &kp LG(N3)  &kp LG(N4)  &trans
 &kp LCTRL       &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                          &trans
             >;
@@ -517,7 +517,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans    &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans    &trans  &trans  &trans
-&kp LEFT_SHIFT  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp LCLK  &mkp RCLK  &trans  &trans  &trans
+&kp LEFT_SHIFT  &trans  &trans  &mkp LCLK  &mkp RCLK  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &kp LCTRL       &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans   &trans   &trans     &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                          &trans
             >;
