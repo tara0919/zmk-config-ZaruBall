@@ -31,6 +31,9 @@
 #define MOUSE    4
 #define SCROLL   5
 #define SNIPER   6
+#define GEST_M   7
+#define GEST_C   8
+#define H_SCROLL 9
 
 // OS設定を日本語キーボードのまま使用するための変換定義
 #define JP_DQUOTE       AT                // "
@@ -95,11 +98,22 @@
                          &zip_temp_layer MOUSE 500
     >;
 
-    scroller {
+    v_scroller {
         layers = <SCROLL>;
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)
-                            &zip_xy_scaler 1 20
+                            &zip_x_scaler 0 1
+                            &zip_xy_scaler 1 40
+                            &zip_xy_to_scroll_mapper
+        >;
+    };
+
+    h_scroller {
+        layers = <H_SCROLL>;
+        input-processors = <
+                            &zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)
+                            &zip_y_scaler 0 1
+                            &zip_xy_scaler 1 40
                             &zip_xy_to_scroll_mapper
         >;
     };
@@ -478,8 +492,19 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&kp LEFT_SHIFT  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&kp LEFT_SHIFT  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &mo H_SCROLL  &trans  &trans
 &kp LCTRL       &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                          &trans
+            >;
+        };
+
+        h_scroll_layer {
+            display-name = "HScroll";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                          &trans
             >;
         };
