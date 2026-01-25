@@ -195,14 +195,6 @@
             bindings = <&mo>, <&to>;
         };
 
-        ht_win_tab: ht_win_tab {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <150>;
-            bindings = <&macro_win_tab>, <&kp>;
-        };
-
         ht_win_d: ht_win_d {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -216,7 +208,23 @@
             #binding-cells = <2>;
             flavor = "tap-preferred";
             tapping-term-ms = <150>;
-            bindings = <&to_layer_0_win_d>, <&to_layer_0>;
+            bindings = <&macro_win_d>, <&to_layer_0>;
+        };
+
+        ht_mouse_l0_alt: ht_mouse_l0_alt {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <150>;
+            bindings = <&l0_alt>, <&to_layer_0>;
+        };
+
+        ht_mouse_win_tab: ht_mouse_win_tab {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <150>;
+            bindings = <&macro_win_tab>, <&to_layer_0>;
         };
 
         ht_l0_alt: ht_l0_alt {
@@ -387,7 +395,7 @@
         macro_win_tab: macro_win_tab {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LG(TAB)>;
+            bindings = <&to 0 &kp LG(TAB)>;
         };
 
         macro_win_d: macro_win_d {
@@ -505,9 +513,9 @@
             bindings = <
 &to_layer_0 ESC       &to_layer_0 N1        &to_layer_0 N2        &to_layer_0 N3        &to_layer_0 N4        &to_layer_0 N5                     &trans  &trans  &trans  &trans                           &to_layer_0 N6     &to_layer_0 N7  &to_layer_0 N8               &to_layer_0 N9   &to_layer_0 N0         &to_layer_0 PRINTSCREEN
 &to_layer_0 LEFT_ALT  &to_layer_0 Q         &to_layer_0 W         &to_layer_0 E         &to_layer_0 R         &to_layer_0 T                      &trans  &trans  &trans  &trans                           &to_layer_0 Y      &to_layer_0 U   &mkp MCLK                    &to_layer_0 O    &to_layer_0 P          &to_layer_0 DEL
-&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &to_layer_0 S         &ht_win_d BASE D      &ht_l0_alt BASE F     &to_layer_0 G   &trans             &trans  &trans  &trans  &trans    &trans                 &to_layer_0 H      &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo 6            &to_layer_0 MINUS      &to_layer_0 SLASH
+&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &to_layer_0 S         &ht_mouse_win_d BASE D      &ht_mouse_l0_alt BASE F     &to_layer_0 G   &trans             &trans  &trans  &trans  &trans    &trans                 &to_layer_0 H      &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo 6            &to_layer_0 MINUS      &to_layer_0 SLASH
 &kp LCTRL             &to_layer_0 Z         &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &to_layer_0 B   &trans             &trans  &trans  &trans  &trans    &trans                 &to_layer_0 N      &mkp MB4        &mouse_gesture_mkp 0 MB5     &to_layer_0 DOT  &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
-&to_layer_0 LEFT_GUI  &trans                                      &mo 7                 &mo 6                 &lt 5 ENTER     &to_layer_0 TAB                                      &to_layer_0 BACKSPACE  &to_layer_0 SPACE                                                                                       &to 0
+&to_layer_0 LEFT_GUI  &trans                                      &mo 7                 &mo 6                 &lt 5 ENTER     &ht_mouse_win_tab BASE TAB                                                            &to_layer_0 BACKSPACE  &to_layer_0 SPACE                                                                                       &to 0
             >;
         };
 
