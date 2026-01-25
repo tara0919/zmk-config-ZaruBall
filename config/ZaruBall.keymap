@@ -1,4 +1,4 @@
-// スクロール量の設定
+﻿// スクロール量の設定
 
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 100
 
@@ -393,7 +393,7 @@
         macro_win_d: macro_win_d {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LG(D)>;
+            bindings = <&to 0 &kp LG(D)>;
         };
 
         to_layer_0_win_d: to_layer_0_win_d {
