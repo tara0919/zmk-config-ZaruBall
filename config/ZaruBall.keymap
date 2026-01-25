@@ -195,6 +195,14 @@
             bindings = <&mo>, <&to>;
         };
 
+        ht_win_tab: ht_win_tab {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <150>;
+            bindings = <&macro_win_tab>, <&kp>;
+        };
+
         ht_win_d: ht_win_d {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
