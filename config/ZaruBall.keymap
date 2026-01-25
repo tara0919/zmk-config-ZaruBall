@@ -463,11 +463,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans      &trans  &trans           &trans           &trans           &kp KP_SLASH                      &trans  &trans  &trans  &trans                   &trans     &trans    &trans    &trans     &trans  &trans
-&trans      &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY                   &trans  &trans  &trans  &trans                   &trans     &trans    &kp UP    &trans     &trans  &none
-&kp LSHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans           &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &none
-&trans      &trans  &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS      &trans           &trans  &trans  &trans  &trans    &trans         &trans     &trans    &trans    &trans     &trans  &none
-&trans      &trans                   &kp KP_N0        &kp DOT          &kp ENTER        &kp BACKSPACE                                      &kp BACKSPACE  &kp SPACE                                         &studio_unlock
+&trans      &trans  &trans           &trans           &trans           &kp KP_SLASH                      &trans  &trans  &trans  &trans                   &trans     &trans     &trans               &trans               &trans           &trans
+&trans      &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY                   &trans  &trans  &trans  &trans                   &trans     &trans     &kp UP               &trans               &trans           &trans
+&kp LSHIFT  &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &trans           &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT   &kp DOWN             &kp RIGHT            &trans           &trans
+&kp LCTRL   &trans  &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS      &trans           &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)  &kp LG(KP_NUMBER_2)  &kp LG(KP_NUMBER_3)  &kp KP_NUMBER_4  &trans
+&trans      &trans                   &kp KP_N0        &kp DOT          &kp ENTER        &kp BACKSPACE                                      &kp BACKSPACE  &kp SPACE                                                                        &studio_unlock
             >;
         };
 
