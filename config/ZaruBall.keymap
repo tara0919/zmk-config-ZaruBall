@@ -1,4 +1,4 @@
-﻿// スクロール量の設定
+// スクロール量の設定
 
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 100
 
@@ -455,10 +455,10 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &mt F1 N1             &mm_n2                &mt F3 N3             &mt F4 N4             &mt F5 N5                            &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mm_n6     &mm_n7  &mm_n8     &mm_n9   &mm_n0     &mt CAPSLOCK PRINTSCREEN
-&kp LEFT_ALT    &kp Q                 &kp W                 &kp E                 &kp R                 &kp T                                &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y      &kp U   &kp I      &kp O    &kp P      &mt LA(F4) DEL
-&kp LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &kp S                 &ht_win_d BASE D      &ht_l0_alt BASE F     &kp G        &kp JP_LPAREN           &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN  &kp H      &kp J   &kp K      &kp L    &mm_minus  &kp SLASH
-&kp LCTRL       &kp Z                 &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V  &kp B        &lt_to RAISE LOWER      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp INS        &kp N      &kp M   &kp COMMA  &kp DOT  &mm_semi   &mm_quote
+&kp ESC         &mt F1 N1             &mm_n2                &mt F3 N3             &mt F4 N4                    &mt F5 N5                            &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &mm_n6     &mm_n7  &mm_n8     &mm_n9   &mm_n0     &mt CAPSLOCK PRINTSCREEN
+&kp LEFT_ALT    &kp Q                 &kp W                 &kp E                 &kp R                        &kp T                                &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y      &kp U   &kp I      &kp O    &kp P      &mt LA(F4) DEL
+&kp LEFT_SHIFT  &ht_l0_ctrl_a BASE A  &kp S                 &ht_win_d BASE D      &ht_l0_alt BASE F            &kp G        &kp JP_LPAREN           &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_RPAREN  &kp H      &kp J   &kp K      &kp L    &mm_minus  &kp SLASH
+&kp LCTRL       &kp Z                 &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V         &kp B        &lt_to RAISE LOWER      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp INS        &kp N      &kp M   &kp COMMA  &kp DOT  &mm_semi   &mm_quote
 &kp LEFT_GUI    &trans                                      &mo 7                 &ht_lang_hscroll H_SCROLL 0  &lt 5 ENTER  &ht_win_tab BASE TAB                                                            &kp BACKSPACE  &kp SPACE                                         &to ADJUST
             >;
         };
@@ -514,11 +514,11 @@
         scroll_layer {
             display-name = "Scroll";
             bindings = <
-&trans          &trans  &trans                           &trans                           &trans                           &kp KP_SLASH                &trans  &trans  &trans  &trans                   &trans     &trans           &trans               &trans               &trans               &trans
-&trans          &trans  &kp KP_NUMBER_7                  &kp KP_NUMBER_8                  &kp KP_NUMBER_9                  &kp KP_MULTIPLY             &trans  &trans  &trans  &trans                   &trans     &kp LC(LS(TAB))  &kp UP               &kp LC(TAB)          &trans               &trans
-&kp LEFT_SHIFT  &trans  &mt LC(KP_NUMBER_4) KP_NUMBER_4  &mt LC(KP_NUMBER_5) KP_NUMBER_5  &mt LC(KP_NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT         &kp DOWN             &kp RIGHT            &trans               &trans
-&kp LCTRL       &trans  &mt LC(KP_NUMBER_1) KP_NUMBER_1  &mt LC(KP_NUMBER_2) KP_NUMBER_2  &mt LC(KP_NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)        &kp LG(KP_NUMBER_2)  &kp LG(KP_NUMBER_3)  &kp LG(KP_NUMBER_4)  &trans
-&trans          &trans                                   &mt LC(KP_NUMBER_0) KP_NUMBER_0  &kp DOT                          &kp ENTER        &kp TAB                                      &kp BACKSPACE  &kp SPACE                                                                                  &to 0
+&trans          &trans  &trans                           &trans                           &trans                           &kp KP_SLASH                &trans  &trans  &trans  &trans                   &trans     &trans           &trans      &trans       &trans      &trans
+&trans          &trans  &kp KP_NUMBER_7                  &kp KP_NUMBER_8                  &kp KP_NUMBER_9                  &kp KP_MULTIPLY             &trans  &trans  &trans  &trans                   &trans     &kp LC(LS(TAB))  &kp UP      &kp LC(TAB)  &trans      &trans
+&kp LEFT_SHIFT  &trans  &mt LC(KP_NUMBER_4) KP_NUMBER_4  &mt LC(KP_NUMBER_5) KP_NUMBER_5  &mt LC(KP_NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT         &kp DOWN    &kp RIGHT    &trans      &trans
+&kp LCTRL       &trans  &mt LC(KP_NUMBER_1) KP_NUMBER_1  &mt LC(KP_NUMBER_2) KP_NUMBER_2  &mt LC(KP_NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)        &kp LG(N2)  &kp LG(N3)   &kp LG(N4)  &trans
+&trans          &trans                                   &mt LC(KP_NUMBER_0) KP_NUMBER_0  &kp DOT                          &kp ENTER        &kp TAB                                      &kp BACKSPACE  &kp SPACE                                                        &to 0
             >;
         };
 
