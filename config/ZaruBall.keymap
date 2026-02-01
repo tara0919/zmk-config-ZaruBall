@@ -328,6 +328,14 @@
             bindings = <&l0_ctrl_b>, <&kp>;
         };
 
+        ht_l0_ctrl_w: ht_l0_ctrl_w {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <150>;
+            bindings = <&l0_ctrl_w>, <&kp>;
+        };
+
         // US Keycap Emulation for JIS OS
 
         mm_n2: mm_n2 {
@@ -591,6 +599,13 @@
             label = "L0_CTRL_B";
         };
 
+        l0_ctrl_w: l0_ctrl_w {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0 &kp LC(W)>;
+            label = "L0_CTRL_W";
+        };
+
         macro_dzero: macro_dzero {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -651,7 +666,7 @@
             sensor-bindings = <&scroll_down_up>;
             bindings = <
 &mt CAPSLOCK ESC  &mt F1 N1             &mm_n2                &mt F3 N3             &mt F4 N4                    &mt F5 N5                                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                      &mm_n6     &mm_n7  &mm_n8     &mm_n9   &mm_n0     &mm_grave
-&kp LEFT_ALT      &kp Q                 &kp W                 &kp E                 &kp R                        &kp T                                         &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                    &kp Y      &kp U   &kp I      &kp O    &kp P      &mm_equal
+&kp LEFT_ALT      &kp Q                 &ht_l0_ctrl_w BASE W  &kp E                 &kp R                        &kp T                                         &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                    &kp Y      &kp U   &kp I      &kp O    &kp P      &mm_equal
 &kp LEFT_SHIFT    &ht_l0_ctrl_a BASE A  &ht_l0_ctrl_s BASE S  &ht_win_d BASE D      &ht_l0_alt BASE F            &kp G                 &mm_lbracket            &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &mm_rbracket    &kp H      &kp J   &kp K      &kp L    &mm_minus  &kp SLASH
 &kp LCTRL         &ht_l0_ctrl_z BASE Z  &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C  &ht_l0_ctrl_v BASE V         &ht_l0_ctrl_b BASE B  &lt_to RAISE LOWER      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(F4) DEL  &kp N      &kp M   &kp COMMA  &kp DOT  &mm_semi   &mm_quote
 &kp LEFT_GUI      &trans                                      &mo 7                 &ht_lang_hscroll H_SCROLL 0  &lt 5 ENTER           &ht_win_tab BASE TAB                                                            &kp BACKSPACE   &kp SPACE                                         &ht_bslash_adjust ADJUST 0
@@ -698,10 +713,10 @@
             display-name = "Mouse";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&to_layer_0 ESC       &to_layer_0 N1        &to_layer_0 N2        &to_layer_0 N3          &to_layer_0 N4           &to_layer_0 N5                                &trans  &trans  &trans  &trans                           &to_layer_0 N6     &to_layer_0 N7  &to_layer_0 N8               &to_layer_0 N9  &to_layer_0 N0         &to_l0_grave
-&to_layer_0 LEFT_ALT  &to_layer_0 Q         &to_layer_0 W         &to_layer_0 E           &to_layer_0 R            &to_layer_0 T                                 &trans  &trans  &trans  &trans                           &to_layer_0 Y      &to_layer_0 U   &mkp MCLK                    &to_layer_0 O   &to_layer_0 P          &to_l0_equal
-&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &to_layer_0 S         &ht_mouse_win_d BASE D  &ht_mouse_l0_alt BASE F  &to_layer_0 G   &to_l0_lbracket               &trans  &trans  &trans  &trans    &to_l0_rbracket        &to_layer_0 H      &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo 6           &to_layer_0 MINUS      &to_layer_0 SLASH
-&kp LCTRL             &to_layer_0 Z         &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V     &to_layer_0 B   &trans                        &trans  &trans  &trans  &trans    &mt LA(F4) DEL         &to_layer_0 N      &mkp MB4        &mouse_gesture_mkp 0 MB5     &to_l0_dot      &to_layer_0 SEMICOLON  &to_layer_0 SINGLE_QUOTE
+&to_layer_0 ESC       &to_layer_0 N1        &to_layer_0 N2        &to_layer_0 N3          &to_layer_0 N4           &to_layer_0 N5                                &trans  &trans  &trans  &trans                           &to_layer_0 N6     &to_layer_0 N7  &to_layer_0 N8               &to_layer_0 N9   &to_layer_0 N0         &to_l0_grave
+&to_layer_0 LEFT_ALT  &to_layer_0 Q         &ht_l0_ctrl_w BASE W  &to_layer_0 E           &to_layer_0 R            &to_layer_0 T                                 &trans  &trans  &trans  &trans                           &to_layer_0 Y      &to_layer_0 U   &mkp MCLK                    &to_layer_0 O    &to_layer_0 P          &to_l0_equal
+&kp LEFT_SHIFT        &ht_l0_ctrl_a BASE A  &ht_l0_ctrl_s BASE S  &ht_mouse_win_d BASE D  &ht_mouse_l0_alt BASE F  &to_layer_0 G   &to_l0_lbracket               &trans  &trans  &trans  &trans    &to_l0_rbracket        &to_layer_0 H      &mkp LCLK       &ht_rclk_scroll SCROLL RCLK  &mo 6            &to_layer_0 MINUS      &to_l0_rbracket
+&kp LCTRL             &ht_l0_ctrl_z BASE Z  &ht_l0_ctrl_x BASE X  &ht_l0_ctrl_c BASE C    &ht_l0_ctrl_v BASE V     &ht_l0_ctrl_b BASE B &trans                        &trans  &trans  &trans  &trans    &mt LA(F4) DEL         &to_layer_0 N      &mkp MB4        &mouse_gesture_mkp 0 MB5     &to_l0_dot       &to_layer_0 SEMICOLON  &to_l0_del
 &to_layer_0 LEFT_GUI  &trans                                      &mo 7                   &mo 6                    &lt 5 ENTER     &ht_mouse_win_tab BASE TAB                                      &to_layer_0 BACKSPACE  &to_layer_0 SPACE                                                                                      &to 0
             >;
         };
