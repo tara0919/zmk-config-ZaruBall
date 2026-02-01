@@ -594,11 +594,11 @@
         scroll_layer {
             display-name = "Scroll";
             bindings = <
-&trans          &trans  &trans                           &trans                           &trans                           &kp KP_SLASH                &trans  &trans  &trans  &trans                   &trans     &trans           &trans      &trans       &trans      &trans
-&trans          &trans  &kp KP_NUMBER_7                  &kp KP_NUMBER_8                  &kp KP_NUMBER_9                  &kp KP_MULTIPLY             &trans  &trans  &trans  &trans                   &trans     &kp LC(LS(TAB))  &kp UP      &kp LC(TAB)  &trans      &trans
-&kp LEFT_SHIFT  &trans  &mt LC(KP_NUMBER_4) KP_NUMBER_4  &mt LC(KP_NUMBER_5) KP_NUMBER_5  &mt LC(KP_NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT         &kp DOWN    &kp RIGHT    &trans      &trans
-&kp LCTRL       &trans  &mt LC(KP_NUMBER_1) KP_NUMBER_1  &mt LC(KP_NUMBER_2) KP_NUMBER_2  &mt LC(KP_NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans     &trans  &trans  &trans  &trans    &trans         &trans     &kp LG(E)        &kp LG(N2)  &kp LG(N3)   &kp LG(N4)  &trans
-&trans          &trans                                   &mt LC(KP_NUMBER_0) KP_NUMBER_0  &kp DOT                          &kp ENTER        &kp TAB                                      &kp BACKSPACE  &kp SPACE                                                        &to 0
+&trans          &kp F1           &kp F2           &kp F3           &kp F4           &kp F5                              &trans  &trans  &trans  &trans                   &kp F6     &kp F7            &kp F8            &kp F9            &kp F10           &kp F11
+&trans          &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_MULTIPLY                     &trans  &trans  &trans  &trans                   &trans     &kp LC(LS(TAB))   &kp UP            &kp LC(TAB)       &trans            &kp F12
+&kp LEFT_SHIFT  &kp KP_NUMBER_0  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS     &kp KP_DIVIDE      &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT          &kp DOWN          &kp RIGHT         &trans            &trans
+&kp LCTRL       &trans           &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_PLUS      &kp KP_MULTIPLY    &trans  &trans  &trans  &trans    &trans         &kp LG(E)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(NUMBER_5)  &trans
+&trans          &trans                            &to 0            &kp DOT          &kp ENTER        &kp TAB                                              &kp BACKSPACE  &kp SPACE                                                                          &to 0
             >;
         };
 
