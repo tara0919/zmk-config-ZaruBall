@@ -662,11 +662,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans      &kp F1     &kp F2           &kp F3           &kp F4           &kp F5                           &trans  &trans  &trans  &trans                   &kp F6     &kp F7      &kp F8      &kp F9      &kp F10     &kp F11
-&trans      &trans     &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans                           &trans  &trans  &trans  &trans                   &trans     &trans      &kp UP      &trans      &trans      &kp F12
-&kp LSHIFT  &kp KP_N0  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS  &kp KP_SLASH       &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT    &kp DOWN    &kp RIGHT   &trans      &trans
-&kp LCTRL   &trans     &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS   &kp KP_MULTIPLY    &trans  &trans  &trans  &trans    &trans         &td_n      &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &trans
-&trans      &trans                      &to 0            &kp DOT          &kp ENTER     &kp TAB                                              &kp BACKSPACE  &kp SPACE                                                  &to 0
+&trans      &kp F1        &kp F2           &kp F3           &kp F4           &kp F5                           &trans  &trans  &trans  &trans                   &kp F6     &kp F7      &kp F8      &kp F9      &kp F10     &kp F11
+&trans      &trans        &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans                           &trans  &trans  &trans  &trans                   &trans     &trans      &kp UP      &trans      &trans      &kp F12
+&kp LSHIFT  &kp KP_N0     &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MINUS  &kp KP_SLASH       &trans  &trans  &trans  &trans    &trans         &trans     &kp LEFT    &kp DOWN    &kp RIGHT   &trans      &trans
+&kp LCTRL   &macro_dzero  &kp KP_N1        &kp KP_N2        &kp KP_NUMBER_3  &kp KP_PLUS   &kp KP_MULTIPLY    &trans  &trans  &trans  &trans    &trans         &td_n      &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &trans
+&trans      &trans                         &to 0            &kp DOT          &kp ENTER     &kp TAB                                              &kp BACKSPACE  &kp SPACE                                                  &to 0
             >;
         };
 
