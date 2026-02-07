@@ -484,7 +484,10 @@
     };
 };
 
-&zip_temp_layer { require-prior-idle-ms = <300>; };
+&zip_temp_layer {
+    require-prior-idle-ms = <300>;
+    min-movement-threshold = <10>;
+};
 
 &mt { tapping-term-ms = <150>; };
 
