@@ -96,10 +96,10 @@
 
 &trackball_listener {
     input-processors = <
-                         &zip_xy_scaler 1 4
+                         &zip_xy_scaler 1 8
                          &zip_mouse_gesture
                          &zip_temp_layer MOUSE 500
-                         &zip_xy_scaler 4 1
+                         &zip_xy_scaler 8 1
     >;
 
     // 横スクロールを優先的に判定 (Lキー押下時)
