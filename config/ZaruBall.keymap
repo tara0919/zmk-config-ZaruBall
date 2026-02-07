@@ -484,7 +484,7 @@
     };
 };
 
-&zip_temp_layer { require-prior-idle-ms = <150>; };
+&zip_temp_layer { require-prior-idle-ms = <300>; };
 
 &mt { tapping-term-ms = <150>; };
 
