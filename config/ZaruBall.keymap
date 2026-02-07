@@ -485,8 +485,7 @@
 };
 
 &zip_temp_layer {
-    require-prior-idle-ms = <300>;
-    min-movement-threshold = <10>;
+    require-prior-idle-ms = <500>;
 };
 
 &mt { tapping-term-ms = <150>; };
