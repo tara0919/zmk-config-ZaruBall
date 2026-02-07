@@ -96,8 +96,10 @@
 
 &trackball_listener {
     input-processors = <
+                         &zip_xy_scaler 1 4
                          &zip_mouse_gesture
-                         &zip_temp_layer MOUSE 500
+                         &zip_temp_layer MOUSE 175
+                         &zip_xy_scaler 4 1
     >;
 
     // 横スクロールを優先的に判定 (Lキー押下時)
@@ -485,7 +487,7 @@
 };
 
 &zip_temp_layer {
-    require-prior-idle-ms = <500>;
+    require-prior-idle-ms = <175>;
 };
 
 &mt { tapping-term-ms = <150>; };
