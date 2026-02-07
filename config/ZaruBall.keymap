@@ -98,7 +98,7 @@
     input-processors = <
                          &zip_xy_scaler 1 4
                          &zip_mouse_gesture
-                         &zip_temp_layer MOUSE 175
+                         &zip_temp_layer MOUSE 500
                          &zip_xy_scaler 4 1
     >;
 
