@@ -3,8 +3,8 @@
 #include <behaviors/rgbled_widget.dtsi>
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
-#include <behaviors.dtsi>
 #include <dt-bindings/zmk/modifiers.h>
+#include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
@@ -129,6 +129,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F2 N2>, <&kp JP_AT>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -136,6 +137,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F6 N6>, <&kp JP_CARET>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -143,6 +145,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F7 N7>, <&kp JP_AMPERSAND>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -150,6 +153,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F8 N8>, <&kp JP_ASTERISK>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -157,6 +161,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F9 N9>, <&kp JP_LPAREN>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -164,6 +169,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&numht F10 N0>, <&kp JP_RPAREN>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -171,6 +177,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp MINUS>, <&kp JP_UNDERSCORE>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -178,6 +185,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp JP_EQUAL>, <&kp JP_PLUS>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -185,6 +193,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp SEMICOLON>, <&kp JP_COLON>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -192,6 +201,7 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp JP_QUOTE>, <&kp JP_DQUOTE>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
@@ -199,18 +209,22 @@
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp JP_BACKQUOTE>, <&kp JP_TILDE>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
         // ' (Shift: ~) 用 mod-morph
+
         jm_sqt_tilde: jm_sqt_tilde {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&kp JP_QUOTE>, <&kp JP_TILDE>;
+
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
         // 数字キー長押しでFキーを出力するための hold-tap behavior
+
         numht: numht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -254,6 +268,30 @@
 };
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        center_click {
+            bindings = <&mkp MB3>;
+            key-positions = <45 46>;
+        };
+
+        right_click {
+            bindings = <&mkp MB2>;
+            key-positions = <46 47>;
+        };
+
+        mb4 {
+            bindings = <&mkp MB4>;
+            key-positions = <63 64>;
+        };
+
+        mb5 {
+            bindings = <&mkp MB5>;
+            key-positions = <64 65>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -261,11 +299,11 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &numht F1 N1  &jm_n2  &numht F3 N3  &numht F4 N4  &numht F5 N5              &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                     &jm_n6        &jm_n7  &jm_n8     &jm_n9   &jm_n0         &jm_sqt_tilde
-&kp LEFT_ALT    &kp Q         &kp W      &kp E         &kp R         &kp T                     &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                   &kp Y         &kp U      &kp I      &kp O      &kp P          &jm_equal
-&kp LEFT_SHIFT  &kp A         &kp S      &kp D         &kp F         &kp G      &kp INS        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_LBRACKET  &kp H      &kp J      &kp K      &kp L      &jm_minus      &kp SLASH
-&kp LCTRL       &kp Z         &kp X      &kp C         &kp V         &kp B      &kp GRAVE      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp JP_RBRACKET  &kp N      &kp M      &kp COMMA  &kp DOT    &jm_semi       &jm_sqt
-&td0            &kp C_MUTE             &kp LWIN      &kp GRAVE      &kp ENTER     &kp TAB                                                              &kp BACKSPACE  &kp SPACE                                                  &td1
+&kp ESC         &numht F1 N1  &jm_n2  &numht F3 N3  &numht F4 N4  &numht F5 N5               &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                       &jm_n6     &jm_n7  &jm_n8     &jm_n9   &jm_n0     &jm_sqt_tilde
+&kp LEFT_ALT    &kp Q         &kp W   &kp E         &kp R         &kp T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                     &kp Y      &kp U   &kp I      &kp O    &kp P      &jm_equal
+&kp LEFT_SHIFT  &kp A         &kp S   &kp D         &kp F         &kp G         &kp INS      &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_LBRACKET  &kp H      &kp J   &kp K      &kp L    &jm_minus  &kp SLASH
+&kp LCTRL       &kp Z         &kp X   &kp C         &kp V         &kp B         &kp GRAVE    &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp JP_RBRACKET  &kp N      &kp M   &kp COMMA  &kp DOT  &jm_semi   &jm_sqt
+&kp LEFT_WIN    &kp C_MUTE            &kp LWIN      &lt 3 GRAVE   &lt 2 ENTER   &kp TAB                                                              &kp BACKSPACE    &kp SPACE                                         &td1
             >;
         };
 
@@ -273,11 +311,11 @@
             display-name = "Mouse";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans    &trans    &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans          &trans  &trans  &trans  &trans                                        &trans    &trans                                  &trans
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                  &trans
             >;
         };
 
