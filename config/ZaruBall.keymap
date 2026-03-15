@@ -287,22 +287,6 @@
             bindings = <&kp>, <&kp>;
         };
 
-        // ADJUSTレイヤー呼び出し + USバックスラッシュ入力 (引数無視マクロ経由)
-
-        tap_bs_wrap: tap_bs_wrap {
-            compatible = "zmk,behavior-macro-one-param";
-            #binding-cells = <1>;
-            bindings = <&macro_tap>, <&jm_bslash>;
-        };
-
-        adj_bslash: adj_bslash {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            bindings = <&mo>, <&tap_bs_wrap>;
-        };
     };
 };
 
