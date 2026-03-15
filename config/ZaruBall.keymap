@@ -42,6 +42,7 @@
 #define JP_KANA         LANGUAGE_1        // かな
 #define JP_EISU         LANGUAGE_2        // 英数
 #define JP_HANZEN       GRAVE             // 半角/全角
+#define JP_BSLASH       INT_RO            // \ (ろ)
 
 // スクロール量の設定（デフォルト10を100に上書き）
 
@@ -271,7 +272,7 @@
         jm_bslash: jm_bslash {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
-            bindings = <&kp RO>, <&kp JP_PIPE>;
+            bindings = <&kp JP_BSLASH>, <&kp JP_PIPE>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
