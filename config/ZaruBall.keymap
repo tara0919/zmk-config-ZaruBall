@@ -335,7 +335,7 @@
                 = <&macro_tap &kp LA(D)>
                 , <&macro_tap &kp LC(C)>
                 , <&macro_tap &kp LC(T)>
-                , <&macro_wait_time 200>
+                , <&macro_wait_time 500>
                 , <&macro_tap &kp LA(D)>
                 , <&macro_tap &kp LC(V)>
                 , <&macro_tap &kp RET>;
@@ -440,7 +440,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
+&trans  &trans  &kp A   &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
