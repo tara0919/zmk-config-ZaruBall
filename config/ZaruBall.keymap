@@ -108,7 +108,7 @@
         scroll_down_up: behavior_sensor_rotate_mouse_wheel_down_up {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
 
             tap-ms = <20>; // スクロールのタップ時間
         };
