@@ -99,7 +99,10 @@
     };
 };
 
-&mt { flavor = "tap-preferred"; };
+&mt {
+    flavor = "tap-preferred";
+    quick-tap-ms = <175>; // 素早いダブルタップ・連続入力を可能にしてレスポンスを改善
+};
 
 / {
     behaviors {
@@ -289,7 +292,7 @@
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <200>;
-            bindings = <&mo ADJUST>, <&jm_bslash>;
+            bindings = <&mo ADJUST &jm_bslash>; // 構文エラー（カンマ）を修正
         };
     };
 };
