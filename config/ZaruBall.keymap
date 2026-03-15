@@ -271,7 +271,7 @@
         jm_bslash: jm_bslash {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
-            bindings = <&kp 0x87>, <&kp JP_PIPE>;
+            bindings = <&kp RO>, <&kp JP_PIPE>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
@@ -374,7 +374,7 @@
 &kp LEFT_ALT     &kp Q         &mt LC(W) W  &kp E              &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y            &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
 &kp LEFT_SHIFT   &mt LC(A) A   &mt LC(S) S  &mt LG(D) D        &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H            &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
 &kp LCTRL        &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C        &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
-&lt 5 LG(LS(S))  &kp C_MUTE                 &lt SLOW LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
+&kp LS(LG(S))   &kp C_MUTE                 &lt SLOW LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
             >;
         };
 
