@@ -99,14 +99,14 @@
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&mt LALT LANG2>, <&mo RAISE>, <&mo MOUSE>;
+            bindings = <&mt LALT LANG2>, <&mo 3>, <&mo 1>;
         };
 
         td1: tap_dance_1 {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&mt RCTL LANG1>, <&mo RAISE>, <&mo MOUSE>;
+            bindings = <&mt RCTL LANG1>, <&mo 3>, <&mo 1>;
         };
 
         // Customed Hold-Tap for SandS
@@ -244,7 +244,7 @@
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&tog MOUSE &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            bindings = <&tog 1 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_layer_0";
         };
 
@@ -260,7 +260,7 @@
                 <&macro_release>,
                 <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
                 <&macro_tap>,
-                <&sl MOUSE>;
+                <&sl 1>;
 
             label = "MKP_EXIT_AML";
         };
@@ -312,8 +312,8 @@
             sensor-bindings = <&scroll_down_up>;
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &mkp MB1  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
@@ -343,6 +343,16 @@
             >;
         };
 
+        slow_layer {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                  &trans
+            >;
+        };
+
         adjust_layer {
             display-name = "Adjust";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -354,8 +364,6 @@
 &trans  &kp C_MUTE                  &trans        &trans        &trans        &trans                                      &trans    &kp DEL                                     &trans
             >;
         };
-
-        // Extra layer can be added in ZMK STUDIO
 
         extra1 { status = "reserved"; };
 
