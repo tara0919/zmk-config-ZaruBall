@@ -287,7 +287,6 @@
             quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
-
     };
 };
 
@@ -371,11 +370,11 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC          &numht F1 N1  &jm_n2       &numht F3 N3       &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
-&kp LEFT_ALT     &kp Q         &mt LC(W) W  &kp E              &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y            &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT   &mt LC(A) A   &mt LC(S) S  &mt LG(D) D        &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H            &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
-&kp LCTRL        &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C        &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
-&kp LS(LG(S))   &kp C_MUTE                 &lt SLOW LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
+&kp ESC         &numht F1 N1  &jm_n2       &numht F3 N3       &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
+&kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E              &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y            &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
+&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D        &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H            &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C        &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
+&kp LS(LG(S))   &kp C_MUTE                 &lt SLOW LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &mo 5
             >;
         };
 
