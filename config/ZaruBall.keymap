@@ -14,8 +14,8 @@
 #define MOUSE    1
 #define LOWER    2
 #define RAISE    3
-#define ADJUST   4
-#define SCROLL   2
+#define SLOW     4
+#define ADJUST   5
 
 // OS設定を日本語キーボードのまま使用するための変換定義
 
@@ -56,7 +56,7 @@
     // レイヤー2 (Lower): 縦スクロールのみ（X軸をゼロにしてH-scrollを無効化）
 
     scroller {
-        layers = <SCROLL>;
+        layers = <LOWER>;
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
@@ -80,7 +80,7 @@
     // レイヤー4 (Slow): カーソル速度を半分に
 
     slow_cursor {
-        layers = <4>;
+        layers = <SLOW>;
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT | INPUT_TRANSFORM_X_INVERT)
                             &zip_xy_scaler 1 2
@@ -93,8 +93,8 @@
         compatible = "zmk,conditional-layers";
 
         tri_layer {
-            if-layers = <2 3>;
-            then-layer = <4>;
+            if-layers = <LOWER RAISE>;
+            then-layer = <ADJUST>;
         };
     };
 };
@@ -117,14 +117,14 @@
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&mt LALT LANG2>, <&mo 3>, <&mo 1>;
+            bindings = <&mt LALT LANG2>, <&mo RAISE>, <&mo MOUSE>;
         };
 
         td1: tap_dance_1 {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
-            bindings = <&mt RCTL LANG1>, <&mo 3>, <&mo 1>;
+            bindings = <&mt RCTL LANG1>, <&mo RAISE>, <&mo MOUSE>;
         };
 
         // Customed Hold-Tap for SandS
@@ -303,7 +303,7 @@
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&tog 1 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            bindings = <&tog MOUSE &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_layer_0";
         };
 
@@ -319,7 +319,7 @@
                 <&macro_release>,
                 <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
                 <&macro_tap>,
-                <&sl 1>;
+                <&sl MOUSE>;
 
             label = "MKP_EXIT_AML";
         };
@@ -394,9 +394,9 @@
             bindings = <
 &kp ESC         &numht F1 N1  &jm_n2       &numht F3 N3    &numht F4 N4    &numht F5 N5                &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6       &jm_n7       &jm_n8       &jm_n9   &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E           &mt LC(R) R     &mt LC(T) T                 &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y        &mt LC(U) U  &mt LC(I) I  &kp O    &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D     &mt LEFT_ALT F  &kp G         &jm_lbkt      &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H        &kp J        &lt 2 K      &lt 3 L  &jm_minus    &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C     &mt LC(V) V     &mt LC(B) B   &kp INSERT    &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N        &kp M        &kp COMMA    &kp DOT  &jm_semi     &jm_bslash
-&kp LS(LG(S))   &kp C_MUTE                 &lt 4 LEFT_WIN  &lt 3 GRAVE     &lt 2 ENTER   &lt 4 TAB                                                             &kp BACKSPACE              &lt 3 SPACE                                                  &lt 5 BACKSLASH
+&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D     &mt LEFT_ALT F  &kp G         &jm_lbkt      &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H        &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C     &mt LC(V) V     &mt LC(B) B   &kp INSERT    &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N        &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_bslash
+&kp LS(LG(S))   &kp C_MUTE                 &lt SLOW LEFT_WIN  &lt RAISE GRAVE     &lt LOWER ENTER   &lt SLOW TAB                                                             &kp BACKSPACE              &lt RAISE SPACE                                          &lt ADJUST BACKSLASH
             >;
         };
 
@@ -440,7 +440,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &kp A   &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
