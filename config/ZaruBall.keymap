@@ -238,6 +238,30 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        // [ (Shift: {) 用 mod-morph
+        jm_lbkt: jm_lbkt {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp JP_LBRACKET>, <&kp JP_LBRACE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // ] (Shift: }) 用 mod-morph
+        jm_rbkt: jm_rbkt {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp JP_RBRACKET>, <&kp JP_RBRACE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // \ (Shift: |) 用 mod-morph
+        jm_bslash: jm_bslash {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp 0x87>, <&kp JP_PIPE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
         // 数字キー長押しでFキーを出力するための hold-tap behavior
 
         numht: numht {
@@ -321,8 +345,8 @@
             bindings = <
 &kp ESC         &numht F1 N1  &jm_n2       &numht F3 N3  &numht F4 N4    &numht F5 N5               &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                       &jm_n6       &jm_n7       &jm_n8       &jm_n9   &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E         &mt LC(R) R     &mt LC(T) T                &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                     &kp Y        &mt LC(U) U  &mt LC(I) I  &kp O    &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D   &mt LEFT_ALT F  &kp G         &kp INS      &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &kp JP_LBRACKET  &kp H        &kp J        &kp K        &kp L    &jm_minus    &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) Z  &mt LC(C) C   &mt LC(V) V     &mt LC(B) B   &kp GRAVE    &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp JP_RBRACKET  &kp N        &kp M        &kp COMMA    &kp DOT  &jm_semi     &jm_sqt
+&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D   &mt LEFT_ALT F  &kp G         &jm_lbkt     &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt         &kp H        &kp J        &kp K        &kp L    &jm_minus    &kp SLASH
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) Z  &mt LC(C) C   &mt LC(V) V     &mt LC(B) B   &kp GRAVE    &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp JP_RBRACKET  &kp N        &kp M        &kp COMMA    &kp DOT  &jm_semi     &jm_bslash
 &kp LEFT_WIN    &kp C_MUTE                 &kp LWIN      &lt 3 GRAVE     &lt 2 ENTER   &lt 4 TAB                                                            &kp BACKSPACE    &lt 3 SPACE                                                  &lt 4 BACKSLASH
             >;
         };
