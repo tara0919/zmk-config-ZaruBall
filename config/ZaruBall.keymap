@@ -24,15 +24,15 @@
 #define JP_QUOTE        AMPERSAND         // '
 #define JP_EQUAL        UNDER             // =
 #define JP_CARET        EQUAL             // ^
-#define JP_YEN          0x89              // ¥
+#define JP_YEN          INT3              // ¥
 #define JP_PLUS         COLON             // +
 #define JP_TILDE        PLUS              // ~
-#define JP_PIPE         LS(0x89)          // |
+#define JP_PIPE         LS(INT3)          // |
 #define JP_AT           LEFT_BRACKET      // @
 #define JP_COLON        SINGLE_QUOTE      // :
 #define JP_ASTERISK     DOUBLE_QUOTES     // *
 #define JP_BACKQUOTE    LEFT_BRACE        // `
-#define JP_UNDERSCORE   LS(0x87)          // _
+#define JP_UNDERSCORE   LS(INT1)          // _
 #define JP_LBRACKET     RIGHT_BRACKET     // [
 #define JP_RBRACKET     BACKSLASH         // ]
 #define JP_LPAREN       ASTERISK          // (
@@ -42,7 +42,7 @@
 #define JP_KANA         LANGUAGE_1        // かな
 #define JP_EISU         LANGUAGE_2        // 英数
 #define JP_HANZEN       GRAVE             // 半角/全角
-#define JP_BSLASH       0x87              // \ (ろ)
+#define JP_BSLASH       INT1              // \ (ろ)
 
 // スクロール量の設定（デフォルト10を100に上書き）
 
