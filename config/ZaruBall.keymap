@@ -399,18 +399,18 @@
 &trans  &trans            &trans            &trans            &trans            &trans                &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
 &trans  &trans            &kp LS(LC(TAB))   &kp LC(W)         &kp LC(TAB)       &trans                &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
 &trans  &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)  &trans    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
-&trans  &trans            &trans            &trans            &trans            &trans      &trans    &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
+&trans  &kp LC(N1)        &kp LC(NUMBER_2)  &kp LC(NUMBER_3)  &kp LC(NUMBER_4)  &kp LC(N5)  &trans    &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
 &trans  &trans                              &trans            &trans            &trans      &trans                                      &mt LA(F4) DELETE  &trans                                                      &trans
             >;
         };
 
         raise_layer {
             display-name = "Raise";
-            sensor-bindings = <&inc_dec_kp RIGHT LEFT>;
+            sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
             bindings = <
 &trans  &trans                        &trans                        &trans                        &trans                        &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &trans                        &mt LC(NUMBER_7) KP_NUMBER_7  &mt LC(NUMBER_8) KP_NUMBER_8  &mt LC(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &trans                        &mt LC(NUMBER_4) KP_NUMBER_4  &mt LC(NUMBER_5) KP_NUMBER_5  &mt LC(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7  &kp F8  &kp F9  &kp F10  &trans
+&trans  &mt LC(N0) KP_NUMBER_0        &mt LC(NUMBER_7) KP_NUMBER_7  &mt LC(NUMBER_8) KP_NUMBER_8  &mt LC(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
+&trans  &mt LC(N0) KP_NUMBER_0        &mt LC(NUMBER_4) KP_NUMBER_4  &mt LC(NUMBER_5) KP_NUMBER_5  &mt LC(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7  &kp F8  &kp F9  &kp F10  &trans
 &trans  &mt LC(NUMBER_0) KP_NUMBER_0  &mt LC(NUMBER_1) KP_NUMBER_1  &mt LC(NUMBER_2) KP_NUMBER_2  &mt LC(NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans   &trans
 &trans  &trans                                                      &mt LC(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &trans           &trans                                      &trans  &trans                                   &trans
             >;
