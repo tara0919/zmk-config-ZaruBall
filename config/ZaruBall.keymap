@@ -24,15 +24,15 @@
 #define JP_QUOTE        AMPERSAND         // '
 #define JP_EQUAL        UNDER             // =
 #define JP_CARET        EQUAL             // ^
-#define JP_YEN          0x89              // ¥
+#define JP_YEN          INT_YEN           // ¥
 #define JP_PLUS         COLON             // +
 #define JP_TILDE        PLUS              // ~
-#define JP_PIPE         LS(0x89)          // |
+#define JP_PIPE         LS(INT_YEN)       // |
 #define JP_AT           LEFT_BRACKET      // @
 #define JP_COLON        SINGLE_QUOTE      // :
 #define JP_ASTERISK     DOUBLE_QUOTES     // *
 #define JP_BACKQUOTE    LEFT_BRACE        // `
-#define JP_UNDERSCORE   LS(0x87)          // _
+#define JP_UNDERSCORE   LS(INT_RO)        // _
 #define JP_LBRACKET     RIGHT_BRACKET     // [
 #define JP_RBRACKET     BACKSLASH         // ]
 #define JP_LPAREN       ASTERISK          // (
@@ -42,7 +42,7 @@
 #define JP_KANA         LANGUAGE_1        // かな
 #define JP_EISU         LANGUAGE_2        // 英数
 #define JP_HANZEN       GRAVE             // 半角/全角
-#define JP_BSLASH       INT_RO            // \ (ろ)
+
 
 // スクロール量の設定（デフォルト10を100に上書き）
 
@@ -410,7 +410,7 @@
 &trans  &trans                        &mt LC(NUMBER_7) KP_NUMBER_7  &mt LC(NUMBER_8) KP_NUMBER_8  &mt LC(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
 &trans  &trans                        &mt LC(NUMBER_4) KP_NUMBER_4  &mt LC(NUMBER_5) KP_NUMBER_5  &mt LC(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7  &kp F8  &kp F9  &kp F10  &trans
 &trans  &mt LC(NUMBER_0) KP_NUMBER_0  &mt LC(NUMBER_1) KP_NUMBER_1  &mt LC(NUMBER_2) KP_NUMBER_2  &mt LC(NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &trans                                                      &mt LC(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &kp ENTER        &trans                                      &trans  &trans                                   &trans
+&trans  &trans                                                      &mt LC(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &trans           &trans                                      &trans  &trans                                   &trans
             >;
         };
 
