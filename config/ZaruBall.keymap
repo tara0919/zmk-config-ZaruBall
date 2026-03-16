@@ -27,7 +27,7 @@
 #define JP_YEN          INT3              // ¥
 #define JP_PLUS         COLON             // +
 #define JP_TILDE        PLUS              // ~
-#define JP_PIPE         LS(INT3)             // |
+#define JP_PIPE         LS(INT3)          // |
 #define JP_AT           LEFT_BRACKET      // @
 #define JP_COLON        SINGLE_QUOTE      // :
 #define JP_ASTERISK     DOUBLE_QUOTES     // *
@@ -42,6 +42,7 @@
 #define JP_KANA         LANGUAGE_1        // かな
 #define JP_EISU         LANGUAGE_2        // 英数
 #define JP_HANZEN       GRAVE             // 半角/全角
+#define JP_BSLASH       INT1              // \ (ろ)
 
 // スクロール量の設定（デフォルト10を100に上書き）
 
@@ -199,9 +200,10 @@
         jm_minus: jm_minus {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
-            bindings = <&kp MINUS>, <&kp JP_UNDERSCORE>;
+            bindings = <&kp MINUS>, <&kp INT1>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
+            keep-mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
         jm_equal: jm_equal {
@@ -271,9 +273,10 @@
         jm_bslash: jm_bslash {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
-            bindings = <&kp JP_YEN>, <&kp JP_PIPE>;
+            bindings = <&kp INT1>, <&kp INT3>;
 
             mods = <(MOD_LSFT|MOD_RSFT)>;
+            keep-mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
         // 数字キー長押しでFキーを出力するための hold-tap behavior
