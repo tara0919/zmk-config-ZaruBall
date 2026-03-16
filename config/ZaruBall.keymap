@@ -42,6 +42,7 @@
 #define JP_KANA         LANGUAGE_1        // かな
 #define JP_EISU         LANGUAGE_2        // 英数
 #define JP_HANZEN       GRAVE             // 半角/全角
+#define JP_BSLASH       0x87              // \ (ろ)
 
 // スクロール量の設定（デフォルト10を100に上書き）
 
