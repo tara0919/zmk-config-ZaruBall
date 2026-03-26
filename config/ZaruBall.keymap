@@ -349,7 +349,7 @@
 
         task_viewer {
             bindings = <&kp LG(TAB)>;
-            key-positions = <36 73>;
+            key-positions = <36 72>;
         };
 
         combo_lparen {
@@ -363,6 +363,16 @@
             key-positions = <45 46>; // J + K
             bindings = <&kp JP_RPAREN>;
         };
+
+        close {
+            bindings = <&kp LA(F4)>;
+            key-positions = <36 71>;
+        };
+
+        plane_paste {
+            bindings = <&kp LC(LS(V))>;
+            key-positions = <53 54>;
+        };
     };
 
     keymap {
@@ -372,11 +382,11 @@
             display-name = "Base";
             sensor-bindings = <&scroll_down_up>;
             bindings = <
-&kp ESC         &numht F1 N1  &jm_n2       &numht F3 N3  &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
-&kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E         &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y            &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LG(D) D   &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H            &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C   &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
-&kp LS(LG(S))   &kp C_MUTE                 &kp LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
+&mt LG(LS(S)) ESCAPE  &numht F1 N1  &jm_n2       &numht F3 N3  &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
+&kp LEFT_ALT          &kp Q         &mt LC(W) W  &kp E         &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &kp Y            &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
+&kp LEFT_SHIFT        &mt LC(A) A   &mt LC(S) S  &mt LG(D) D   &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &kp H            &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
+&kp LCTRL             &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C   &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
+&kp LEFT_WIN          &kp C_MUTE                 &kp LEFT_WIN  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
             >;
         };
 
@@ -396,11 +406,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans  &trans            &trans            &trans            &trans            &trans                &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans            &kp LS(LC(TAB))   &kp LC(W)         &kp LC(TAB)       &trans                &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
-&trans  &kp LG(NUMBER_1)  &kp LG(NUMBER_2)  &kp LG(NUMBER_3)  &kp LG(NUMBER_4)  &kp LG(N5)  &trans    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
-&trans  &kp LC(N1)        &kp LC(NUMBER_2)  &kp LC(NUMBER_3)  &kp LC(NUMBER_4)  &kp LC(N5)  &trans    &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans                              &trans            &trans            &trans      &trans                                      &mt LA(F4) DELETE  &trans                                                      &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                                   &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
+&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
+&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &trans    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                         &trans    &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
+&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                      &mt LA(F4) DELETE  &trans                                                      &trans
             >;
         };
 
@@ -408,11 +418,11 @@
             display-name = "Raise";
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
             bindings = <
-&trans  &trans                        &trans                        &trans                        &trans                        &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &mt LC(N0) KP_NUMBER_0        &mt LC(NUMBER_7) KP_NUMBER_7  &mt LC(NUMBER_8) KP_NUMBER_8  &mt LC(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &mt LC(N0) KP_NUMBER_0        &mt LC(NUMBER_4) KP_NUMBER_4  &mt LC(NUMBER_5) KP_NUMBER_5  &mt LC(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7  &kp F8  &kp F9  &kp F10  &trans
-&trans  &mt LC(NUMBER_0) KP_NUMBER_0  &mt LC(NUMBER_1) KP_NUMBER_1  &mt LC(NUMBER_2) KP_NUMBER_2  &mt LC(NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans   &trans
-&trans  &trans                                                      &mt LC(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &trans           &trans                                      &trans  &trans                                   &trans
+&trans  &trans           &trans                        &trans                        &trans                        &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &kp KP_NUMBER_0  &mt LA(NUMBER_7) KP_NUMBER_7  &mt LA(NUMBER_8) KP_NUMBER_8  &mt LA(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
+&trans  &kp KP_NUMBER_0  &mt LA(NUMBER_4) KP_NUMBER_4  &mt LA(NUMBER_5) KP_NUMBER_5  &mt LA(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
+&trans  &kp KP_N0        &mt LA(NUMBER_1) KP_NUMBER_1  &mt LA(NUMBER_2) KP_NUMBER_2  &mt LA(NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans                                         &mt LA(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &trans           &trans                                      &trans  &trans                                                    &trans
             >;
         };
 
@@ -432,7 +442,7 @@
             bindings = <
 &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4            &trans  &trans  &trans  &trans              &bt BT_CLR_ALL  &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none                   &trans  &trans  &trans  &trans              &bt BT_CLR      &none  &none  &none  &none  &none
-&trans  &none         &kp B         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_bat  &out OUT_TOG    &none  &none  &none  &none  &none
+&trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_bat  &out OUT_TOG    &none  &none  &none  &none  &none
 &trans  &none         &none         &none         &none         &none         &none     &trans  &trans  &trans  &trans    &ind_con  &studio_unlock  &none  &none  &none  &none  &none
 &trans  &kp C_MUTE                  &trans        &trans        &trans        &trans                                      &trans    &trans                                      &trans
             >;
