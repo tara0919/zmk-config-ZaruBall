@@ -368,6 +368,26 @@
                 <&macro_release &kp LSHFT>,
                 <&macro_tap &kp B &kp A &kp S &kp E &kp B &kp A &kp N1 &kp N1>;
         };
+
+        // 括弧ペア入力マクロ: () + カーソルを間に
+
+        type_parens: type_parens {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap &kp JP_LPAREN &kp JP_RPAREN &kp LEFT>;
+        };
+
+        // 括弧ペア入力マクロ: [] + カーソルを間に
+
+        type_brackets: type_brackets {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap &kp JP_LBRACKET &kp JP_RBRACKET &kp LEFT>;
+        };
     };
 };
 
@@ -472,6 +492,18 @@
             timeout-ms = <50>;
             key-positions = <30 33 34>; // P + A + S
             bindings = <&type_tara_base>;
+        };
+
+        combo_parens {
+            timeout-ms = <50>;
+            key-positions = <35 36 45 46>; // D + F + J + K
+            bindings = <&type_parens>;
+        };
+
+        combo_brackets {
+            timeout-ms = <50>;
+            key-positions = <19 20 27 28>; // E + R + U + I
+            bindings = <&type_brackets>;
         };
     };
 
