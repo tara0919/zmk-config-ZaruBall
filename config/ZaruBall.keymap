@@ -320,6 +320,67 @@
 
             label = "MKP_EXIT_AML";
         };
+
+        // Shift+クリック用マクロ（パラメータでボタン指定）
+
+        shift_click: shift_click {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings =
+                <&macro_press &kp LSHFT>,
+                <&macro_press>,
+                <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
+                <&macro_pause_for_release>,
+                <&macro_release>,
+                <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
+                <&macro_release &kp LSHFT>;
+        };
+
+        // 文字列入力マクロ: tara_dart2
+
+        type_tara_dart2: type_tara_dart2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings =
+                <&macro_tap &kp T &kp A &kp R &kp A>,
+                <&macro_press &kp LSHFT>,
+                <&macro_tap &kp INTERNATIONAL_1>,
+                <&macro_release &kp LSHFT>,
+                <&macro_tap &kp D &kp A &kp R &kp T &kp N2>;
+        };
+
+        // 文字列入力マクロ: Tara_baseba11
+
+        type_tara_base: type_tara_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings =
+                <&macro_press &kp LSHFT>,
+                <&macro_tap &kp T>,
+                <&macro_release &kp LSHFT>,
+                <&macro_tap &kp A &kp R &kp A>,
+                <&macro_press &kp LSHFT>,
+                <&macro_tap &kp INTERNATIONAL_1>,
+                <&macro_release &kp LSHFT>,
+                <&macro_tap &kp B &kp A &kp S &kp E &kp B &kp A &kp N1 &kp N1>;
+        };
+    };
+};
+
+// Shift+右クリック用 hold-tap
+/ {
+    behaviors {
+        ht_rclick: ht_rclick {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&shift_click>, <&mkp>;
+        };
     };
 };
 
@@ -333,7 +394,7 @@
         };
 
         right_click {
-            bindings = <&mkp MB2>;
+            bindings = <&ht_rclick MB2 MB2>;
             key-positions = <46 47>;
         };
 
@@ -399,6 +460,18 @@
         new_folder {
             bindings = <&kp LS(LC(N))>;
             key-positions = <62 36>;
+        };
+
+        combo_tara_dart2 {
+            timeout-ms = <50>;
+            key-positions = <30 33>; // P + A
+            bindings = <&type_tara_dart2>;
+        };
+
+        combo_tara_base {
+            timeout-ms = <50>;
+            key-positions = <30 33 34>; // P + A + S
+            bindings = <&type_tara_base>;
         };
     };
 
