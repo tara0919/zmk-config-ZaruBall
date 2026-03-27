@@ -327,13 +327,15 @@
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
             bindings =
-                <&macro_press &kp LSHFT>,
+                <&macro_press>,
+                <&kp LSHFT>,
                 <&macro_press>,
                 <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
                 <&macro_pause_for_release>,
                 <&macro_release>,
                 <&macro_param_1to1 &mkp MACRO_PLACEHOLDER>,
-                <&macro_release &kp LSHFT>;
+                <&macro_release>,
+                <&kp LSHFT>;
         };
 
         // 文字列入力マクロ: tara_dart2
@@ -344,11 +346,16 @@
             wait-ms = <10>;
             tap-ms = <10>;
             bindings =
-                <&macro_tap &kp T &kp A &kp R &kp A>,
-                <&macro_press &kp LSHFT>,
-                <&macro_tap &kp INTERNATIONAL_1>,
-                <&macro_release &kp LSHFT>,
-                <&macro_tap &kp D &kp A &kp R &kp T &kp N2>;
+                <&macro_tap>,
+                <&kp T &kp A &kp R &kp A>,
+                <&macro_press>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp INTERNATIONAL_1>,
+                <&macro_release>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp D &kp A &kp R &kp T &kp N2>;
         };
 
         // 文字列入力マクロ: Tara_baseba11
@@ -359,14 +366,22 @@
             wait-ms = <10>;
             tap-ms = <10>;
             bindings =
-                <&macro_press &kp LSHFT>,
-                <&macro_tap &kp T>,
-                <&macro_release &kp LSHFT>,
-                <&macro_tap &kp A &kp R &kp A>,
-                <&macro_press &kp LSHFT>,
-                <&macro_tap &kp INTERNATIONAL_1>,
-                <&macro_release &kp LSHFT>,
-                <&macro_tap &kp B &kp A &kp S &kp E &kp B &kp A &kp N1 &kp N1>;
+                <&macro_press>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp T>,
+                <&macro_release>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp A &kp R &kp A>,
+                <&macro_press>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp INTERNATIONAL_1>,
+                <&macro_release>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&kp B &kp A &kp S &kp E &kp B &kp A &kp N1 &kp N1>;
         };
 
         // 括弧ペア入力マクロ: () + カーソルを間に
@@ -376,7 +391,9 @@
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&macro_tap &kp JP_LPAREN &kp JP_RPAREN &kp ENTER &kp LEFT>;
+            bindings =
+                <&macro_tap>,
+                <&kp JP_LPAREN &kp JP_RPAREN &kp ENTER &kp LEFT>;
         };
 
         // 括弧ペア入力マクロ: [] + カーソルを間に
@@ -386,12 +403,15 @@
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&macro_tap &kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
+            bindings =
+                <&macro_tap>,
+                <&kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
         };
     };
 };
 
 // Shift+右クリック用 hold-tap
+
 / {
     behaviors {
         ht_rclick: ht_rclick {
@@ -517,7 +537,7 @@
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
 &kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LC(F) F      &mt LALT G       &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &kp N            &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
 &kp LEFT_WIN    &kp C_MUTE                 &kp LS(LG(S))  &lt RAISE GRAVE  &lt LOWER ENTER  &lt SLOW TAB                                                            &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
             >;
         };
@@ -538,11 +558,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
-&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
-&trans  &trans                         &trans                         &trans                         &trans                         &trans                         &trans                           &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &mt LA(F4) DELETE  &trans                                                      &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans         &trans
+&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &trans             &mt LG(UP) UP      &trans               &trans         &trans
+&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &kp LS(LEFT)   &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &kp LS(RIGHT)  &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans         &trans
+&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &kp DELETE  &kp LS(SPACE)                                                                            &trans
             >;
         };
 
