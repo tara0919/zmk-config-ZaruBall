@@ -376,7 +376,7 @@
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&macro_tap &kp JP_LPAREN &kp JP_RPAREN &kp LEFT>;
+            bindings = <&macro_tap &kp JP_LPAREN &kp JP_RPAREN &kp ENTER &kp LEFT>;
         };
 
         // 括弧ペア入力マクロ: [] + カーソルを間に
@@ -386,7 +386,7 @@
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&macro_tap &kp JP_LBRACKET &kp JP_RBRACKET &kp LEFT>;
+            bindings = <&macro_tap &kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
         };
     };
 };
