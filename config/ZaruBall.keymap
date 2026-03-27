@@ -355,7 +355,7 @@
         combo_lparen {
             timeout-ms = <50>;
             key-positions = <35 36>; // D + F
-            bindings = <&kp JP_LPAREN>;
+            bindings = <&mt LALT JP_LPAREN>;
         };
 
         combo_rparen {
