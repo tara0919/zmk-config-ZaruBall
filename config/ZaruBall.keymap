@@ -329,7 +329,7 @@
 
         center_click {
             bindings = <&mkp MB3>;
-            key-positions = <45 46 47>;
+            key-positions = <28 29>;
         };
 
         right_click {
@@ -378,7 +378,7 @@
 
         close {
             bindings = <&kp LA(F4)>;
-            key-positions = <36 35 72>;
+            key-positions = <35 34>;
         };
 
         plane_paste {
@@ -389,6 +389,16 @@
         win+d {
             bindings = <&kp LG(D)>;
             key-positions = <35 72>;
+        };
+
+        f2 {
+            bindings = <&kp F2>;
+            key-positions = <45 46 47>;
+        };
+
+        new_folder {
+            bindings = <&kp LS(LC(N))>;
+            key-positions = <62 36>;
         };
     };
 
@@ -423,11 +433,11 @@
             display-name = "Lower";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans  &trans                         &trans                         &trans                         &trans                         &trans                                   &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
-&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &trans    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
-&trans  &trans                         &trans                         &trans                         &trans                         &trans                         &trans    &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
-&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                      &mt LA(F4) DELETE  &trans                                                      &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                       &trans        &trans    &trans    &trans     &trans         &trans
+&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                       &trans        &trans    &kp UP    &trans     &trans         &trans
+&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans             &kp LS(LEFT)  &kp LEFT  &kp DOWN  &kp RIGHT  &kp LS(RIGHT)  &trans
+&trans  &trans                         &trans                         &trans                         &trans                         &trans                         &trans                           &trans  &trans  &trans  &trans    &trans             &trans        &trans    &trans    &trans     &trans         &trans
+&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &mt LA(F4) DELETE  &trans                                                      &trans
             >;
         };
 
