@@ -393,7 +393,7 @@
             tap-ms = <10>;
             bindings =
                 <&macro_tap>,
-                <&kp JP_LPAREN &kp JP_RPAREN &kp ENTER &kp LEFT>;
+                <&kp JP_KANA &kp JP_LPAREN &kp JP_RPAREN &kp ENTER &kp LEFT>;
         };
 
         // 括弧ペア入力マクロ: [] + カーソルを間に
@@ -405,7 +405,7 @@
             tap-ms = <10>;
             bindings =
                 <&macro_tap>,
-                <&kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
+                <&kp JP_KANA &kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
         };
     };
 };
