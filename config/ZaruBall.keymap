@@ -416,15 +416,6 @@
         };
 
         // Ctrl+左クリック
-
-        ctrl_lclick: ctrl_lclick {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-                <&macro_press &kp LCTRL>,
-                <&macro_tap &mkp MB1>,
-                <&macro_release &kp LCTRL>;
-        };
     };
 };
 
@@ -554,12 +545,6 @@
             key-positions = <35 45>; // D + J
             bindings = <&kp JP_EISU>;
         };
-
-        ctrl_left_click {
-            timeout-ms = <50>;
-            key-positions = <45 47>; // J + L
-            bindings = <&ctrl_lclick>;
-        };
     };
 
     keymap {
@@ -596,7 +581,7 @@
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
 &trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &trans         &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &trans  &trans
-&trans  &kp LC(Z)                      &kp LC(X)                      &kp LC(C)                      &kp LC(V)                      &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
+&trans  &kp LA(NUMBER_1)               &kp LA(NUMBER_2)               &kp LA(NUMBER_3)               &kp LA(NUMBER_4)               &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
 &trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &kp DELETE  &kp LS(SPACE)                                                                     &trans
             >;
         };
