@@ -405,14 +405,14 @@
                 <&kp JP_KANA &kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
         };
 
-        // 右クリック×2（ダブル右クリック）
+        // 左クリック×2（ダブル左クリック）
 
-        double_rclick: double_rclick {
+        double_lclick: double_lclick {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <30>;
             tap-ms = <30>;
-            bindings = <&macro_tap &mkp MB2 &mkp MB2>;
+            bindings = <&macro_tap &mkp MB1 &mkp MB1>;
         };
     };
 };
@@ -440,7 +440,7 @@
         };
 
         right_click {
-            bindings = <&td_rclick>;
+            bindings = <&mkp MB2>;
             key-positions = <46 47>;
         };
 
@@ -467,7 +467,7 @@
 
         combo_rparen {
             timeout-ms = <50>;
-            key-positions = <27 28>; // J + K
+            key-positions = <27 28>; // U + I
             bindings = <&kp JP_RPAREN>;
         };
 
@@ -510,14 +510,20 @@
 
         combo_parens {
             timeout-ms = <50>;
-            key-positions = <19 20 28 27>; // D + F + J + K
+            key-positions = <19 20 28 27>; // E + R + U + I
             bindings = <&type_parens>;
         };
 
-        double_right_click {
+        double_left_click {
             timeout-ms = <50>;
             key-positions = <45 46>; // J + K
-            bindings = <&double_rclick>;
+            bindings = <&double_lclick>;
+        };
+
+        shift_right_click {
+            timeout-ms = <50>;
+            key-positions = <45 46 47>; // J + K + L
+            bindings = <&shift_rclick>;
         };
     };
 
