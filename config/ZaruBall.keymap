@@ -327,9 +327,12 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&macro_press &kp LSHFT>,
-                <&macro_tap &mkp MB2>,
-                <&macro_release &kp LSHFT>;
+                <&macro_press>,
+                <&kp LSHFT>,
+                <&macro_tap>,
+                <&mkp MB2>,
+                <&macro_release>,
+                <&kp LSHFT>;
         };
 
         // 文字列入力マクロ: tara_dart2
@@ -448,31 +451,19 @@
 
         combo_lparen {
             timeout-ms = <50>;
-            key-positions = <35 36>; // D + F
+            key-positions = <19 20>; // D + F
             bindings = <&kp JP_LPAREN>;
         };
 
         combo_rparen {
             timeout-ms = <50>;
-            key-positions = <45 46>; // J + K
+            key-positions = <27 28>; // J + K
             bindings = <&kp JP_RPAREN>;
-        };
-
-        combo_lbracket {
-            timeout-ms = <50>;
-            key-positions = <19 20>; // E + R
-            bindings = <&kp JP_LBRACKET>;
-        };
-
-        combo_rbracket {
-            timeout-ms = <50>;
-            key-positions = <27 28>; // U + I
-            bindings = <&kp JP_RBRACKET>;
         };
 
         close {
             bindings = <&kp LA(F4)>;
-            key-positions = <35 34>;
+            key-positions = <35 36 72>;
         };
 
         plane_paste {
@@ -487,7 +478,7 @@
 
         f2 {
             bindings = <&kp F2>;
-            key-positions = <45 46 47>;
+            key-positions = <35 36>;
         };
 
         new_folder {
@@ -509,14 +500,8 @@
 
         combo_parens {
             timeout-ms = <50>;
-            key-positions = <35 36 45 46>; // D + F + J + K
+            key-positions = <19 20 28 27>; // D + F + J + K
             bindings = <&type_parens>;
-        };
-
-        combo_brackets {
-            timeout-ms = <50>;
-            key-positions = <19 20 27 28>; // E + R + U + I
-            bindings = <&type_brackets>;
         };
     };
 
