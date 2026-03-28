@@ -545,6 +545,21 @@
             key-positions = <35 45>; // D + J
             bindings = <&kp JP_EISU>;
         };
+
+        close_2 {
+            bindings = <&kp RA(F4)>;
+            key-positions = <45 46 75>;
+        };
+
+        win+d_2 {
+            bindings = <&kp RG(D)>;
+            key-positions = <46 75>;
+        };
+
+        task_view_2 {
+            bindings = <&kp RG(TAB)>;
+            key-positions = <45 75>;
+        };
     };
 
     keymap {
