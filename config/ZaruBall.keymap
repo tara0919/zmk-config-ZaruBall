@@ -525,6 +525,24 @@
             key-positions = <45 46 47>; // J + K + L
             bindings = <&shift_rclick>;
         };
+
+        combo_brackets_jp {
+            timeout-ms = <50>;
+            key-positions = <38 43>; // 「 + 」
+            bindings = <&type_brackets>;
+        };
+
+        combo_kana {
+            timeout-ms = <50>;
+            key-positions = <36 45>; // F + J
+            bindings = <&kp JP_KANA>;
+        };
+
+        combo_eisu {
+            timeout-ms = <50>;
+            key-positions = <35 45>; // D + J
+            bindings = <&kp JP_EISU>;
+        };
     };
 
     keymap {
