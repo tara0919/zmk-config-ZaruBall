@@ -119,28 +119,6 @@
             tap-ms = <20>; // スクロールのタップ時間
         };
 
-        macro_ctrl_scroll_up: macro_ctrl_scroll_up {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            wait-ms = <30>;
-            tap-ms = <30>;
-            bindings = <&macro_press &kp LCTRL>, <&macro_tap &msc SCRL_UP>, <&macro_release &kp LCTRL>;
-        };
-
-        macro_ctrl_scroll_down: macro_ctrl_scroll_down {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            wait-ms = <30>;
-            tap-ms = <30>;
-            bindings = <&macro_press &kp LCTRL>, <&macro_tap &msc SCRL_DOWN>, <&macro_release &kp LCTRL>;
-        };
-
-        scroll_zoom: behavior_sensor_rotate_zoom {
-            compatible = "zmk,behavior-sensor-rotate";
-            #sensor-binding-cells = <0>;
-            bindings = <&macro_ctrl_scroll_up>, <&macro_ctrl_scroll_down>;
-            tap-ms = <20>;
-        };
 
         td0: tap_dance_0 {
             compatible = "zmk,behavior-tap-dance";
@@ -613,7 +591,7 @@
 
         base_layer {
             display-name = "Base";
-            sensor-bindings = <&scroll_zoom>;
+            sensor-bindings = <&inc_dec_kp LC(LS(LEFT)) LC(LS(RIGHT))>;
             bindings = <
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
@@ -637,7 +615,7 @@
 
         lower_layer {
             display-name = "Lower";
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            sensor-bindings = <&scroll_down_up>;
             bindings = <
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
@@ -649,7 +627,7 @@
 
         raise_layer {
             display-name = "Raise";
-            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
 &trans  &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
 &trans  &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
