@@ -421,9 +421,12 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&macro_press &kp LCTRL>,
-                <&macro_tap &mkp MB1>,
-                <&macro_release &kp LCTRL>;
+                <&macro_press>,
+                <&kp LCTRL>,
+                <&macro_tap>,
+                <&mkp MB1>,
+                <&macro_release>,
+                <&kp LCTRL>;
         };
     };
 };
@@ -551,7 +554,7 @@
 
         combo_eisu {
             timeout-ms = <50>;
-            key-positions = <35 45>; // D + J
+            key-positions = <35 45 36>; // D + J
             bindings = <&kp JP_EISU>;
         };
 
@@ -574,6 +577,11 @@
             timeout-ms = <50>;
             key-positions = <45 47>; // J + L
             bindings = <&ctrl_lclick>;
+        };
+
+        alt+tab {
+            bindings = <&kp LA(TAB)>;
+            key-positions = <36 73>;
         };
     };
 
@@ -620,11 +628,11 @@
             display-name = "Raise";
             sensor-bindings = <&inc_dec_kp LEFT RIGHT>;
             bindings = <
-&trans  &trans           &trans                        &trans                        &trans                        &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
-&trans  &kp KP_NUMBER_0  &mt LA(NUMBER_7) KP_NUMBER_7  &mt LA(NUMBER_8) KP_NUMBER_8  &mt LA(NUMBER_9) KP_NUMBER_9  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
-&trans  &kp KP_NUMBER_0  &mt LA(NUMBER_4) KP_NUMBER_4  &mt LA(NUMBER_5) KP_NUMBER_5  &mt LA(NUMBER_6) KP_NUMBER_6  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
-&trans  &kp KP_N0        &mt LA(NUMBER_1) KP_NUMBER_1  &mt LA(NUMBER_2) KP_NUMBER_2  &mt LA(NUMBER_3) KP_NUMBER_3  &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
-&trans  &trans                                         &mt LA(NUMBER_0) KP_NUMBER_0  &kp PERIOD                    &trans           &trans                                      &trans  &trans                                                    &trans
+&trans  &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
+&trans  &kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
+&trans  &trans           &kp KP_NUMBER_0  &none            &kp KP_DOT       &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans                            &trans           &trans           &trans           &trans                                      &trans  &trans                                                    &trans
             >;
         };
 
