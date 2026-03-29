@@ -406,6 +406,14 @@
                 <&kp JP_KANA &kp JP_LBRACKET &kp JP_RBRACKET &kp ENTER &kp LEFT>;
         };
 
+        type_00: type_00 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap>, <&kp KP_NUMBER_0 &kp KP_NUMBER_0>;
+        };
+
         // 左クリック×2（ダブル左クリック）
 
         double_lclick: double_lclick {
@@ -632,7 +640,7 @@
 &trans  &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
 &trans  &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
 &trans  &kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
-&trans  &trans           &kp KP_NUMBER_0  &none            &kp KP_DOT       &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans           &kp KP_NUMBER_0  &type_00         &kp KP_DOT       &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
 &trans  &trans                            &trans           &trans           &trans           &trans                                      &trans  &trans                                                    &trans
             >;
         };
