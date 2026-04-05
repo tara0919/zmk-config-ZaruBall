@@ -437,6 +437,14 @@
                 <&macro_release>,
                 <&kp LCTRL>;
         };
+
+        macro_f2_kana: macro_f2_kana {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap>, <&kp F2 &kp JP_KANA>;
+        };
     };
 };
 
@@ -510,8 +518,14 @@
         };
 
         f2 {
-            bindings = <&kp F2>;
+            bindings = <&macro_f2_kana>;
             key-positions = <35 36>;
+        };
+
+        combo_eisu_dk {
+            timeout-ms = <50>;
+            key-positions = <35 46>; // D + K
+            bindings = <&kp JP_EISU>;
         };
 
         new_folder {
@@ -599,7 +613,7 @@
 
         base_layer {
             display-name = "Base";
-            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
+            sensor-bindings = <&scroll_down_up>;
             bindings = <
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
@@ -611,7 +625,7 @@
 
         mouse_layer {
             display-name = "Mouse";
-            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
+            sensor-bindings = <&scroll_down_up>;
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
@@ -623,7 +637,7 @@
 
         lower_layer {
             display-name = "Lower";
-            sensor-bindings = <&scroll_down_up>;
+            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
             bindings = <
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
