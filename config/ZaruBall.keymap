@@ -96,31 +96,31 @@
 // マウスジェスチャーの設定
 
 &zip_mouse_gesture {
-    stroke-size = <300>;
+    stroke-size = <100>;
     enable-eager-mode;
 
-    // 右スワイプ → ブラウザの「戻る」
-    history_back {
-        pattern = <GESTURE_RIGHT>;
-        bindings = <&kp LA(LEFT)>;
-    };
-
-    // 左スワイプ → ブラウザの「進む」
-    history_forward {
+    // 左スワイプ → Win+1
+    win1 {
         pattern = <GESTURE_LEFT>;
-        bindings = <&kp LA(RIGHT)>;
+        bindings = <&kp LG(N1)>;
     };
 
-    // 下→右スワイプ → タブを閉じる (Ctrl+W)
-    close_tab {
-        pattern = <GESTURE_DOWN GESTURE_RIGHT>;
-        bindings = <&kp LC(W)>;
+    // 上スワイプ → Win+2
+    win2 {
+        pattern = <GESTURE_UP>;
+        bindings = <&kp LG(N2)>;
     };
 
-    // 下→左スワイプ → 新しいタブを開く (Ctrl+T)
-    new_tab {
-        pattern = <GESTURE_DOWN GESTURE_LEFT>;
-        bindings = <&kp LC(T)>;
+    // 下スワイプ → Win+3
+    win3 {
+        pattern = <GESTURE_DOWN>;
+        bindings = <&kp LG(N3)>;
+    };
+
+    // 右スワイプ → Win+4
+    win4 {
+        pattern = <GESTURE_RIGHT>;
+        bindings = <&kp LG(N4)>;
     };
 };
 
@@ -491,13 +491,6 @@
             tapping-term-ms = <200>;
             bindings = <&mkp MB2>, <&shift_rclick>;
         };
-
-        td_gesture: td_gesture {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            tapping-term-ms = <300>;
-            bindings = <&double_lclick>, <&mouse_gesture>;
-        };
     };
 };
 
@@ -594,7 +587,7 @@
         double_left_click {
             timeout-ms = <50>;
             key-positions = <45 46>; // J + K
-            bindings = <&td_gesture>;
+            bindings = <&double_lclick>;
         };
 
         shift_right_click {
@@ -645,6 +638,12 @@
         alt+tab {
             bindings = <&kp LA(TAB)>;
             key-positions = <36 73>;
+        };
+
+        combo_gesture {
+            timeout-ms = <50>;
+            key-positions = <47 48>; // L + -
+            bindings = <&mouse_gesture>;
         };
     };
 
