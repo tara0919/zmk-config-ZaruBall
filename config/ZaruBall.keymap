@@ -444,7 +444,15 @@
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&macro_tap>, <&kp KP_NUMBER_0 &kp KP_NUMBER_0>;
+            bindings = <&macro_tap &kp JP_EISU &kp KP_NUMBER_0 &kp KP_NUMBER_0>;
+        };
+
+        num_eisu: num_eisu {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap &kp JP_EISU>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
         };
 
         // 左クリック×2（ダブル左クリック）
@@ -684,10 +692,10 @@
             display-name = "Raise";
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
             bindings = <
-&trans  &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
-&trans  &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
-&trans  &kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
-&trans  &trans           &kp KP_NUMBER_0  &type_00         &kp KP_DOT       &kp KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans           &num_eisu KP_NUMBER_7  &num_eisu KP_NUMBER_8  &num_eisu KP_NUMBER_9  &num_eisu KP_SLASH               &trans  &trans  &trans  &trans            &trans  &trans           &trans     &trans       &trans   &trans
+&trans  &trans           &num_eisu KP_NUMBER_4  &num_eisu KP_NUMBER_5  &num_eisu KP_NUMBER_6  &num_eisu KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
+&trans  &num_eisu KP_NUMBER_0  &num_eisu KP_NUMBER_1  &num_eisu KP_NUMBER_2  &num_eisu KP_NUMBER_3  &num_eisu KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
+&trans  &trans           &num_eisu KP_NUMBER_0  &type_00         &num_eisu KP_DOT       &num_eisu KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
 &trans  &trans                            &trans           &trans           &trans           &trans                                      &trans  &trans                                                    &trans
             >;
         };
