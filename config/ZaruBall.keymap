@@ -528,8 +528,8 @@
             key-positions = <28 29>;
         };
 
-        right_click {
-            bindings = <&mkp MB2>;
+        shift_right_click {
+            bindings = <&shift_rclick>;
             key-positions = <46 47>;
         };
 
@@ -588,7 +588,7 @@
 
         new_folder {
             bindings = <&kp LS(LC(N))>;
-            key-positions = <62 36>;
+            key-positions = <34 35>; // S + D
         };
 
         combo_tara_dart2 {
@@ -615,10 +615,10 @@
             bindings = <&double_lclick>;
         };
 
-        shift_right_click {
+        ctrl_left_click {
             timeout-ms = <50>;
-            key-positions = <45 46 47>; // J + K + L
-            bindings = <&shift_rclick>;
+            key-positions = <44 45>; // H + J
+            bindings = <&ctrl_lclick>;
         };
 
         combo_brackets_jp {
@@ -693,7 +693,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &mkp MB2  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
@@ -719,7 +719,7 @@
 &trans  &trans           &num_eisu KP_NUMBER_4  &num_eisu KP_NUMBER_5  &num_eisu KP_NUMBER_6  &num_eisu KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
 &trans  &num_eisu KP_NUMBER_0  &num_eisu KP_NUMBER_1  &num_eisu KP_NUMBER_2  &num_eisu KP_NUMBER_3  &num_eisu KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
 &trans  &trans           &num_eisu KP_NUMBER_0  &type_00         &num_eisu KP_DOT       &num_eisu KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
-&trans  &trans                            &trans           &trans           &trans           &trans                                      &trans  &trans                                                    &trans
+&trans  &trans                            &trans           &trans           &trans           &kp LS(TAB)                                &trans  &trans                                                    &trans
             >;
         };
 
