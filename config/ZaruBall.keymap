@@ -58,11 +58,11 @@
         #input-processor-cells = <0>;
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
-        interval-ms = <16>;
-        gain-percent = <70>;
+        interval-ms = <12>;
+        gain-percent = <50>;
         start-threshold = <1>;
-        decay-percent = <93>;
-        stop-threshold = <5>;
+        decay-percent = <95>;
+        stop-threshold = <2>;
         max-step = <1>;
     };
 };
@@ -81,7 +81,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
-                            &zip_xy_scaler 1 28
+                            &zip_xy_scaler 1 12
                             &zip_xy_to_scroll_mapper
                             &inertial_scroll
         >;
