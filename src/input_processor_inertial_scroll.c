@@ -38,6 +38,7 @@ struct inertial_scroll_data {
     const struct device *dev;
     struct k_work_delayable work;
     int32_t velocity;
+    int32_t remainder;
     uint16_t code;
 };
 
@@ -100,18 +101,25 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     int32_t abs_velocity = data->velocity < 0 ? -data->velocity : data->velocity;
     if (abs_velocity < cfg->stop_threshold) {
         data->velocity = 0;
+        data->remainder = 0;
         return;
     }
 
-    int32_t step = data->velocity / VELOCITY_SCALE;
+    data->remainder += data->velocity;
+
+    int32_t step = data->remainder / VELOCITY_SCALE;
+    data->remainder -= step * VELOCITY_SCALE;
+
     if (step == 0) {
-        step = data->velocity > 0 ? 1 : -1;
+        k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
+        return;
     }
 
     int err = send_scroll_report(data->code, limit_step(cfg, step));
     if (err < 0) {
         LOG_WRN("Failed to send inertial scroll: %d", err);
         data->velocity = 0;
+        data->remainder = 0;
         return;
     }
 
@@ -134,6 +142,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     data->code = event->code;
     data->velocity = (event->value * VELOCITY_SCALE * cfg->gain_percent) / 100;
+    data->remainder = 0;
 
     k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
 
