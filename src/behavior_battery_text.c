@@ -164,14 +164,26 @@ static int queue_battery_text(const struct zmk_behavior_binding_event *event) {
         return err;
     }
 
-    err = queue_level(event, central_level, &typed_chars);
-    if (err < 0) {
-        return err;
-    }
+    if (peripheral_available) {
+        err = queue_level(event, cached_peripheral_level, &typed_chars);
+        if (err < 0) {
+            return err;
+        }
 
-    err = queue_text_keycode(event, PERCENT, &typed_chars);
-    if (err < 0) {
-        return err;
+        err = queue_text_keycode(event, PERCENT, &typed_chars);
+        if (err < 0) {
+            return err;
+        }
+    } else {
+        err = queue_text_keycode(event, MINUS, &typed_chars);
+        if (err < 0) {
+            return err;
+        }
+
+        err = queue_text_keycode(event, MINUS, &typed_chars);
+        if (err < 0) {
+            return err;
+        }
     }
 
     err = queue_text_keycode(event, SPACE, &typed_chars);
@@ -189,26 +201,12 @@ static int queue_battery_text(const struct zmk_behavior_binding_event *event) {
         return err;
     }
 
-    if (peripheral_available) {
-        err = queue_level(event, cached_peripheral_level, &typed_chars);
-        if (err < 0) {
-            return err;
-        }
-
-        err = queue_text_keycode(event, PERCENT, &typed_chars);
-        if (err < 0) {
-            return err;
-        }
-
-        return queue_select_previous_chars(event, typed_chars);
-    }
-
-    err = queue_text_keycode(event, MINUS, &typed_chars);
+    err = queue_level(event, central_level, &typed_chars);
     if (err < 0) {
         return err;
     }
 
-    err = queue_text_keycode(event, MINUS, &typed_chars);
+    err = queue_text_keycode(event, PERCENT, &typed_chars);
     if (err < 0) {
         return err;
     }
