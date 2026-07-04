@@ -33,6 +33,9 @@ properties:
   burst-timeout-ms:
     type: int
     default: 120
+  burst-window-ms:
+    type: int
+    default: 80
   decay-percent:
     type: int
     default: 78
