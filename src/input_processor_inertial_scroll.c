@@ -132,15 +132,17 @@ static void inertial_scroll_work_handler(struct k_work *work) {
 
     data->remainder += data->velocity;
 
-    int32_t step = data->remainder / VELOCITY_SCALE;
-    data->remainder -= step * VELOCITY_SCALE;
+    int32_t raw_step = data->remainder / VELOCITY_SCALE;
 
-    if (step == 0) {
+    if (raw_step == 0) {
         k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
         return;
     }
 
-    int err = send_scroll_report(data->code, limit_step(cfg, step));
+    int16_t step = limit_step(cfg, raw_step);
+    data->remainder -= step * VELOCITY_SCALE;
+
+    int err = send_scroll_report(data->code, step);
     if (err < 0) {
         LOG_WRN("Failed to send inertial scroll: %d", err);
         stop_inertia(data);
@@ -170,6 +172,11 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     if (data->velocity != 0 && input_dir != inertia_dir) {
         stop_inertia(data);
+        data->burst_accum = 0;
+        data->burst_dir = input_dir;
+        data->last_input_ms = now;
+        data->code = event->code;
+        return ZMK_INPUT_PROC_STOP;
     }
 
     if (abs32(event->value) < cfg->start_threshold) {

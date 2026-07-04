@@ -59,11 +59,11 @@
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
         interval-ms = <12>;
-        gain-percent = <28>;
+        gain-percent = <30>;
         start-threshold = <1>;
-        burst-threshold = <6>;
-        burst-timeout-ms = <140>;
-        decay-percent = <96>;
+        burst-threshold = <8>;
+        burst-timeout-ms = <90>;
+        decay-percent = <97>;
         stop-threshold = <2>;
         max-step = <1>;
     };
@@ -83,7 +83,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
-                            &zip_xy_scaler 1 44
+                            &zip_xy_scaler 1 56
                             &zip_xy_to_scroll_mapper
                             &inertial_scroll
         >;
