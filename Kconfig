@@ -8,3 +8,11 @@ config ZARUBALL_BATTERY_TEXT
     depends on ZMK_BATTERY_REPORTING
     depends on ZMK_SPLIT_ROLE_CENTRAL
     depends on ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
+
+config ZARUBALL_INERTIAL_SCROLL
+    bool "ZaruBall inertial scroll input processor"
+    default y
+    depends on SHIELD_ZARUBALL_RIGHT
+    depends on ZMK_POINTING
+    depends on ZMK_SPLIT_ROLE_CENTRAL
+    depends on INPUT

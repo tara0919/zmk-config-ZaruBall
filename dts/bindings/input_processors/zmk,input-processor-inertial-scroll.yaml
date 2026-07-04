@@ -1,0 +1,32 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: Input processor for adding decaying inertial scroll after wheel input stops
+
+compatible: "zmk,input-processor-inertial-scroll"
+
+properties:
+  "#input-processor-cells":
+    type: int
+    required: true
+    const: 0
+  track-remainders:
+    type: boolean
+  type:
+    type: int
+    required: true
+  codes:
+    type: array
+    required: true
+  interval-ms:
+    type: int
+    default: 16
+  decay-percent:
+    type: int
+    default: 78
+  stop-threshold:
+    type: int
+    default: 35
+  max-step:
+    type: int
+    default: 4

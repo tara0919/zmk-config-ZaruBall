@@ -2,6 +2,7 @@
 
 #include <behaviors/rgbled_widget.dtsi>
 #include <input/processors.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <dt-bindings/zmk/input_transform.h>
 #include <dt-bindings/zmk/modifiers.h>
 #include <behaviors.dtsi>
@@ -51,6 +52,19 @@
 
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 100
 
+/ {
+    inertial_scroll: inertial_scroll {
+        compatible = "zmk,input-processor-inertial-scroll";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_WHEEL>;
+        interval-ms = <16>;
+        decay-percent = <78>;
+        stop-threshold = <35>;
+        max-step = <4>;
+    };
+};
+
 &trackball_listener {
     input-processors = <
                          &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT | INPUT_TRANSFORM_X_INVERT)
@@ -67,6 +81,7 @@
                             &zip_x_scaler 0 1
                             &zip_xy_scaler 1 20
                             &zip_xy_to_scroll_mapper
+                            &inertial_scroll
         >;
     };
 
