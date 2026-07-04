@@ -1,0 +1,10 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config ZARUBALL_BATTERY_TEXT
+    bool "Type both ZaruBall battery levels"
+    default y
+    depends on SHIELD_ZARUBALL_RIGHT
+    depends on ZMK_BATTERY_REPORTING
+    depends on ZMK_SPLIT_ROLE_CENTRAL
+    depends on ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
