@@ -59,9 +59,10 @@
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
         interval-ms = <16>;
-        decay-percent = <78>;
-        stop-threshold = <35>;
-        max-step = <4>;
+        gain-percent = <260>;
+        decay-percent = <90>;
+        stop-threshold = <18>;
+        max-step = <8>;
     };
 };
 

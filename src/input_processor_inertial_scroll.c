@@ -27,6 +27,7 @@ struct inertial_scroll_config {
     uint8_t type;
     size_t codes_len;
     uint16_t interval_ms;
+    uint16_t gain_percent;
     uint8_t decay_percent;
     int16_t stop_threshold;
     int16_t max_step;
@@ -132,7 +133,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     }
 
     data->code = event->code;
-    data->velocity = event->value * VELOCITY_SCALE;
+    data->velocity = (event->value * VELOCITY_SCALE * cfg->gain_percent) / 100;
 
     k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
 
@@ -157,12 +158,15 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .type = DT_INST_PROP_OR(n, type, INPUT_EV_REL),                                            \
         .codes_len = DT_INST_PROP_LEN(n, codes),                                                   \
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
+        .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
         .codes = DT_INST_PROP(n, codes),                                                           \
     };                                                                                             \
     static struct inertial_scroll_data inertial_scroll_data_##n = {};                              \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, gain_percent, 100) > 0,                                        \
+                 "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, decay_percent, 78) < 100,                                     \
                  "decay-percent must be less than 100");                                          \
     DEVICE_DT_INST_DEFINE(n, inertial_scroll_init, NULL, &inertial_scroll_data_##n,                \

@@ -21,6 +21,9 @@ properties:
   interval-ms:
     type: int
     default: 16
+  gain-percent:
+    type: int
+    default: 100
   decay-percent:
     type: int
     default: 78
