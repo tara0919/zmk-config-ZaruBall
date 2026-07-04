@@ -330,6 +330,15 @@
             quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
+
+        lt_mkp: layer_tap_mouse_button {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&mo>, <&mkp>;
+        };
     };
 };
 
@@ -528,8 +537,8 @@
             key-positions = <28 29>;
         };
 
-        shift_right_click {
-            bindings = <&shift_rclick>;
+        right_click {
+            bindings = <&mkp MB2>;
             key-positions = <46 47>;
         };
 
@@ -615,10 +624,10 @@
             bindings = <&double_lclick>;
         };
 
-        ctrl_left_click {
+        shift_right_click {
             timeout-ms = <50>;
-            key-positions = <44 45>; // H + J
-            bindings = <&ctrl_lclick>;
+            key-positions = <45 46 47>; // J + K + L
+            bindings = <&shift_rclick>;
         };
 
         combo_brackets_jp {
@@ -681,8 +690,8 @@
             bindings = <
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &lt RAISE L  &jm_minus    &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &mt LA(LC(DELETE)) DELETE  &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
+&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &lt RAISE L  &lt SLOW MINUS  &kp SLASH
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp LG(TAB)                &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
 &kp LEFT_WIN    &kp C_MUTE                 &kp LS(LG(S))  &lt RAISE GRAVE  &lt LOWER ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
             >;
         };
@@ -693,7 +702,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &mkp MB2  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &lt_mkp LOWER MB2  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
@@ -707,7 +716,7 @@
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
 &trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &trans         &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &trans  &trans
 &trans  &kp LA(NUMBER_1)               &kp LA(NUMBER_2)               &kp LA(NUMBER_3)               &kp LA(NUMBER_4)               &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
-&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &kp DELETE  &kp LS(SPACE)                                                                     &trans
+&trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &mt LA(LC(DELETE)) DELETE  &kp LS(SPACE)                                                                     &trans
             >;
         };
 
