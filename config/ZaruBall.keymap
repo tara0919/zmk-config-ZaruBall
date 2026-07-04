@@ -59,10 +59,11 @@
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
         interval-ms = <16>;
-        gain-percent = <100>;
-        decay-percent = <88>;
-        stop-threshold = <8>;
-        max-step = <4>;
+        gain-percent = <40>;
+        start-threshold = <2>;
+        decay-percent = <92>;
+        stop-threshold = <5>;
+        max-step = <1>;
     };
 };
 
@@ -80,7 +81,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
-                            &zip_xy_scaler 1 20
+                            &zip_xy_scaler 1 35
                             &zip_xy_to_scroll_mapper
                             &inertial_scroll
         >;
@@ -724,7 +725,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &lt_mkp LOWER MB2  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &mo LOWER  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;

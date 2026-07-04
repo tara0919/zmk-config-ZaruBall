@@ -28,6 +28,7 @@ struct inertial_scroll_config {
     size_t codes_len;
     uint16_t interval_ms;
     uint16_t gain_percent;
+    int16_t start_threshold;
     uint8_t decay_percent;
     int16_t stop_threshold;
     int16_t max_step;
@@ -50,6 +51,10 @@ static bool handles_code(const struct inertial_scroll_config *cfg, uint16_t code
     }
 
     return false;
+}
+
+static int32_t abs32(int32_t value) {
+    return value < 0 ? -value : value;
 }
 
 static int16_t limit_step(const struct inertial_scroll_config *cfg, int32_t step) {
@@ -98,8 +103,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     }
 
     data->velocity = (data->velocity * cfg->decay_percent) / 100;
-    int32_t abs_velocity = data->velocity < 0 ? -data->velocity : data->velocity;
-    if (abs_velocity < cfg->stop_threshold) {
+    if (abs32(data->velocity) < cfg->stop_threshold) {
         data->velocity = 0;
         data->remainder = 0;
         return;
@@ -140,6 +144,12 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
+    if (abs32(event->value) < cfg->start_threshold) {
+        data->velocity = 0;
+        data->remainder = 0;
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
     data->code = event->code;
     data->velocity = (event->value * VELOCITY_SCALE * cfg->gain_percent) / 100;
     data->remainder = 0;
@@ -168,6 +178,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .codes_len = DT_INST_PROP_LEN(n, codes),                                                   \
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
+        .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
@@ -176,6 +187,8 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
     static struct inertial_scroll_data inertial_scroll_data_##n = {};                              \
     BUILD_ASSERT(DT_INST_PROP_OR(n, gain_percent, 100) > 0,                                        \
                  "gain-percent must be greater than 0");                                          \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
+                 "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, decay_percent, 78) < 100,                                     \
                  "decay-percent must be less than 100");                                          \
     DEVICE_DT_INST_DEFINE(n, inertial_scroll_init, NULL, &inertial_scroll_data_##n,                \
