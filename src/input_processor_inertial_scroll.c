@@ -29,6 +29,8 @@ struct inertial_scroll_config {
     uint16_t interval_ms;
     uint16_t gain_percent;
     int16_t start_threshold;
+    int16_t burst_threshold;
+    uint16_t burst_timeout_ms;
     uint8_t decay_percent;
     int16_t stop_threshold;
     int16_t max_step;
@@ -40,6 +42,9 @@ struct inertial_scroll_data {
     struct k_work_delayable work;
     int32_t velocity;
     int32_t remainder;
+    int32_t burst_accum;
+    int64_t last_input_ms;
+    int8_t burst_dir;
     uint16_t code;
 };
 
@@ -55,6 +60,23 @@ static bool handles_code(const struct inertial_scroll_config *cfg, uint16_t code
 
 static int32_t abs32(int32_t value) {
     return value < 0 ? -value : value;
+}
+
+static int8_t sign32(int32_t value) {
+    if (value > 0) {
+        return 1;
+    }
+
+    if (value < 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
+static void stop_inertia(struct inertial_scroll_data *data) {
+    data->velocity = 0;
+    data->remainder = 0;
 }
 
 static int16_t limit_step(const struct inertial_scroll_config *cfg, int32_t step) {
@@ -104,8 +126,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
 
     data->velocity = (data->velocity * cfg->decay_percent) / 100;
     if (abs32(data->velocity) < cfg->stop_threshold) {
-        data->velocity = 0;
-        data->remainder = 0;
+        stop_inertia(data);
         return;
     }
 
@@ -122,8 +143,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     int err = send_scroll_report(data->code, limit_step(cfg, step));
     if (err < 0) {
         LOG_WRN("Failed to send inertial scroll: %d", err);
-        data->velocity = 0;
-        data->remainder = 0;
+        stop_inertia(data);
         return;
     }
 
@@ -144,15 +164,35 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
+    const int8_t input_dir = sign32(event->value);
+    const int8_t inertia_dir = sign32(data->velocity);
+    const int64_t now = k_uptime_get();
+
+    if (data->velocity != 0 && input_dir != inertia_dir) {
+        stop_inertia(data);
+    }
+
     if (abs32(event->value) < cfg->start_threshold) {
-        data->velocity = 0;
-        data->remainder = 0;
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
+    if (data->burst_dir != input_dir || data->code != event->code ||
+        now - data->last_input_ms > cfg->burst_timeout_ms) {
+        data->burst_accum = 0;
+        data->burst_dir = input_dir;
+    }
+
+    data->last_input_ms = now;
     data->code = event->code;
-    data->velocity = (event->value * VELOCITY_SCALE * cfg->gain_percent) / 100;
+    data->burst_accum += abs32(event->value);
+
+    if (data->burst_accum < cfg->burst_threshold) {
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
+    data->velocity = (input_dir * data->burst_accum * VELOCITY_SCALE * cfg->gain_percent) / 100;
     data->remainder = 0;
+    data->burst_accum = 0;
 
     k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
 
@@ -179,6 +219,8 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
+        .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
+        .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
@@ -189,6 +231,10 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
                  "start-threshold must be greater than 0");                                       \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
+                 "burst-threshold must be greater than 0");                                       \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, burst_timeout_ms, 120) > 0,                                    \
+                 "burst-timeout-ms must be greater than 0");                                      \
     BUILD_ASSERT(DT_INST_PROP_OR(n, decay_percent, 78) < 100,                                     \
                  "decay-percent must be less than 100");                                          \
     DEVICE_DT_INST_DEFINE(n, inertial_scroll_init, NULL, &inertial_scroll_data_##n,                \

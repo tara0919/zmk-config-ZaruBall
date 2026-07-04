@@ -27,6 +27,12 @@ properties:
   start-threshold:
     type: int
     default: 1
+  burst-threshold:
+    type: int
+    default: 1
+  burst-timeout-ms:
+    type: int
+    default: 120
   decay-percent:
     type: int
     default: 78
