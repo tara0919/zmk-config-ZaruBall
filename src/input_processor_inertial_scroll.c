@@ -43,6 +43,7 @@ struct inertial_scroll_data {
     const struct device *dev;
     struct k_work_delayable work;
     int32_t velocity;
+    int32_t velocity_remainder;
     int32_t remainder;
     int32_t burst_accum;
     int64_t last_input_ms;
@@ -79,12 +80,26 @@ static int8_t sign32(int32_t value) {
 
 static void stop_inertia(struct inertial_scroll_data *data) {
     data->velocity = 0;
+    data->velocity_remainder = 0;
     data->remainder = 0;
 }
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
                                  int32_t amount) {
     return (dir * amount * VELOCITY_SCALE * cfg->gain_percent) / 100;
+}
+
+static void decay_velocity(struct inertial_scroll_data *data,
+                           const struct inertial_scroll_config *cfg) {
+    int64_t scaled = (int64_t)data->velocity * cfg->decay_percent + data->velocity_remainder;
+    int32_t next_velocity = scaled / 100;
+
+    if (next_velocity == 0 && data->velocity != 0 && scaled != 0) {
+        next_velocity = sign32(data->velocity);
+    }
+
+    data->velocity = next_velocity;
+    data->velocity_remainder = scaled - (data->velocity * 100);
 }
 
 static int16_t limit_step(const struct inertial_scroll_config *cfg, int32_t step) {
@@ -134,11 +149,12 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         }
 
         data->velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
+        data->velocity_remainder = 0;
         data->remainder = 0;
         data->burst_accum = 0;
     }
 
-    data->velocity = (data->velocity * cfg->decay_percent) / 100;
+    decay_velocity(data, cfg);
     if (abs32(data->velocity) < cfg->stop_threshold) {
         stop_inertia(data);
         return;
@@ -187,6 +203,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (data->velocity != 0) {
         if (input_dir == inertia_dir) {
             data->velocity = input_to_velocity(cfg, input_dir, cfg->burst_threshold);
+            data->velocity_remainder = 0;
             data->code = event->code;
             data->burst_accum = 0;
             data->burst_dir = input_dir;
