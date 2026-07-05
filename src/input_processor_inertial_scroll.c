@@ -186,7 +186,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     if (data->velocity != 0) {
         if (input_dir == inertia_dir) {
-            data->velocity += input_to_velocity(cfg, input_dir, abs32(event->value));
+            data->velocity = input_to_velocity(cfg, input_dir, cfg->burst_threshold);
             data->code = event->code;
             data->burst_accum = 0;
             data->burst_dir = input_dir;

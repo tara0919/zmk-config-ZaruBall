@@ -65,7 +65,7 @@
         burst-timeout-ms = <75>;
         burst-window-ms = <75>;
         release-ms = <35>;
-        decay-percent = <97>;
+        decay-percent = <98>;
         stop-threshold = <2>;
         max-step = <1>;
     };
@@ -85,7 +85,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
-                            &zip_xy_scaler 1 80
+                            &zip_xy_scaler 1 120
                             &zip_xy_to_scroll_mapper
                             &inertial_scroll
         >;
