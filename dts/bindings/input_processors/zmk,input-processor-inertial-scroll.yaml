@@ -48,3 +48,6 @@ properties:
   max-step:
     type: int
     default: 4
+  required-layer:
+    type: int
+    default: -1

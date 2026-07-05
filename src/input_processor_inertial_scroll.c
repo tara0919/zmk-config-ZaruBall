@@ -16,6 +16,7 @@
 #include <drivers/input_processor.h>
 #include <zmk/endpoints.h>
 #include <zmk/hid.h>
+#include <zmk/keymap.h>
 
 #include <zephyr/logging/log.h>
 
@@ -36,6 +37,7 @@ struct inertial_scroll_config {
     uint8_t decay_percent;
     int16_t stop_threshold;
     int16_t max_step;
+    int16_t required_layer;
     uint16_t codes[];
 };
 
@@ -82,6 +84,15 @@ static void stop_inertia(struct inertial_scroll_data *data) {
     data->velocity = 0;
     data->velocity_remainder = 0;
     data->remainder = 0;
+}
+
+static void clear_pending_scroll(struct inertial_scroll_data *data) {
+    stop_inertia(data);
+    data->burst_accum = 0;
+}
+
+static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
+    return cfg->required_layer < 0 || zmk_keymap_layer_active(cfg->required_layer);
 }
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
@@ -142,6 +153,11 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         CONTAINER_OF(delayable, struct inertial_scroll_data, work);
     const struct device *dev = data->dev;
     const struct inertial_scroll_config *cfg = dev->config;
+
+    if (!layer_allows_inertia(cfg)) {
+        clear_pending_scroll(data);
+        return;
+    }
 
     if (data->velocity == 0) {
         if (data->burst_accum < cfg->burst_threshold) {
@@ -213,12 +229,6 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
             return ZMK_INPUT_PROC_CONTINUE;
         } else {
             stop_inertia(data);
-            data->burst_accum = 0;
-            data->burst_dir = input_dir;
-            data->burst_start_ms = now;
-            data->last_input_ms = now;
-            data->code = event->code;
-            return ZMK_INPUT_PROC_STOP;
         }
     }
 
@@ -272,6 +282,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
+        .required_layer = DT_INST_PROP_OR(n, required_layer, -1),                                  \
         .codes = DT_INST_PROP(n, codes),                                                           \
     };                                                                                             \
     static struct inertial_scroll_data inertial_scroll_data_##n = {};                              \

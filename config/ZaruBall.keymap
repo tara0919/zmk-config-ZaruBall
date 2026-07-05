@@ -61,13 +61,14 @@
         interval-ms = <12>;
         gain-percent = <10>;
         start-threshold = <1>;
-        burst-threshold = <3>;
+        burst-threshold = <2>;
         burst-timeout-ms = <55>;
         burst-window-ms = <55>;
         release-ms = <35>;
         decay-percent = <99>;
         stop-threshold = <12>;
         max-step = <1>;
+        required-layer = <LOWER>;
     };
 };
 
