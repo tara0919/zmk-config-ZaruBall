@@ -36,6 +36,9 @@ properties:
   burst-window-ms:
     type: int
     default: 80
+  release-ms:
+    type: int
+    default: 40
   decay-percent:
     type: int
     default: 78
