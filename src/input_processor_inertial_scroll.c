@@ -31,6 +31,7 @@ struct inertial_scroll_config {
     uint16_t gain_percent;
     int16_t start_threshold;
     int16_t burst_threshold;
+    int16_t burst_peak_threshold;
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
     uint16_t release_ms;
@@ -49,6 +50,7 @@ struct inertial_scroll_data {
     int32_t velocity_remainder;
     int32_t remainder;
     int32_t burst_accum;
+    int32_t burst_peak;
     int64_t last_input_ms;
     int64_t burst_start_ms;
     int8_t burst_dir;
@@ -91,6 +93,7 @@ static void stop_inertia(struct inertial_scroll_data *data) {
 static void clear_pending_scroll(struct inertial_scroll_data *data) {
     stop_inertia(data);
     data->burst_accum = 0;
+    data->burst_peak = 0;
 }
 
 static void prime_first_step(struct inertial_scroll_data *data) {
@@ -166,7 +169,8 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     }
 
     if (data->velocity == 0) {
-        if (data->burst_accum < cfg->burst_threshold) {
+        if (data->burst_accum < cfg->burst_threshold ||
+            data->burst_peak < cfg->burst_peak_threshold) {
             return;
         }
 
@@ -174,6 +178,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         data->velocity_remainder = 0;
         prime_first_step(data);
         data->burst_accum = 0;
+        data->burst_peak = 0;
     }
 
     decay_velocity(data, cfg);
@@ -230,6 +235,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
             data->input_code = event->code;
             data->code = cfg->output_code;
             data->burst_accum = 0;
+            data->burst_peak = 0;
             data->burst_dir = input_dir;
             data->burst_start_ms = now;
             data->last_input_ms = now;
@@ -247,17 +253,23 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
         data->burst_accum = 0;
+        data->burst_peak = 0;
         data->burst_dir = input_dir;
         data->burst_start_ms = now;
     } else if (now - data->burst_start_ms > cfg->burst_window_ms) {
         data->burst_accum = 0;
+        data->burst_peak = 0;
         data->burst_start_ms = now;
     }
 
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = cfg->output_code;
-    data->burst_accum += abs32(event->value);
+    int32_t input_amount = abs32(event->value);
+    data->burst_accum += input_amount;
+    if (input_amount > data->burst_peak) {
+        data->burst_peak = input_amount;
+    }
 
     k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
 
@@ -285,6 +297,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
+        .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
         .release_ms = DT_INST_PROP_OR(n, release_ms, 40),                                           \
@@ -302,6 +315,8 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
                  "burst-threshold must be greater than 0");                                       \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, burst_peak_threshold, 1) > 0,                                  \
+                 "burst-peak-threshold must be greater than 0");                                  \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_timeout_ms, 120) > 0,                                    \
                  "burst-timeout-ms must be greater than 0");                                      \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_window_ms, 80) > 0,                                      \

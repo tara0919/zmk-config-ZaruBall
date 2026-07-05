@@ -62,7 +62,8 @@
         interval-ms = <12>;
         gain-percent = <1>;
         start-threshold = <1>;
-        burst-threshold = <35>;
+        burst-threshold = <24>;
+        burst-peak-threshold = <14>;
         burst-timeout-ms = <35>;
         burst-window-ms = <35>;
         release-ms = <35>;
