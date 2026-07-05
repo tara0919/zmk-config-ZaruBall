@@ -32,6 +32,7 @@ struct inertial_scroll_config {
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
+    uint8_t burst_peak_percent;
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
     uint16_t release_ms;
@@ -109,6 +110,21 @@ static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_
     return (dir * amount * VELOCITY_SCALE * cfg->gain_percent) / 100;
 }
 
+static int32_t refresh_amount(const struct inertial_scroll_config *cfg) {
+    return cfg->burst_threshold + cfg->burst_peak_threshold;
+}
+
+static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
+                                  const struct inertial_scroll_data *data) {
+    if (data->burst_accum < cfg->burst_threshold ||
+        data->burst_peak < cfg->burst_peak_threshold) {
+        return false;
+    }
+
+    return cfg->burst_peak_percent == 0 ||
+           data->burst_peak * 100 >= data->burst_accum * cfg->burst_peak_percent;
+}
+
 static void decay_velocity(struct inertial_scroll_data *data,
                            const struct inertial_scroll_config *cfg) {
     int64_t scaled = (int64_t)data->velocity * cfg->decay_percent + data->velocity_remainder;
@@ -169,8 +185,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     }
 
     if (data->velocity == 0) {
-        if (data->burst_accum < cfg->burst_threshold ||
-            data->burst_peak < cfg->burst_peak_threshold) {
+        if (!burst_is_sharp_enough(cfg, data)) {
             return;
         }
 
@@ -229,7 +244,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     if (data->velocity != 0) {
         if (input_dir == inertia_dir) {
-            data->velocity = input_to_velocity(cfg, input_dir, cfg->burst_threshold);
+            data->velocity = input_to_velocity(cfg, input_dir, refresh_amount(cfg));
             data->velocity_remainder = 0;
             prime_first_step(data);
             data->input_code = event->code;
@@ -298,6 +313,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
+        .burst_peak_percent = DT_INST_PROP_OR(n, burst_peak_percent, 0),                            \
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
         .release_ms = DT_INST_PROP_OR(n, release_ms, 40),                                           \
