@@ -61,7 +61,7 @@
         interval-ms = <12>;
         gain-percent = <14>;
         start-threshold = <1>;
-        burst-threshold = <2>;
+        burst-threshold = <3>;
         burst-timeout-ms = <55>;
         burst-window-ms = <55>;
         release-ms = <35>;
@@ -85,7 +85,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
-                            &zip_xy_scaler 1 60
+                            &zip_xy_scaler 1 80
                             &zip_xy_to_scroll_mapper
                             &inertial_scroll
         >;
