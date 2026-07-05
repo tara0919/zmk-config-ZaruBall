@@ -27,6 +27,9 @@ properties:
   gain-percent:
     type: int
     default: 100
+  velocity-percent:
+    type: int
+    default: 100
   start-threshold:
     type: int
     default: 1

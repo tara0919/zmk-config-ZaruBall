@@ -29,6 +29,7 @@ struct inertial_scroll_config {
     size_t codes_len;
     uint16_t interval_ms;
     uint16_t gain_percent;
+    uint8_t velocity_percent;
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
@@ -107,7 +108,10 @@ static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
                                  int32_t amount) {
-    return (dir * amount * VELOCITY_SCALE * cfg->gain_percent) / 100;
+    int64_t velocity = (int64_t)dir * amount * VELOCITY_SCALE * cfg->gain_percent *
+                       cfg->velocity_percent;
+
+    return velocity / 10000;
 }
 
 static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
@@ -295,6 +299,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .codes_len = DT_INST_PROP_LEN(n, codes),                                                   \
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
+        .velocity_percent = DT_INST_PROP_OR(n, velocity_percent, 100),                             \
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
@@ -312,6 +317,8 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
     static struct inertial_scroll_data inertial_scroll_data_##n = {};                              \
     BUILD_ASSERT(DT_INST_PROP_OR(n, gain_percent, 100) > 0,                                        \
                  "gain-percent must be greater than 0");                                          \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, velocity_percent, 100) > 0,                                    \
+                 "velocity-percent must be greater than 0");                                      \
     BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
                  "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
