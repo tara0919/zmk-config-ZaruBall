@@ -59,13 +59,13 @@
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
         interval-ms = <12>;
-        gain-percent = <24>;
+        gain-percent = <20>;
         start-threshold = <1>;
-        burst-threshold = <6>;
-        burst-timeout-ms = <90>;
-        burst-window-ms = <90>;
+        burst-threshold = <5>;
+        burst-timeout-ms = <75>;
+        burst-window-ms = <75>;
         release-ms = <35>;
-        decay-percent = <96>;
+        decay-percent = <97>;
         stop-threshold = <2>;
         max-step = <1>;
     };
