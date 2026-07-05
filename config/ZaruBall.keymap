@@ -77,6 +77,31 @@
         max-step = <1>;
         required-layer = <LOWER>;
     };
+
+    inertial_hscroll: inertial_hscroll {
+        compatible = "zmk,input-processor-inertial-scroll";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_REL>;
+        codes = <INPUT_REL_X>;
+        output-code = <INPUT_REL_HWHEEL>;
+        interval-ms = <12>;
+        gain-percent = <2>;
+        velocity-percent = <75>;
+        min-velocity = <34>;
+        start-threshold = <1>;
+        burst-threshold = <8>;
+        burst-peak-threshold = <3>;
+        burst-peak-percent = <0>;
+        burst-timeout-ms = <25>;
+        burst-window-ms = <25>;
+        release-ms = <35>;
+        decay-percent = <97>;
+        tail-decay-percent = <99>;
+        tail-threshold = <20>;
+        stop-threshold = <7>;
+        max-step = <1>;
+        required-layer = <RAISE>;
+    };
 };
 
 &trackball_listener {
@@ -106,6 +131,7 @@
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_y_scaler 0 1
+                            &inertial_hscroll
                             &zip_xy_scaler 1 20
                             &zip_xy_to_scroll_mapper
         >;
