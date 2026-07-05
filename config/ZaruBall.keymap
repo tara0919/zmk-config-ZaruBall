@@ -66,7 +66,7 @@
         burst-window-ms = <55>;
         release-ms = <35>;
         decay-percent = <99>;
-        stop-threshold = <4>;
+        stop-threshold = <12>;
         max-step = <1>;
     };
 };
