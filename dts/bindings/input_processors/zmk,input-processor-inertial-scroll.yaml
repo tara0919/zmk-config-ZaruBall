@@ -54,6 +54,12 @@ properties:
   decay-percent:
     type: int
     default: 78
+  tail-decay-percent:
+    type: int
+    default: 78
+  tail-threshold:
+    type: int
+    default: 0
   stop-threshold:
     type: int
     default: 35

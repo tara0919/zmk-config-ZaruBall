@@ -38,6 +38,8 @@ struct inertial_scroll_config {
     uint16_t burst_window_ms;
     uint16_t release_ms;
     uint8_t decay_percent;
+    uint8_t tail_decay_percent;
+    int16_t tail_threshold;
     int16_t stop_threshold;
     int16_t max_step;
     int16_t required_layer;
@@ -127,7 +129,10 @@ static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
 
 static void decay_velocity(struct inertial_scroll_data *data,
                            const struct inertial_scroll_config *cfg) {
-    int64_t scaled = (int64_t)data->velocity * cfg->decay_percent + data->velocity_remainder;
+    uint8_t decay_percent = abs32(data->velocity) <= cfg->tail_threshold
+                                ? cfg->tail_decay_percent
+                                : cfg->decay_percent;
+    int64_t scaled = (int64_t)data->velocity * decay_percent + data->velocity_remainder;
     int32_t next_velocity = scaled / 100;
 
     if (next_velocity == 0 && data->velocity != 0 && scaled != 0) {
@@ -308,6 +313,9 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
         .release_ms = DT_INST_PROP_OR(n, release_ms, 40),                                           \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
+        .tail_decay_percent = DT_INST_PROP_OR(n, tail_decay_percent,                                \
+                                              DT_INST_PROP_OR(n, decay_percent, 78)),               \
+        .tail_threshold = DT_INST_PROP_OR(n, tail_threshold, 0),                                    \
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
         .required_layer = DT_INST_PROP_OR(n, required_layer, -1),                                  \
@@ -333,6 +341,9 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "release-ms must be greater than 0");                                            \
     BUILD_ASSERT(DT_INST_PROP_OR(n, decay_percent, 78) < 100,                                     \
                  "decay-percent must be less than 100");                                          \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, tail_decay_percent, DT_INST_PROP_OR(n, decay_percent, 78)) <   \
+                     100,                                                                          \
+                 "tail-decay-percent must be less than 100");                                     \
     DEVICE_DT_INST_DEFINE(n, inertial_scroll_init, NULL, &inertial_scroll_data_##n,                \
                           &inertial_scroll_config_##n, POST_KERNEL,                                \
                           CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &inertial_scroll_driver_api);
