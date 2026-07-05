@@ -91,6 +91,10 @@ static void clear_pending_scroll(struct inertial_scroll_data *data) {
     data->burst_accum = 0;
 }
 
+static void prime_first_step(struct inertial_scroll_data *data) {
+    data->remainder = sign32(data->velocity) * (VELOCITY_SCALE - 1);
+}
+
 static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
     return cfg->required_layer < 0 || zmk_keymap_layer_active(cfg->required_layer);
 }
@@ -166,7 +170,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
 
         data->velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
         data->velocity_remainder = 0;
-        data->remainder = 0;
+        prime_first_step(data);
         data->burst_accum = 0;
     }
 
@@ -220,6 +224,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         if (input_dir == inertia_dir) {
             data->velocity = input_to_velocity(cfg, input_dir, cfg->burst_threshold);
             data->velocity_remainder = 0;
+            prime_first_step(data);
             data->code = event->code;
             data->burst_accum = 0;
             data->burst_dir = input_dir;
