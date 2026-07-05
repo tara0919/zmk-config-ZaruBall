@@ -62,7 +62,7 @@
         interval-ms = <12>;
         gain-percent = <2>;
         velocity-percent = <75>;
-        min-velocity = <28>;
+        min-velocity = <34>;
         start-threshold = <1>;
         burst-threshold = <8>;
         burst-peak-threshold = <3>;
