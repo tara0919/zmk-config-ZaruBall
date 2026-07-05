@@ -60,10 +60,10 @@
         codes = <INPUT_REL_Y>;
         output-code = <INPUT_REL_WHEEL>;
         interval-ms = <12>;
-        gain-percent = <1>;
+        gain-percent = <2>;
         start-threshold = <1>;
-        burst-threshold = <18>;
-        burst-peak-threshold = <7>;
+        burst-threshold = <14>;
+        burst-peak-threshold = <6>;
         burst-peak-percent = <0>;
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;
