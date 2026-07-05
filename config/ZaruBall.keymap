@@ -59,11 +59,11 @@
         type = <INPUT_EV_REL>;
         codes = <INPUT_REL_WHEEL>;
         interval-ms = <12>;
-        gain-percent = <30>;
+        gain-percent = <24>;
         start-threshold = <1>;
-        burst-threshold = <4>;
-        burst-timeout-ms = <120>;
-        burst-window-ms = <120>;
+        burst-threshold = <6>;
+        burst-timeout-ms = <90>;
+        burst-window-ms = <90>;
         release-ms = <35>;
         decay-percent = <96>;
         stop-threshold = <2>;
@@ -729,7 +729,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &mo LOWER  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans     &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
