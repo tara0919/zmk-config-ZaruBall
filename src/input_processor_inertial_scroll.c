@@ -30,6 +30,7 @@ struct inertial_scroll_config {
     uint16_t interval_ms;
     uint16_t gain_percent;
     uint8_t velocity_percent;
+    int16_t min_velocity;
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
@@ -112,8 +113,13 @@ static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_
                                  int32_t amount) {
     int64_t velocity = (int64_t)dir * amount * VELOCITY_SCALE * cfg->gain_percent *
                        cfg->velocity_percent;
+    int32_t scaled_velocity = velocity / 10000;
 
-    return velocity / 10000;
+    if (cfg->min_velocity > 0 && abs32(scaled_velocity) < cfg->min_velocity) {
+        return dir * cfg->min_velocity;
+    }
+
+    return scaled_velocity;
 }
 
 static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
@@ -305,6 +311,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .velocity_percent = DT_INST_PROP_OR(n, velocity_percent, 100),                             \
+        .min_velocity = DT_INST_PROP_OR(n, min_velocity, 0),                                       \
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \

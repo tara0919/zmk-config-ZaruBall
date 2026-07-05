@@ -30,6 +30,9 @@ properties:
   velocity-percent:
     type: int
     default: 100
+  min-velocity:
+    type: int
+    default: 0
   start-threshold:
     type: int
     default: 1
