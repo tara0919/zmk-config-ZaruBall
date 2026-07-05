@@ -82,6 +82,11 @@ static void stop_inertia(struct inertial_scroll_data *data) {
     data->remainder = 0;
 }
 
+static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
+                                 int32_t amount) {
+    return (dir * amount * VELOCITY_SCALE * cfg->gain_percent) / 100;
+}
+
 static int16_t limit_step(const struct inertial_scroll_config *cfg, int32_t step) {
     if (cfg->max_step <= 0) {
         return step;
@@ -128,8 +133,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
             return;
         }
 
-        data->velocity =
-            (data->burst_dir * data->burst_accum * VELOCITY_SCALE * cfg->gain_percent) / 100;
+        data->velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
         data->remainder = 0;
         data->burst_accum = 0;
     }
@@ -181,9 +185,17 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     const int64_t now = k_uptime_get();
 
     if (data->velocity != 0) {
-        stop_inertia(data);
-
-        if (input_dir != inertia_dir) {
+        if (input_dir == inertia_dir) {
+            data->velocity += input_to_velocity(cfg, input_dir, abs32(event->value));
+            data->code = event->code;
+            data->burst_accum = 0;
+            data->burst_dir = input_dir;
+            data->burst_start_ms = now;
+            data->last_input_ms = now;
+            k_work_reschedule(&data->work, K_MSEC(cfg->interval_ms));
+            return ZMK_INPUT_PROC_CONTINUE;
+        } else {
+            stop_inertia(data);
             data->burst_accum = 0;
             data->burst_dir = input_dir;
             data->burst_start_ms = now;
