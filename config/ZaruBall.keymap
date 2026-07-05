@@ -158,7 +158,7 @@
         compatible = "zmk,input-processor-temp-layer";
         #input-processor-cells = <2>;
         require-prior-idle-ms = <300>;
-        excluded-positions = <45 46 47>;
+        excluded-positions = <45>;
     };
 
     conditional_layers {
