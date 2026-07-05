@@ -38,6 +38,7 @@ struct inertial_scroll_config {
     int16_t stop_threshold;
     int16_t max_step;
     int16_t required_layer;
+    uint16_t output_code;
     uint16_t codes[];
 };
 
@@ -51,6 +52,7 @@ struct inertial_scroll_data {
     int64_t last_input_ms;
     int64_t burst_start_ms;
     int8_t burst_dir;
+    uint16_t input_code;
     uint16_t code;
 };
 
@@ -225,7 +227,8 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
             data->velocity = input_to_velocity(cfg, input_dir, cfg->burst_threshold);
             data->velocity_remainder = 0;
             prime_first_step(data);
-            data->code = event->code;
+            data->input_code = event->code;
+            data->code = cfg->output_code;
             data->burst_accum = 0;
             data->burst_dir = input_dir;
             data->burst_start_ms = now;
@@ -241,7 +244,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    if (data->burst_dir != input_dir || data->code != event->code ||
+    if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
         data->burst_accum = 0;
         data->burst_dir = input_dir;
@@ -252,7 +255,8 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     }
 
     data->last_input_ms = now;
-    data->code = event->code;
+    data->input_code = event->code;
+    data->code = cfg->output_code;
     data->burst_accum += abs32(event->value);
 
     k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
@@ -288,6 +292,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
         .required_layer = DT_INST_PROP_OR(n, required_layer, -1),                                  \
+        .output_code = DT_INST_PROP_OR(n, output_code, INPUT_REL_WHEEL),                           \
         .codes = DT_INST_PROP(n, codes),                                                           \
     };                                                                                             \
     static struct inertial_scroll_data inertial_scroll_data_##n = {};                              \

@@ -18,6 +18,9 @@ properties:
   codes:
     type: array
     required: true
+  output-code:
+    type: int
+    default: 8
   interval-ms:
     type: int
     default: 16
