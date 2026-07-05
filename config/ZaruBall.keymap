@@ -68,7 +68,7 @@
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;
         release-ms = <35>;
-        decay-percent = <99>;
+        decay-percent = <98>;
         stop-threshold = <12>;
         max-step = <1>;
         required-layer = <LOWER>;
