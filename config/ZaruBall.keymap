@@ -71,7 +71,7 @@
         release-ms = <35>;
         decay-percent = <97>;
         tail-decay-percent = <99>;
-        tail-threshold = <30>;
+        tail-threshold = <20>;
         stop-threshold = <7>;
         max-step = <1>;
         required-layer = <LOWER>;
