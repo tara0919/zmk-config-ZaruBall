@@ -34,7 +34,6 @@ struct inertial_scroll_config {
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
-    int16_t reverse_noise_threshold;
     uint8_t burst_peak_percent;
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
@@ -55,11 +54,12 @@ struct inertial_scroll_data {
     int32_t velocity;
     int32_t velocity_remainder;
     int32_t remainder;
-    int32_t burst_accum;
-    int32_t burst_peak;
+    int32_t burst_pos_accum;
+    int32_t burst_neg_accum;
+    int32_t burst_pos_peak;
+    int32_t burst_neg_peak;
     int64_t last_input_ms;
     int64_t burst_start_ms;
-    int8_t burst_dir;
     uint16_t input_code;
     uint16_t code;
 };
@@ -96,10 +96,16 @@ static void stop_inertia(struct inertial_scroll_data *data) {
     data->remainder = 0;
 }
 
+static void clear_burst(struct inertial_scroll_data *data) {
+    data->burst_pos_accum = 0;
+    data->burst_neg_accum = 0;
+    data->burst_pos_peak = 0;
+    data->burst_neg_peak = 0;
+}
+
 static void clear_pending_scroll(struct inertial_scroll_data *data) {
     stop_inertia(data);
-    data->burst_accum = 0;
-    data->burst_peak = 0;
+    clear_burst(data);
 }
 
 static void prime_first_step(struct inertial_scroll_data *data) {
@@ -123,15 +129,38 @@ static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_
     return scaled_velocity;
 }
 
-static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
-                                  const struct inertial_scroll_data *data) {
-    if (data->burst_accum < cfg->burst_threshold ||
-        data->burst_peak < cfg->burst_peak_threshold) {
+static bool candidate_is_sharp_enough(const struct inertial_scroll_config *cfg, int32_t accum,
+                                      int32_t peak) {
+    if (accum < cfg->burst_threshold || peak < cfg->burst_peak_threshold) {
         return false;
     }
 
-    return cfg->burst_peak_percent == 0 ||
-           data->burst_peak * 100 >= data->burst_accum * cfg->burst_peak_percent;
+    return cfg->burst_peak_percent == 0 || peak * 100 >= accum * cfg->burst_peak_percent;
+}
+
+static bool select_burst_candidate(const struct inertial_scroll_config *cfg,
+                                   const struct inertial_scroll_data *data, int8_t *dir,
+                                   int32_t *amount) {
+    bool pos_ok =
+        candidate_is_sharp_enough(cfg, data->burst_pos_accum, data->burst_pos_peak);
+    bool neg_ok =
+        candidate_is_sharp_enough(cfg, data->burst_neg_accum, data->burst_neg_peak);
+
+    if (!pos_ok && !neg_ok) {
+        return false;
+    }
+
+    if (pos_ok && (!neg_ok || data->burst_pos_peak > data->burst_neg_peak ||
+                   (data->burst_pos_peak == data->burst_neg_peak &&
+                    data->burst_pos_accum >= data->burst_neg_accum))) {
+        *dir = 1;
+        *amount = data->burst_pos_accum;
+        return true;
+    }
+
+    *dir = -1;
+    *amount = data->burst_neg_accum;
+    return true;
 }
 
 static void decay_velocity(struct inertial_scroll_data *data,
@@ -197,15 +226,16 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     }
 
     if (data->velocity == 0) {
-        if (!burst_is_sharp_enough(cfg, data)) {
+        int8_t burst_dir;
+        int32_t burst_amount;
+        if (!select_burst_candidate(cfg, data, &burst_dir, &burst_amount)) {
             return;
         }
 
-        data->velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
+        data->velocity = input_to_velocity(cfg, burst_dir, burst_amount);
         data->velocity_remainder = 0;
         prime_first_step(data);
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        clear_burst(data);
     }
 
     decay_velocity(data, cfg);
@@ -255,9 +285,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     if (data->velocity != 0) {
         stop_inertia(data);
-        data->burst_accum = 0;
-        data->burst_peak = 0;
-        data->burst_dir = input_dir;
+        clear_burst(data);
         data->burst_start_ms = now;
         data->last_input_ms = 0;
     }
@@ -267,33 +295,27 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     }
 
     int32_t input_amount = abs32(event->value);
-    bool within_burst = data->input_code == event->code &&
-                        now - data->last_input_ms <= cfg->burst_timeout_ms &&
-                        now - data->burst_start_ms <= cfg->burst_window_ms;
-    if (within_burst && data->burst_dir != 0 && data->burst_dir != input_dir &&
-        data->burst_peak >= cfg->burst_peak_threshold &&
-        input_amount <= cfg->reverse_noise_threshold) {
-        return ZMK_INPUT_PROC_CONTINUE;
-    }
-
-    if (data->burst_dir != input_dir || data->input_code != event->code ||
-        now - data->last_input_ms > cfg->burst_timeout_ms) {
-        data->burst_accum = 0;
-        data->burst_peak = 0;
-        data->burst_dir = input_dir;
+    if (data->input_code != event->code || now - data->last_input_ms > cfg->burst_timeout_ms) {
+        clear_burst(data);
         data->burst_start_ms = now;
     } else if (now - data->burst_start_ms > cfg->burst_window_ms) {
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        clear_burst(data);
         data->burst_start_ms = now;
     }
 
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = cfg->output_code;
-    data->burst_accum += input_amount;
-    if (input_amount > data->burst_peak) {
-        data->burst_peak = input_amount;
+    if (input_dir > 0) {
+        data->burst_pos_accum += input_amount;
+        if (input_amount > data->burst_pos_peak) {
+            data->burst_pos_peak = input_amount;
+        }
+    } else {
+        data->burst_neg_accum += input_amount;
+        if (input_amount > data->burst_neg_peak) {
+            data->burst_neg_peak = input_amount;
+        }
     }
 
     k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
@@ -325,7 +347,6 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
-        .reverse_noise_threshold = DT_INST_PROP_OR(n, reverse_noise_threshold, 0),                  \
         .burst_peak_percent = DT_INST_PROP_OR(n, burst_peak_percent, 0),                            \
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
