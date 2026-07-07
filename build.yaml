@@ -22,6 +22,7 @@ include:
     shield: ZaruBall_left rgbled_adapter
   - board: seeeduino_xiao_ble
     shield: ZaruBall_right rgbled_adapter
-    cmake-args: -DCONFIG_ZMK_STUDIO=n -DCONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG=y -DCONFIG_ZMK_USB_LOGGING=y
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG=y
   - board: seeeduino_xiao_ble
     shield: settings_reset
