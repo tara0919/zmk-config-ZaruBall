@@ -66,6 +66,7 @@
         start-threshold = <1>;
         burst-threshold = <8>;
         burst-peak-threshold = <3>;
+        reverse-noise-threshold = <2>;
         burst-peak-percent = <0>;
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;
@@ -91,6 +92,7 @@
         start-threshold = <1>;
         burst-threshold = <8>;
         burst-peak-threshold = <3>;
+        reverse-noise-threshold = <2>;
         burst-peak-percent = <0>;
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;

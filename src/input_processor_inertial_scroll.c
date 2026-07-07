@@ -34,6 +34,7 @@ struct inertial_scroll_config {
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
+    int16_t reverse_noise_threshold;
     uint8_t burst_peak_percent;
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
@@ -265,6 +266,16 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
+    int32_t input_amount = abs32(event->value);
+    bool within_burst = data->input_code == event->code &&
+                        now - data->last_input_ms <= cfg->burst_timeout_ms &&
+                        now - data->burst_start_ms <= cfg->burst_window_ms;
+    if (within_burst && data->burst_dir != 0 && data->burst_dir != input_dir &&
+        data->burst_peak >= cfg->burst_peak_threshold &&
+        input_amount <= cfg->reverse_noise_threshold) {
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
         data->burst_accum = 0;
@@ -280,7 +291,6 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = cfg->output_code;
-    int32_t input_amount = abs32(event->value);
     data->burst_accum += input_amount;
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
@@ -315,6 +325,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
+        .reverse_noise_threshold = DT_INST_PROP_OR(n, reverse_noise_threshold, 0),                  \
         .burst_peak_percent = DT_INST_PROP_OR(n, burst_peak_percent, 0),                            \
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
