@@ -152,7 +152,7 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
         return;
     }
 
-    LOG_INF("inertia_dbg %s in=%u out=%u age=%lld gap=%lld pos=%ld/%ld/%u neg=%ld/%ld/%u "
+    LOG_WRN("inertia_dbg %s in=%u out=%u age=%lld gap=%lld pos=%ld/%ld/%u neg=%ld/%ld/%u "
             "burst=%d/%ld/%ld chosen=%d/%ld vel=%ld",
             state, data->debug_code, cfg->output_code,
             (long long)(now - data->debug_start_ms), (long long)(now - data->debug_last_ms),
@@ -163,7 +163,7 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
 }
 
 static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
-    LOG_INF("inertia_dbg touch_stop in=%u dir=%d amount=%ld old_vel=%ld", code, dir,
+    LOG_WRN("inertia_dbg touch_stop in=%u dir=%d amount=%ld old_vel=%ld", code, dir,
             (long)amount, (long)velocity);
 }
 #else
