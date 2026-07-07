@@ -265,7 +265,6 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    int32_t input_amount = abs32(event->value);
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
         data->burst_accum = 0;
@@ -281,6 +280,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = cfg->output_code;
+    int32_t input_amount = abs32(event->value);
     data->burst_accum += input_amount;
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
