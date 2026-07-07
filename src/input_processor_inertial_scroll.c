@@ -12,6 +12,7 @@
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <zephyr/input/input.h>
 #include <zephyr/kernel.h>
+#include <zephyr/sys/util.h>
 
 #include <drivers/input_processor.h>
 #include <zmk/endpoints.h>
@@ -61,6 +62,18 @@ struct inertial_scroll_data {
     int8_t burst_dir;
     uint16_t input_code;
     uint16_t code;
+#if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
+    int32_t debug_pos_accum;
+    int32_t debug_neg_accum;
+    int32_t debug_pos_peak;
+    int32_t debug_neg_peak;
+    uint16_t debug_pos_count;
+    uint16_t debug_neg_count;
+    int64_t debug_start_ms;
+    int64_t debug_last_ms;
+    uint16_t debug_code;
+    bool debug_active;
+#endif
 };
 
 static bool handles_code(const struct inertial_scroll_config *cfg, uint16_t code) {
@@ -89,6 +102,102 @@ static int8_t sign32(int32_t value) {
     return 0;
 }
 
+#if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
+static void debug_reset(struct inertial_scroll_data *data) {
+    data->debug_pos_accum = 0;
+    data->debug_neg_accum = 0;
+    data->debug_pos_peak = 0;
+    data->debug_neg_peak = 0;
+    data->debug_pos_count = 0;
+    data->debug_neg_count = 0;
+    data->debug_start_ms = 0;
+    data->debug_last_ms = 0;
+    data->debug_code = 0;
+    data->debug_active = false;
+}
+
+static void debug_record_input(const struct inertial_scroll_config *cfg,
+                               struct inertial_scroll_data *data, uint16_t code, int8_t dir,
+                               int32_t amount, int64_t now) {
+    if (!data->debug_active || data->debug_code != code ||
+        now - data->debug_last_ms > cfg->burst_timeout_ms ||
+        now - data->debug_start_ms > cfg->burst_window_ms) {
+        debug_reset(data);
+        data->debug_active = true;
+        data->debug_code = code;
+        data->debug_start_ms = now;
+    }
+
+    data->debug_last_ms = now;
+    if (dir > 0) {
+        data->debug_pos_accum += amount;
+        data->debug_pos_count++;
+        if (amount > data->debug_pos_peak) {
+            data->debug_pos_peak = amount;
+        }
+    } else {
+        data->debug_neg_accum += amount;
+        data->debug_neg_count++;
+        if (amount > data->debug_neg_peak) {
+            data->debug_neg_peak = amount;
+        }
+    }
+}
+
+static void debug_log_window(const struct inertial_scroll_config *cfg,
+                             const struct inertial_scroll_data *data, const char *state,
+                             int8_t chosen_dir, int32_t chosen_amount, int32_t velocity,
+                             int64_t now) {
+    if (!data->debug_active) {
+        return;
+    }
+
+    LOG_INF("inertia_dbg %s in=%u out=%u age=%lld gap=%lld pos=%ld/%ld/%u neg=%ld/%ld/%u "
+            "burst=%d/%ld/%ld chosen=%d/%ld vel=%ld",
+            state, data->debug_code, cfg->output_code,
+            (long long)(now - data->debug_start_ms), (long long)(now - data->debug_last_ms),
+            (long)data->debug_pos_accum, (long)data->debug_pos_peak, data->debug_pos_count,
+            (long)data->debug_neg_accum, (long)data->debug_neg_peak, data->debug_neg_count,
+            data->burst_dir, (long)data->burst_accum, (long)data->burst_peak, chosen_dir,
+            (long)chosen_amount, (long)velocity);
+}
+
+static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
+    LOG_INF("inertia_dbg touch_stop in=%u dir=%d amount=%ld old_vel=%ld", code, dir,
+            (long)amount, (long)velocity);
+}
+#else
+static void debug_reset(struct inertial_scroll_data *data) { (void)data; }
+static void debug_record_input(const struct inertial_scroll_config *cfg,
+                               struct inertial_scroll_data *data, uint16_t code, int8_t dir,
+                               int32_t amount, int64_t now) {
+    (void)cfg;
+    (void)data;
+    (void)code;
+    (void)dir;
+    (void)amount;
+    (void)now;
+}
+static void debug_log_window(const struct inertial_scroll_config *cfg,
+                             const struct inertial_scroll_data *data, const char *state,
+                             int8_t chosen_dir, int32_t chosen_amount, int32_t velocity,
+                             int64_t now) {
+    (void)cfg;
+    (void)data;
+    (void)state;
+    (void)chosen_dir;
+    (void)chosen_amount;
+    (void)velocity;
+    (void)now;
+}
+static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
+    (void)code;
+    (void)dir;
+    (void)amount;
+    (void)velocity;
+}
+#endif
+
 static void stop_inertia(struct inertial_scroll_data *data) {
     data->velocity = 0;
     data->velocity_remainder = 0;
@@ -99,6 +208,7 @@ static void clear_pending_scroll(struct inertial_scroll_data *data) {
     stop_inertia(data);
     data->burst_accum = 0;
     data->burst_peak = 0;
+    debug_reset(data);
 }
 
 static void prime_first_step(struct inertial_scroll_data *data) {
@@ -197,10 +307,16 @@ static void inertial_scroll_work_handler(struct k_work *work) {
 
     if (data->velocity == 0) {
         if (!burst_is_sharp_enough(cfg, data)) {
+            debug_log_window(cfg, data, "no_start", 0, 0, 0, k_uptime_get());
+            debug_reset(data);
             return;
         }
 
-        data->velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
+        int32_t velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
+        debug_log_window(cfg, data, "start", data->burst_dir, data->burst_accum, velocity,
+                         k_uptime_get());
+        debug_reset(data);
+        data->velocity = velocity;
         data->velocity_remainder = 0;
         prime_first_step(data);
         data->burst_accum = 0;
@@ -253,6 +369,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     const int64_t now = k_uptime_get();
 
     if (data->velocity != 0) {
+        debug_log_touch_stop(event->code, input_dir, abs32(event->value), data->velocity);
         stop_inertia(data);
         data->burst_accum = 0;
         data->burst_peak = 0;
@@ -264,6 +381,9 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (abs32(event->value) < cfg->start_threshold) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
+
+    int32_t input_amount = abs32(event->value);
+    debug_record_input(cfg, data, event->code, input_dir, input_amount, now);
 
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
@@ -280,7 +400,6 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = cfg->output_code;
-    int32_t input_amount = abs32(event->value);
     data->burst_accum += input_amount;
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
