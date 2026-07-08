@@ -404,7 +404,7 @@
         raise_ime: raise_ime {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&raise_ime_hold>, <&kp>;
@@ -413,7 +413,7 @@
         slow_eisu_tap: slow_eisu_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&slow_eisu_hold>, <&kp>;
@@ -422,7 +422,7 @@
         slow_minus_base: slow_minus_base {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&slow_eisu_hold>, <&kp>;
@@ -615,10 +615,10 @@
             wait-ms = <10>;
             tap-ms = <10>;
             bindings =
-                <&macro_tap>,
-                <&kp JP_EISU>,
                 <&macro_press>,
                 <&mo RAISE>,
+                <&macro_tap>,
+                <&kp JP_EISU>,
                 <&macro_pause_for_release>,
                 <&macro_release>,
                 <&mo RAISE>,
