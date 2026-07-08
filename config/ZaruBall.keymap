@@ -796,6 +796,18 @@
             key-positions = <36 73>;
         };
 
+        combo_exclamation_atab {
+            timeout-ms = <50>;
+            key-positions = <33 73>; // A + Tab
+            bindings = <&kp LS(N1)>;
+        };
+
+        combo_at_stab {
+            timeout-ms = <50>;
+            key-positions = <34 73>; // S + Tab
+            bindings = <&kp JP_AT>;
+        };
+
         combo_gesture {
             timeout-ms = <50>;
             key-positions = <47 48>; // L + -
