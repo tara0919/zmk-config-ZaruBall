@@ -764,10 +764,10 @@
             bindings = <&type_brackets>;
         };
 
-        combo_kana {
+        combo_parens_fj {
             timeout-ms = <50>;
             key-positions = <36 45>; // F + J
-            bindings = <&kp JP_KANA>;
+            bindings = <&type_parens>;
         };
 
         combo_eisu {
@@ -798,8 +798,14 @@
 
         combo_gesture {
             timeout-ms = <50>;
-            key-positions = <45 47>; // J + L
+            key-positions = <47 48>; // L + -
             bindings = <&mouse_gesture>;
+        };
+
+        combo_ctrl_lclick_jl {
+            timeout-ms = <50>;
+            key-positions = <45 47>; // J + L
+            bindings = <&ctrl_lclick>;
         };
 
         combo_ab3233921 {
