@@ -76,6 +76,7 @@
         stop-threshold = <7>;
         max-step = <1>;
         required-layer = <LOWER>;
+        cancel-layer = <MOUSE>;
     };
 
     inertial_hscroll: inertial_hscroll {
@@ -101,6 +102,7 @@
         stop-threshold = <7>;
         max-step = <1>;
         required-layer = <RAISE>;
+        cancel-layer = <MOUSE>;
     };
 };
 
@@ -794,15 +796,15 @@
             key-positions = <36 73>;
         };
 
-        combo_exclamation_atab {
+        combo_exclamation_aenter {
             timeout-ms = <50>;
-            key-positions = <33 73>; // A + Tab
+            key-positions = <33 72>; // A + Enter
             bindings = <&kp LS(N1)>;
         };
 
-        combo_at_stab {
+        combo_at_senter {
             timeout-ms = <50>;
-            key-positions = <34 73>; // S + Tab
+            key-positions = <34 72>; // S + Enter
             bindings = <&kp JP_AT>;
         };
 
@@ -858,8 +860,8 @@
             bindings = <
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
-&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &trans         &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &trans  &trans
-&trans  &kp LA(NUMBER_1)               &kp LA(NUMBER_2)               &kp LA(NUMBER_3)               &kp LA(NUMBER_4)               &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
+&trans  &kp LG(NUMBER_1)               &kp LG(NUMBER_2)               &kp LG(NUMBER_3)               &kp LG(NUMBER_4)               &kp LG(NUMBER_5)               &kp LG(NUMBER_6)                 &trans  &trans  &trans  &trans    &trans      &trans         &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &trans  &trans
+&trans  &mt LC(NUMBER_1) LA(NUMBER_1)  &mt LC(NUMBER_2) LA(NUMBER_2)  &mt LC(NUMBER_3) LA(NUMBER_3)  &mt LC(NUMBER_4) LA(NUMBER_4)  &mt LC(NUMBER_5) B              &mt LC(NUMBER_6) INSERT          &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
 &trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &mt LA(LC(DELETE)) DELETE  &kp LS(SPACE)                                                                     &trans
             >;
         };

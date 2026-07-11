@@ -44,6 +44,7 @@ struct inertial_scroll_config {
     int16_t stop_threshold;
     int16_t max_step;
     int16_t required_layer;
+    int16_t cancel_layer;
     uint16_t output_code;
     uint16_t codes[];
 };
@@ -105,8 +106,8 @@ static void prime_first_step(struct inertial_scroll_data *data) {
     data->remainder = sign32(data->velocity) * (VELOCITY_SCALE - 1);
 }
 
-static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
-    return cfg->required_layer < 0 || zmk_keymap_layer_active(cfg->required_layer);
+static bool layer_cancels_inertia(const struct inertial_scroll_config *cfg) {
+    return cfg->cancel_layer >= 0 && zmk_keymap_layer_active(cfg->cancel_layer);
 }
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
@@ -190,7 +191,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     const struct device *dev = data->dev;
     const struct inertial_scroll_config *cfg = dev->config;
 
-    if (!layer_allows_inertia(cfg)) {
+    if (layer_cancels_inertia(cfg)) {
         clear_pending_scroll(data);
         return;
     }
@@ -326,6 +327,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .stop_threshold = DT_INST_PROP_OR(n, stop_threshold, 35),                                  \
         .max_step = DT_INST_PROP_OR(n, max_step, 4),                                               \
         .required_layer = DT_INST_PROP_OR(n, required_layer, -1),                                  \
+        .cancel_layer = DT_INST_PROP_OR(n, cancel_layer, -1),                                      \
         .output_code = DT_INST_PROP_OR(n, output_code, INPUT_REL_WHEEL),                           \
         .codes = DT_INST_PROP(n, codes),                                                           \
     };                                                                                             \

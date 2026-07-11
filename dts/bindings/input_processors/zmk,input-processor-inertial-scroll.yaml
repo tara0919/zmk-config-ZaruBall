@@ -72,3 +72,6 @@ properties:
   required-layer:
     type: int
     default: -1
+  cancel-layer:
+    type: int
+    default: -1
