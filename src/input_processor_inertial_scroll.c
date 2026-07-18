@@ -21,7 +21,7 @@
 
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+LOG_MODULE_REGISTER(zaruball_inertia, LOG_LEVEL_WRN);
 
 #define VELOCITY_SCALE 100
 
@@ -61,6 +61,7 @@ struct inertial_scroll_data {
     int32_t best_burst_peak;
     int64_t last_input_ms;
     int64_t burst_start_ms;
+    int64_t best_burst_ms;
     int8_t burst_dir;
     int8_t best_burst_dir;
     uint16_t input_code;
@@ -162,6 +163,10 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
             (long)data->debug_pos_accum, (long)data->debug_neg_accum,
             (long)data->debug_pos_peak, (long)data->debug_neg_peak, chosen_dir,
             (long)chosen_accum, (long)chosen_peak, (long)velocity);
+    LOG_WRN("inertia_dbg profile samples=%u/%u best_at=%lld tail=%lld",
+            data->debug_pos_count, data->debug_neg_count,
+            (long long)(data->best_burst_ms - data->debug_start_ms),
+            (long long)(now - data->best_burst_ms));
 }
 
 static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
@@ -217,6 +222,7 @@ static void reset_burst_tracking(struct inertial_scroll_data *data) {
     data->best_burst_accum = 0;
     data->best_burst_peak = 0;
     data->best_burst_dir = 0;
+    data->best_burst_ms = 0;
 }
 
 static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg, int32_t accum,
@@ -230,7 +236,7 @@ static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg, int3
 }
 
 static void update_best_burst(const struct inertial_scroll_config *cfg,
-                              struct inertial_scroll_data *data) {
+                              struct inertial_scroll_data *data, int64_t now) {
     bool current_is_valid =
         burst_is_sharp_enough(cfg, data->burst_accum, data->burst_peak);
     bool best_is_valid =
@@ -244,6 +250,7 @@ static void update_best_burst(const struct inertial_scroll_config *cfg,
         data->best_burst_accum = data->burst_accum;
         data->best_burst_peak = data->burst_peak;
         data->best_burst_dir = data->burst_dir;
+        data->best_burst_ms = now;
     }
 }
 
@@ -440,7 +447,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
     }
-    update_best_burst(cfg, data);
+    update_best_burst(cfg, data, now);
 
     k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
 
