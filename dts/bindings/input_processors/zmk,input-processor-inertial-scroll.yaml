@@ -54,6 +54,12 @@ properties:
   release-ms:
     type: int
     default: 40
+  candidate-tail-ms:
+    type: int
+    default: 0
+  touch-guard-ms:
+    type: int
+    default: 0
   decay-percent:
     type: int
     default: 78

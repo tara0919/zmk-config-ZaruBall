@@ -39,6 +39,8 @@ struct inertial_scroll_config {
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
     uint16_t release_ms;
+    uint16_t candidate_tail_ms;
+    uint16_t touch_guard_ms;
     uint8_t decay_percent;
     uint8_t tail_decay_percent;
     int16_t tail_threshold;
@@ -62,8 +64,10 @@ struct inertial_scroll_data {
     int64_t last_input_ms;
     int64_t burst_start_ms;
     int64_t best_burst_ms;
+    int64_t touch_guard_last_ms;
     int8_t burst_dir;
     int8_t best_burst_dir;
+    bool touch_guard_active;
     uint16_t input_code;
     uint16_t code;
 #if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
@@ -257,6 +261,8 @@ static void update_best_burst(const struct inertial_scroll_config *cfg,
 static void clear_pending_scroll(struct inertial_scroll_data *data) {
     stop_inertia(data);
     reset_burst_tracking(data);
+    data->touch_guard_active = false;
+    data->touch_guard_last_ms = 0;
     debug_reset(data);
 }
 
@@ -266,6 +272,12 @@ static void prime_first_step(struct inertial_scroll_data *data) {
 
 static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
     return cfg->required_layer < 0 || zmk_keymap_layer_active(cfg->required_layer);
+}
+
+static bool candidate_is_fresh(const struct inertial_scroll_config *cfg,
+                               const struct inertial_scroll_data *data, int64_t now) {
+    return cfg->candidate_tail_ms == 0 ||
+           (data->best_burst_ms > 0 && now - data->best_burst_ms <= cfg->candidate_tail_ms);
 }
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
@@ -341,10 +353,11 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         CONTAINER_OF(delayable, struct inertial_scroll_data, work);
     const struct device *dev = data->dev;
     const struct inertial_scroll_config *cfg = dev->config;
+    const int64_t now = k_uptime_get();
 
     if (!layer_allows_inertia(cfg)) {
         debug_log_window(cfg, data, "layer_cancel", data->best_burst_dir,
-                         data->best_burst_accum, data->best_burst_peak, 0, k_uptime_get());
+                         data->best_burst_accum, data->best_burst_peak, 0, now);
         clear_pending_scroll(data);
         return;
     }
@@ -352,7 +365,15 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     if (data->velocity == 0) {
         if (!burst_is_sharp_enough(cfg, data->best_burst_accum, data->best_burst_peak)) {
             debug_log_window(cfg, data, "no_start", data->best_burst_dir,
-                             data->best_burst_accum, data->best_burst_peak, 0, k_uptime_get());
+                             data->best_burst_accum, data->best_burst_peak, 0, now);
+            reset_burst_tracking(data);
+            debug_reset(data);
+            return;
+        }
+
+        if (!candidate_is_fresh(cfg, data, now)) {
+            debug_log_window(cfg, data, "stale", data->best_burst_dir,
+                             data->best_burst_accum, data->best_burst_peak, 0, now);
             reset_burst_tracking(data);
             debug_reset(data);
             return;
@@ -361,7 +382,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         int32_t velocity =
             input_to_velocity(cfg, data->best_burst_dir, data->best_burst_peak);
         debug_log_window(cfg, data, "start", data->best_burst_dir, data->best_burst_accum,
-                         data->best_burst_peak, velocity, k_uptime_get());
+                         data->best_burst_peak, velocity, now);
         debug_reset(data);
         data->velocity = velocity;
         data->velocity_remainder = 0;
@@ -413,21 +434,41 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     const int8_t input_dir = sign32(event->value);
     const int64_t now = k_uptime_get();
+    const int32_t input_amount = abs32(event->value);
 
     if (data->velocity != 0) {
-        debug_log_touch_stop(event->code, input_dir, abs32(event->value), data->velocity);
+        debug_log_touch_stop(event->code, input_dir, input_amount, data->velocity);
+        k_work_cancel_delayable(&data->work);
         stop_inertia(data);
         reset_burst_tracking(data);
+        debug_reset(data);
+        if (cfg->touch_guard_ms > 0) {
+            data->touch_guard_active = true;
+            data->touch_guard_last_ms = now;
+            return ZMK_INPUT_PROC_CONTINUE;
+        }
+
         data->burst_dir = input_dir;
         data->burst_start_ms = now;
         data->last_input_ms = 0;
     }
 
-    if (abs32(event->value) < cfg->start_threshold) {
+    if (data->touch_guard_active) {
+        if (now - data->touch_guard_last_ms <= cfg->touch_guard_ms) {
+            data->touch_guard_last_ms = now;
+            return ZMK_INPUT_PROC_CONTINUE;
+        }
+
+        data->touch_guard_active = false;
+        data->touch_guard_last_ms = 0;
+        reset_burst_tracking(data);
+        debug_reset(data);
+    }
+
+    if (input_amount < cfg->start_threshold) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    int32_t input_amount = abs32(event->value);
     debug_record_input(cfg, data, event->code, input_dir, input_amount, now);
 
     if (data->burst_dir != input_dir || data->input_code != event->code ||
@@ -488,6 +529,8 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
         .release_ms = DT_INST_PROP_OR(n, release_ms, 40),                                           \
+        .candidate_tail_ms = DT_INST_PROP_OR(n, candidate_tail_ms, 0),                              \
+        .touch_guard_ms = DT_INST_PROP_OR(n, touch_guard_ms, 0),                                    \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .tail_decay_percent = DT_INST_PROP_OR(n, tail_decay_percent,                                \
                                               DT_INST_PROP_OR(n, decay_percent, 78)),               \
