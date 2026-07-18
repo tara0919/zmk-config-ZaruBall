@@ -16,3 +16,8 @@ config ZARUBALL_INERTIAL_SCROLL
     depends on ZMK_POINTING
     depends on ZMK_SPLIT_ROLE_CENTRAL
     depends on INPUT
+
+config ZARUBALL_INERTIAL_SCROLL_DEBUG
+    bool "Log ZaruBall inertial scroll input windows"
+    default n
+    depends on ZARUBALL_INERTIAL_SCROLL

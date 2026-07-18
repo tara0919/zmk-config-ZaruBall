@@ -54,6 +54,15 @@ properties:
   release-ms:
     type: int
     default: 40
+  candidate-tail-base-ms:
+    type: int
+    default: 0
+  candidate-tail-per-peak-ms:
+    type: int
+    default: 0
+  candidate-tail-max-ms:
+    type: int
+    default: 0
   decay-percent:
     type: int
     default: 78
@@ -69,9 +78,6 @@ properties:
   max-step:
     type: int
     default: 4
-  required-layer:
-    type: int
-    default: -1
   cancel-layer:
     type: int
     default: -1
