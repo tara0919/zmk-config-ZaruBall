@@ -70,8 +70,9 @@
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;
         release-ms = <35>;
-        candidate-tail-ms = <240>;
-        touch-guard-ms = <180>;
+        candidate-tail-base-ms = <60>;
+        candidate-tail-per-peak-ms = <3>;
+        candidate-tail-max-ms = <360>;
         decay-percent = <97>;
         tail-decay-percent = <99>;
         tail-threshold = <20>;
@@ -97,8 +98,9 @@
         burst-timeout-ms = <25>;
         burst-window-ms = <25>;
         release-ms = <35>;
-        candidate-tail-ms = <240>;
-        touch-guard-ms = <180>;
+        candidate-tail-base-ms = <60>;
+        candidate-tail-per-peak-ms = <3>;
+        candidate-tail-max-ms = <360>;
         decay-percent = <97>;
         tail-decay-percent = <99>;
         tail-threshold = <20>;

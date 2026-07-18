@@ -39,8 +39,9 @@ struct inertial_scroll_config {
     uint16_t burst_timeout_ms;
     uint16_t burst_window_ms;
     uint16_t release_ms;
-    uint16_t candidate_tail_ms;
-    uint16_t touch_guard_ms;
+    uint16_t candidate_tail_base_ms;
+    uint16_t candidate_tail_per_peak_ms;
+    uint16_t candidate_tail_max_ms;
     uint8_t decay_percent;
     uint8_t tail_decay_percent;
     int16_t tail_threshold;
@@ -64,10 +65,8 @@ struct inertial_scroll_data {
     int64_t last_input_ms;
     int64_t burst_start_ms;
     int64_t best_burst_ms;
-    int64_t touch_guard_last_ms;
     int8_t burst_dir;
     int8_t best_burst_dir;
-    bool touch_guard_active;
     uint16_t input_code;
     uint16_t code;
 #if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
@@ -160,6 +159,14 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
         return;
     }
 
+    int64_t tail_limit_ms =
+        cfg->candidate_tail_base_ms +
+        (int64_t)chosen_peak * cfg->candidate_tail_per_peak_ms;
+    if (cfg->candidate_tail_max_ms > 0 &&
+        tail_limit_ms > cfg->candidate_tail_max_ms) {
+        tail_limit_ms = cfg->candidate_tail_max_ms;
+    }
+
     LOG_WRN("inertia_dbg %s in=%u out=%u age=%lld gap=%lld total=%ld/%ld peak=%ld/%ld "
             "chosen=%d/%ld/%ld vel=%ld",
             state, data->debug_code, cfg->output_code,
@@ -167,10 +174,10 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
             (long)data->debug_pos_accum, (long)data->debug_neg_accum,
             (long)data->debug_pos_peak, (long)data->debug_neg_peak, chosen_dir,
             (long)chosen_accum, (long)chosen_peak, (long)velocity);
-    LOG_WRN("inertia_dbg profile samples=%u/%u best_at=%lld tail=%lld",
+    LOG_WRN("inertia_dbg profile samples=%u/%u best_at=%lld tail=%lld limit=%lld",
             data->debug_pos_count, data->debug_neg_count,
             (long long)(data->best_burst_ms - data->debug_start_ms),
-            (long long)(now - data->best_burst_ms));
+            (long long)(now - data->best_burst_ms), (long long)tail_limit_ms);
 }
 
 static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
@@ -261,8 +268,6 @@ static void update_best_burst(const struct inertial_scroll_config *cfg,
 static void clear_pending_scroll(struct inertial_scroll_data *data) {
     stop_inertia(data);
     reset_burst_tracking(data);
-    data->touch_guard_active = false;
-    data->touch_guard_last_ms = 0;
     debug_reset(data);
 }
 
@@ -276,8 +281,20 @@ static bool layer_allows_inertia(const struct inertial_scroll_config *cfg) {
 
 static bool candidate_is_fresh(const struct inertial_scroll_config *cfg,
                                const struct inertial_scroll_data *data, int64_t now) {
-    return cfg->candidate_tail_ms == 0 ||
-           (data->best_burst_ms > 0 && now - data->best_burst_ms <= cfg->candidate_tail_ms);
+    if (cfg->candidate_tail_base_ms == 0 && cfg->candidate_tail_per_peak_ms == 0) {
+        return true;
+    }
+
+    int64_t allowed_tail_ms =
+        cfg->candidate_tail_base_ms +
+        (int64_t)data->best_burst_peak * cfg->candidate_tail_per_peak_ms;
+
+    if (cfg->candidate_tail_max_ms > 0 &&
+        allowed_tail_ms > cfg->candidate_tail_max_ms) {
+        allowed_tail_ms = cfg->candidate_tail_max_ms;
+    }
+
+    return data->best_burst_ms > 0 && now - data->best_burst_ms <= allowed_tail_ms;
 }
 
 static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_t dir,
@@ -442,27 +459,9 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         stop_inertia(data);
         reset_burst_tracking(data);
         debug_reset(data);
-        if (cfg->touch_guard_ms > 0) {
-            data->touch_guard_active = true;
-            data->touch_guard_last_ms = now;
-            return ZMK_INPUT_PROC_CONTINUE;
-        }
-
         data->burst_dir = input_dir;
         data->burst_start_ms = now;
         data->last_input_ms = 0;
-    }
-
-    if (data->touch_guard_active) {
-        if (now - data->touch_guard_last_ms <= cfg->touch_guard_ms) {
-            data->touch_guard_last_ms = now;
-            return ZMK_INPUT_PROC_CONTINUE;
-        }
-
-        data->touch_guard_active = false;
-        data->touch_guard_last_ms = 0;
-        reset_burst_tracking(data);
-        debug_reset(data);
     }
 
     if (input_amount < cfg->start_threshold) {
@@ -529,8 +528,9 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .burst_timeout_ms = DT_INST_PROP_OR(n, burst_timeout_ms, 120),                              \
         .burst_window_ms = DT_INST_PROP_OR(n, burst_window_ms, 80),                                  \
         .release_ms = DT_INST_PROP_OR(n, release_ms, 40),                                           \
-        .candidate_tail_ms = DT_INST_PROP_OR(n, candidate_tail_ms, 0),                              \
-        .touch_guard_ms = DT_INST_PROP_OR(n, touch_guard_ms, 0),                                    \
+        .candidate_tail_base_ms = DT_INST_PROP_OR(n, candidate_tail_base_ms, 0),                    \
+        .candidate_tail_per_peak_ms = DT_INST_PROP_OR(n, candidate_tail_per_peak_ms, 0),            \
+        .candidate_tail_max_ms = DT_INST_PROP_OR(n, candidate_tail_max_ms, 0),                      \
         .decay_percent = DT_INST_PROP_OR(n, decay_percent, 78),                                    \
         .tail_decay_percent = DT_INST_PROP_OR(n, tail_decay_percent,                                \
                                               DT_INST_PROP_OR(n, decay_percent, 78)),               \

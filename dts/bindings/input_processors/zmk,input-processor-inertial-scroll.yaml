@@ -54,10 +54,13 @@ properties:
   release-ms:
     type: int
     default: 40
-  candidate-tail-ms:
+  candidate-tail-base-ms:
     type: int
     default: 0
-  touch-guard-ms:
+  candidate-tail-per-peak-ms:
+    type: int
+    default: 0
+  candidate-tail-max-ms:
     type: int
     default: 0
   decay-percent:
