@@ -23,7 +23,7 @@ include:
   - board: seeeduino_xiao_ble
     shield: ZaruBall_right rgbled_adapter
     snippet: zmk-usb-logging
-    cmake-args: -DCONFIG_ZMK_STUDIO=n -DCONFIG_ZMK_LOG_LEVEL=1 -DCONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG=y
+    cmake-args: -DCONFIG_ZMK_STUDIO=n -DCONFIG_ZMK_LOGGING_MINIMAL=y -DCONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG=y
     artifact-name: ZaruBall_right_inertia_log
   - board: seeeduino_xiao_ble
     shield: settings_reset
