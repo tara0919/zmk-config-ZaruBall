@@ -32,6 +32,7 @@ struct inertial_scroll_config {
     uint16_t gain_percent;
     uint8_t velocity_percent;
     int16_t min_velocity;
+    int16_t max_velocity;
     int16_t start_threshold;
     int16_t burst_threshold;
     int16_t burst_peak_threshold;
@@ -57,9 +58,12 @@ struct inertial_scroll_data {
     int32_t remainder;
     int32_t burst_accum;
     int32_t burst_peak;
+    int32_t best_burst_accum;
+    int32_t best_burst_peak;
     int64_t last_input_ms;
     int64_t burst_start_ms;
     int8_t burst_dir;
+    int8_t best_burst_dir;
     uint16_t input_code;
     uint16_t code;
 #if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
@@ -119,9 +123,9 @@ static void debug_reset(struct inertial_scroll_data *data) {
 static void debug_record_input(const struct inertial_scroll_config *cfg,
                                struct inertial_scroll_data *data, uint16_t code, int8_t dir,
                                int32_t amount, int64_t now) {
-    if (!data->debug_active || data->debug_code != code ||
-        now - data->debug_last_ms > cfg->burst_timeout_ms ||
-        now - data->debug_start_ms > cfg->burst_window_ms) {
+    (void)cfg;
+
+    if (!data->debug_active || data->debug_code != code) {
         debug_reset(data);
         data->debug_active = true;
         data->debug_code = code;
@@ -146,20 +150,20 @@ static void debug_record_input(const struct inertial_scroll_config *cfg,
 
 static void debug_log_window(const struct inertial_scroll_config *cfg,
                              const struct inertial_scroll_data *data, const char *state,
-                             int8_t chosen_dir, int32_t chosen_amount, int32_t velocity,
-                             int64_t now) {
+                             int8_t chosen_dir, int32_t chosen_accum, int32_t chosen_peak,
+                             int32_t velocity, int64_t now) {
     if (!data->debug_active) {
         return;
     }
 
     LOG_WRN("inertia_dbg %s in=%u out=%u age=%lld gap=%lld pos=%ld/%ld/%u neg=%ld/%ld/%u "
-            "burst=%d/%ld/%ld chosen=%d/%ld vel=%ld",
+            "current=%d/%ld/%ld chosen=%d/%ld/%ld vel=%ld",
             state, data->debug_code, cfg->output_code,
             (long long)(now - data->debug_start_ms), (long long)(now - data->debug_last_ms),
             (long)data->debug_pos_accum, (long)data->debug_pos_peak, data->debug_pos_count,
             (long)data->debug_neg_accum, (long)data->debug_neg_peak, data->debug_neg_count,
             data->burst_dir, (long)data->burst_accum, (long)data->burst_peak, chosen_dir,
-            (long)chosen_amount, (long)velocity);
+            (long)chosen_accum, (long)chosen_peak, (long)velocity);
 }
 
 static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int32_t velocity) {
@@ -180,13 +184,14 @@ static void debug_record_input(const struct inertial_scroll_config *cfg,
 }
 static void debug_log_window(const struct inertial_scroll_config *cfg,
                              const struct inertial_scroll_data *data, const char *state,
-                             int8_t chosen_dir, int32_t chosen_amount, int32_t velocity,
-                             int64_t now) {
+                             int8_t chosen_dir, int32_t chosen_accum, int32_t chosen_peak,
+                             int32_t velocity, int64_t now) {
     (void)cfg;
     (void)data;
     (void)state;
     (void)chosen_dir;
-    (void)chosen_amount;
+    (void)chosen_accum;
+    (void)chosen_peak;
     (void)velocity;
     (void)now;
 }
@@ -204,10 +209,49 @@ static void stop_inertia(struct inertial_scroll_data *data) {
     data->remainder = 0;
 }
 
-static void clear_pending_scroll(struct inertial_scroll_data *data) {
-    stop_inertia(data);
+static void reset_burst_window(struct inertial_scroll_data *data) {
     data->burst_accum = 0;
     data->burst_peak = 0;
+}
+
+static void reset_burst_tracking(struct inertial_scroll_data *data) {
+    reset_burst_window(data);
+    data->best_burst_accum = 0;
+    data->best_burst_peak = 0;
+    data->best_burst_dir = 0;
+}
+
+static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg, int32_t accum,
+                                  int32_t peak) {
+    if (accum < cfg->burst_threshold || peak < cfg->burst_peak_threshold) {
+        return false;
+    }
+
+    return cfg->burst_peak_percent == 0 ||
+           peak * 100 >= accum * cfg->burst_peak_percent;
+}
+
+static void update_best_burst(const struct inertial_scroll_config *cfg,
+                              struct inertial_scroll_data *data) {
+    bool current_is_valid =
+        burst_is_sharp_enough(cfg, data->burst_accum, data->burst_peak);
+    bool best_is_valid =
+        burst_is_sharp_enough(cfg, data->best_burst_accum, data->best_burst_peak);
+
+    if ((current_is_valid && !best_is_valid) ||
+        (current_is_valid == best_is_valid &&
+         (data->burst_peak > data->best_burst_peak ||
+          (data->burst_peak == data->best_burst_peak &&
+           data->burst_accum > data->best_burst_accum)))) {
+        data->best_burst_accum = data->burst_accum;
+        data->best_burst_peak = data->burst_peak;
+        data->best_burst_dir = data->burst_dir;
+    }
+}
+
+static void clear_pending_scroll(struct inertial_scroll_data *data) {
+    stop_inertia(data);
+    reset_burst_tracking(data);
     debug_reset(data);
 }
 
@@ -226,21 +270,14 @@ static int32_t input_to_velocity(const struct inertial_scroll_config *cfg, int8_
     int32_t scaled_velocity = velocity / 10000;
 
     if (cfg->min_velocity > 0 && abs32(scaled_velocity) < cfg->min_velocity) {
-        return dir * cfg->min_velocity;
+        scaled_velocity = dir * cfg->min_velocity;
+    }
+
+    if (cfg->max_velocity > 0 && abs32(scaled_velocity) > cfg->max_velocity) {
+        scaled_velocity = dir * cfg->max_velocity;
     }
 
     return scaled_velocity;
-}
-
-static bool burst_is_sharp_enough(const struct inertial_scroll_config *cfg,
-                                  const struct inertial_scroll_data *data) {
-    if (data->burst_accum < cfg->burst_threshold ||
-        data->burst_peak < cfg->burst_peak_threshold) {
-        return false;
-    }
-
-    return cfg->burst_peak_percent == 0 ||
-           data->burst_peak * 100 >= data->burst_accum * cfg->burst_peak_percent;
 }
 
 static void decay_velocity(struct inertial_scroll_data *data,
@@ -301,27 +338,30 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     const struct inertial_scroll_config *cfg = dev->config;
 
     if (!layer_allows_inertia(cfg)) {
-        debug_log_window(cfg, data, "layer_cancel", 0, 0, 0, k_uptime_get());
+        debug_log_window(cfg, data, "layer_cancel", data->best_burst_dir,
+                         data->best_burst_accum, data->best_burst_peak, 0, k_uptime_get());
         clear_pending_scroll(data);
         return;
     }
 
     if (data->velocity == 0) {
-        if (!burst_is_sharp_enough(cfg, data)) {
-            debug_log_window(cfg, data, "no_start", 0, 0, 0, k_uptime_get());
+        if (!burst_is_sharp_enough(cfg, data->best_burst_accum, data->best_burst_peak)) {
+            debug_log_window(cfg, data, "no_start", data->best_burst_dir,
+                             data->best_burst_accum, data->best_burst_peak, 0, k_uptime_get());
+            reset_burst_tracking(data);
             debug_reset(data);
             return;
         }
 
-        int32_t velocity = input_to_velocity(cfg, data->burst_dir, data->burst_accum);
-        debug_log_window(cfg, data, "start", data->burst_dir, data->burst_accum, velocity,
-                         k_uptime_get());
+        int32_t velocity =
+            input_to_velocity(cfg, data->best_burst_dir, data->best_burst_peak);
+        debug_log_window(cfg, data, "start", data->best_burst_dir, data->best_burst_accum,
+                         data->best_burst_peak, velocity, k_uptime_get());
         debug_reset(data);
         data->velocity = velocity;
         data->velocity_remainder = 0;
         prime_first_step(data);
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        reset_burst_tracking(data);
     }
 
     decay_velocity(data, cfg);
@@ -372,8 +412,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (data->velocity != 0) {
         debug_log_touch_stop(event->code, input_dir, abs32(event->value), data->velocity);
         stop_inertia(data);
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        reset_burst_tracking(data);
         data->burst_dir = input_dir;
         data->burst_start_ms = now;
         data->last_input_ms = 0;
@@ -388,13 +427,11 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        reset_burst_window(data);
         data->burst_dir = input_dir;
         data->burst_start_ms = now;
     } else if (now - data->burst_start_ms > cfg->burst_window_ms) {
-        data->burst_accum = 0;
-        data->burst_peak = 0;
+        reset_burst_window(data);
         data->burst_start_ms = now;
     }
 
@@ -405,6 +442,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
     }
+    update_best_burst(cfg, data);
 
     k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
 
@@ -438,6 +476,7 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .velocity_percent = DT_INST_PROP_OR(n, velocity_percent, 100),                             \
         .min_velocity = DT_INST_PROP_OR(n, min_velocity, 0),                                       \
+        .max_velocity = DT_INST_PROP_OR(n, max_velocity, 0),                                       \
         .start_threshold = DT_INST_PROP_OR(n, start_threshold, 1),                                  \
         .burst_threshold = DT_INST_PROP_OR(n, burst_threshold, 1),                                  \
         .burst_peak_threshold = DT_INST_PROP_OR(n, burst_peak_threshold, 1),                        \
@@ -460,6 +499,10 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, velocity_percent, 100) > 0,                                    \
                  "velocity-percent must be greater than 0");                                      \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, max_velocity, 0) == 0 ||                                      \
+                     DT_INST_PROP_OR(n, max_velocity, 0) >=                                       \
+                         DT_INST_PROP_OR(n, min_velocity, 0),                                      \
+                 "max-velocity must be zero or at least min-velocity");                            \
     BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
                  "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
