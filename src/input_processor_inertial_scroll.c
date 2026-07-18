@@ -301,6 +301,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
     const struct inertial_scroll_config *cfg = dev->config;
 
     if (!layer_allows_inertia(cfg)) {
+        debug_log_window(cfg, data, "layer_cancel", 0, 0, 0, k_uptime_get());
         clear_pending_scroll(data);
         return;
     }
@@ -415,6 +416,12 @@ static int inertial_scroll_init(const struct device *dev) {
 
     data->dev = dev;
     k_work_init_delayable(&data->work, inertial_scroll_work_handler);
+
+#if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
+    const struct inertial_scroll_config *cfg = dev->config;
+    LOG_WRN("inertia_dbg ready in=%u out=%u layer=%d", cfg->codes[0], cfg->output_code,
+            cfg->required_layer);
+#endif
 
     return 0;
 }
