@@ -499,10 +499,6 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, velocity_percent, 100) > 0,                                    \
                  "velocity-percent must be greater than 0");                                      \
-    BUILD_ASSERT(DT_INST_PROP_OR(n, max_velocity, 0) == 0 ||                                      \
-                     DT_INST_PROP_OR(n, max_velocity, 0) >=                                       \
-                         DT_INST_PROP_OR(n, min_velocity, 0),                                      \
-                 "max-velocity must be zero or at least min-velocity");                            \
     BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
                  "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
