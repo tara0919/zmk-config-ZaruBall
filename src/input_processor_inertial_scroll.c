@@ -155,13 +155,12 @@ static void debug_log_window(const struct inertial_scroll_config *cfg,
         return;
     }
 
-    LOG_WRN("inertia_dbg %s in=%u out=%u age=%lld gap=%lld pos=%ld/%ld/%u neg=%ld/%ld/%u "
-            "current=%d/%ld/%ld chosen=%d/%ld/%ld vel=%ld",
+    LOG_WRN("inertia_dbg %s in=%u out=%u age=%lld gap=%lld total=%ld/%ld peak=%ld/%ld "
+            "chosen=%d/%ld/%ld vel=%ld",
             state, data->debug_code, cfg->output_code,
             (long long)(now - data->debug_start_ms), (long long)(now - data->debug_last_ms),
-            (long)data->debug_pos_accum, (long)data->debug_pos_peak, data->debug_pos_count,
-            (long)data->debug_neg_accum, (long)data->debug_neg_peak, data->debug_neg_count,
-            data->burst_dir, (long)data->burst_accum, (long)data->burst_peak, chosen_dir,
+            (long)data->debug_pos_accum, (long)data->debug_neg_accum,
+            (long)data->debug_pos_peak, (long)data->debug_neg_peak, chosen_dir,
             (long)chosen_accum, (long)chosen_peak, (long)velocity);
 }
 
