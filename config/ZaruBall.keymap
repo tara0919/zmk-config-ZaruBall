@@ -63,7 +63,6 @@
         gain-percent = <2>;
         velocity-percent = <75>;
         min-velocity = <34>;
-        max-velocity = <100>;
         start-threshold = <1>;
         burst-threshold = <8>;
         burst-peak-threshold = <3>;
@@ -89,7 +88,6 @@
         gain-percent = <2>;
         velocity-percent = <75>;
         min-velocity = <34>;
-        max-velocity = <100>;
         start-threshold = <1>;
         burst-threshold = <8>;
         burst-peak-threshold = <3>;
