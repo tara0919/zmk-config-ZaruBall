@@ -21,6 +21,25 @@ properties:
   output-code:
     type: int
     default: 8
+  axis-lock:
+    type: boolean
+    description: Lock XY input to the dominant axis and map X/Y to horizontal/vertical scroll
+  axis-lock-threshold:
+    type: int
+    default: 4
+    description: Minimum accumulated movement before choosing an axis
+  axis-lock-ratio-percent:
+    type: int
+    default: 150
+    description: Dominant-to-secondary axis ratio required for an immediate decision
+  axis-lock-max-pending:
+    type: int
+    default: 12
+    description: Total accumulated movement after which the larger axis is chosen
+  axis-lock-release-ms:
+    type: int
+    default: 80
+    description: Idle time before the selected axis is released
   interval-ms:
     type: int
     default: 16

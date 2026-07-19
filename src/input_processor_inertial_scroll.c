@@ -28,6 +28,11 @@ LOG_MODULE_REGISTER(zaruball_inertia, LOG_LEVEL_WRN);
 struct inertial_scroll_config {
     uint8_t type;
     size_t codes_len;
+    bool axis_lock;
+    int16_t axis_lock_threshold;
+    uint16_t axis_lock_ratio_percent;
+    int16_t axis_lock_max_pending;
+    uint16_t axis_lock_release_ms;
     uint16_t interval_ms;
     uint16_t gain_percent;
     uint8_t velocity_percent;
@@ -52,6 +57,12 @@ struct inertial_scroll_config {
     uint16_t codes[];
 };
 
+enum scroll_axis {
+    SCROLL_AXIS_NONE,
+    SCROLL_AXIS_X,
+    SCROLL_AXIS_Y,
+};
+
 struct inertial_scroll_data {
     const struct device *dev;
     struct k_work_delayable work;
@@ -69,6 +80,12 @@ struct inertial_scroll_data {
     int8_t best_burst_dir;
     uint16_t input_code;
     uint16_t code;
+    enum scroll_axis locked_axis;
+    int32_t pending_x;
+    int32_t pending_y;
+    int32_t pending_abs_x;
+    int32_t pending_abs_y;
+    int64_t last_axis_input_ms;
 #if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
     int32_t debug_pos_accum;
     int32_t debug_neg_accum;
@@ -271,12 +288,126 @@ static void clear_pending_scroll(struct inertial_scroll_data *data) {
     debug_reset(data);
 }
 
+static void clear_axis_lock(struct inertial_scroll_data *data) {
+    data->locked_axis = SCROLL_AXIS_NONE;
+    data->pending_x = 0;
+    data->pending_y = 0;
+    data->pending_abs_x = 0;
+    data->pending_abs_y = 0;
+    data->last_axis_input_ms = 0;
+}
+
 static void prime_first_step(struct inertial_scroll_data *data) {
     data->remainder = sign32(data->velocity) * (VELOCITY_SCALE - 1);
 }
 
 static bool layer_cancels_inertia(const struct inertial_scroll_config *cfg) {
     return cfg->cancel_layer >= 0 && zmk_keymap_layer_active(cfg->cancel_layer);
+}
+
+static enum scroll_axis axis_for_code(uint16_t code) {
+    switch (code) {
+    case INPUT_REL_X:
+        return SCROLL_AXIS_X;
+    case INPUT_REL_Y:
+        return SCROLL_AXIS_Y;
+    default:
+        return SCROLL_AXIS_NONE;
+    }
+}
+
+static uint16_t output_code_for_input(const struct inertial_scroll_config *cfg,
+                                      uint16_t input_code) {
+    if (!cfg->axis_lock) {
+        return cfg->output_code;
+    }
+
+    return input_code == INPUT_REL_X ? INPUT_REL_HWHEEL : INPUT_REL_WHEEL;
+}
+
+static enum scroll_axis choose_axis(const struct inertial_scroll_config *cfg,
+                                    const struct inertial_scroll_data *data) {
+    int32_t x = data->pending_abs_x;
+    int32_t y = data->pending_abs_y;
+
+    if (x >= cfg->axis_lock_threshold &&
+        (int64_t)x * 100 >= (int64_t)y * cfg->axis_lock_ratio_percent) {
+        return SCROLL_AXIS_X;
+    }
+
+    if (y >= cfg->axis_lock_threshold &&
+        (int64_t)y * 100 >= (int64_t)x * cfg->axis_lock_ratio_percent) {
+        return SCROLL_AXIS_Y;
+    }
+
+    if (x + y < cfg->axis_lock_max_pending) {
+        return SCROLL_AXIS_NONE;
+    }
+
+    // Prefer vertical scrolling when the direction is ambiguous.
+    return x > y ? SCROLL_AXIS_X : SCROLL_AXIS_Y;
+}
+
+static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
+                            struct inertial_scroll_data *data, struct input_event *event,
+                            int64_t now) {
+    enum scroll_axis event_axis = axis_for_code(event->code);
+
+    if (!cfg->axis_lock || event_axis == SCROLL_AXIS_NONE) {
+        return true;
+    }
+
+    if (data->last_axis_input_ms > 0 &&
+        now - data->last_axis_input_ms >= cfg->axis_lock_release_ms) {
+        clear_axis_lock(data);
+        clear_pending_scroll(data);
+    }
+
+    if (data->locked_axis != SCROLL_AXIS_NONE) {
+        if (event_axis != data->locked_axis) {
+            if (event->value != 0) {
+                stop_inertia(data);
+            }
+            event->value = 0;
+            return false;
+        }
+
+        if (event->value != 0) {
+            data->last_axis_input_ms = now;
+        }
+        return true;
+    }
+
+    if (event_axis == SCROLL_AXIS_X) {
+        data->pending_x += event->value;
+        data->pending_abs_x += abs32(event->value);
+    } else {
+        data->pending_y += event->value;
+        data->pending_abs_y += abs32(event->value);
+    }
+
+    if (event->value != 0) {
+        data->last_axis_input_ms = now;
+    }
+    event->value = 0;
+
+    // Choose once per synchronized X/Y report so the first event cannot win prematurely.
+    if (!event->sync) {
+        return false;
+    }
+
+    data->locked_axis = choose_axis(cfg, data);
+    if (data->locked_axis == SCROLL_AXIS_NONE) {
+        return false;
+    }
+
+    event->code = data->locked_axis == SCROLL_AXIS_X ? INPUT_REL_X : INPUT_REL_Y;
+    event->value = data->locked_axis == SCROLL_AXIS_X ? data->pending_x : data->pending_y;
+    clear_axis_lock(data);
+    data->locked_axis = axis_for_code(event->code);
+    data->last_axis_input_ms = now;
+
+    return event->value != 0;
 }
 
 static bool candidate_is_fresh(const struct inertial_scroll_config *cfg,
@@ -376,6 +507,7 @@ static void inertial_scroll_work_handler(struct k_work *work) {
         debug_log_window(cfg, data, "mouse_cancel", data->best_burst_dir,
                          data->best_burst_accum, data->best_burst_peak, 0, now);
         clear_pending_scroll(data);
+        clear_axis_lock(data);
         return;
     }
 
@@ -445,12 +577,17 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
+    const int64_t now = k_uptime_get();
+
+    if (!apply_axis_lock(cfg, data, event, now)) {
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
     if (event->value == 0) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
     const int8_t input_dir = sign32(event->value);
-    const int64_t now = k_uptime_get();
     const int32_t input_amount = abs32(event->value);
 
     if (data->velocity != 0) {
@@ -482,7 +619,7 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
 
     data->last_input_ms = now;
     data->input_code = event->code;
-    data->code = cfg->output_code;
+    data->code = output_code_for_input(cfg, event->code);
     data->burst_accum += input_amount;
     if (input_amount > data->burst_peak) {
         data->burst_peak = input_amount;
@@ -517,6 +654,11 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
     static const struct inertial_scroll_config inertial_scroll_config_##n = {                      \
         .type = DT_INST_PROP_OR(n, type, INPUT_EV_REL),                                            \
         .codes_len = DT_INST_PROP_LEN(n, codes),                                                   \
+        .axis_lock = DT_INST_PROP_OR(n, axis_lock, false),                                         \
+        .axis_lock_threshold = DT_INST_PROP_OR(n, axis_lock_threshold, 4),                         \
+        .axis_lock_ratio_percent = DT_INST_PROP_OR(n, axis_lock_ratio_percent, 150),               \
+        .axis_lock_max_pending = DT_INST_PROP_OR(n, axis_lock_max_pending, 12),                    \
+        .axis_lock_release_ms = DT_INST_PROP_OR(n, axis_lock_release_ms, 80),                      \
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
         .gain_percent = DT_INST_PROP_OR(n, gain_percent, 100),                                     \
         .velocity_percent = DT_INST_PROP_OR(n, velocity_percent, 100),                             \
@@ -546,6 +688,14 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, velocity_percent, 100) > 0,                                    \
                  "velocity-percent must be greater than 0");                                      \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_threshold, 4) > 0,                                  \
+                 "axis-lock-threshold must be greater than 0");                                   \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_ratio_percent, 150) >= 100,                          \
+                 "axis-lock-ratio-percent must be at least 100");                                 \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_max_pending, 12) > 0,                               \
+                 "axis-lock-max-pending must be greater than 0");                                 \
+    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_release_ms, 80) > 0,                                \
+                 "axis-lock-release-ms must be greater than 0");                                  \
     BUILD_ASSERT(DT_INST_PROP_OR(n, start_threshold, 1) > 0,                                       \
                  "start-threshold must be greater than 0");                                       \
     BUILD_ASSERT(DT_INST_PROP_OR(n, burst_threshold, 1) > 0,                                       \
