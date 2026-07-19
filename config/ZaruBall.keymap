@@ -412,7 +412,7 @@
 
         task_enter: task_enter {
             compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <0>;
+            #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
@@ -943,7 +943,7 @@
 &trans  &trans           &num_eisu KP_NUMBER_4  &num_eisu KP_NUMBER_5  &num_eisu KP_NUMBER_6  &num_eisu KP_MULTIPLY            &trans  &trans  &trans  &trans            &trans  &kp LS(LC(TAB))  &kp LC(W)  &kp LC(TAB)  &trans   &trans
 &trans  &num_eisu KP_NUMBER_0  &num_eisu KP_NUMBER_1  &num_eisu KP_NUMBER_2  &num_eisu KP_NUMBER_3  &num_eisu KP_MINUS     &trans    &trans  &trans  &trans  &trans    &trans  &trans  &kp F7           &kp F8     &kp F9       &kp F10  &trans
 &trans  &trans           &num_eisu KP_NUMBER_0  &type_00         &num_eisu KP_DOT       &num_eisu KP_PLUS      &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans     &trans       &trans   &trans
-&trans  &trans                            &trans           &trans           &task_enter     &kp LS(TAB)                                &trans  &trans                                                    &trans
+&trans  &trans                            &trans           &trans           &task_enter 0 0 &kp LS(TAB)                                &trans  &trans                                                    &trans
             >;
         };
 
