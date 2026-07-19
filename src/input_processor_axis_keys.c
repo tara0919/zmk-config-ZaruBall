@@ -26,11 +26,14 @@ struct axis_keys_config {
     uint8_t type;
     uint16_t code;
     int16_t threshold;
+    uint16_t min_interval_ms;
     struct zmk_behavior_binding bindings[AXIS_KEY_BINDINGS];
 };
 
 struct axis_keys_data {
     int32_t remainder;
+    int64_t last_tap_at;
+    bool has_tapped;
 };
 
 static int tap_binding(const struct zmk_behavior_binding *binding,
@@ -54,35 +57,39 @@ static int axis_keys_handle_event(const struct device *dev, struct input_event *
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    data->remainder += event->value;
+    data->remainder =
+        CLAMP(data->remainder + event->value, -cfg->threshold, cfg->threshold);
     event->value = 0;
+
+    const int64_t now = k_uptime_get();
+    const bool negative = data->remainder <= -cfg->threshold;
+    const bool positive = data->remainder >= cfg->threshold;
+
+    if (!negative && !positive) {
+        return ZMK_INPUT_PROC_STOP;
+    }
+
+    if (data->has_tapped && now - data->last_tap_at < cfg->min_interval_ms) {
+        return ZMK_INPUT_PROC_STOP;
+    }
 
     struct zmk_behavior_binding_event behavior_event = {
         .position = ZMK_VIRTUAL_KEY_POSITION_BEHAVIOR_INPUT_PROCESSOR(
             state->input_device_index, cfg->index),
-        .timestamp = k_uptime_get(),
+        .timestamp = now,
 #if IS_ENABLED(CONFIG_ZMK_SPLIT)
         .source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
 #endif
     };
 
-    while (data->remainder <= -cfg->threshold) {
-        int ret = tap_binding(&cfg->bindings[NEGATIVE_BINDING], behavior_event);
-        if (ret < 0) {
-            return ret;
-        }
-        data->remainder += cfg->threshold;
-    }
+    data->remainder = 0;
+    data->last_tap_at = now;
+    data->has_tapped = true;
 
-    while (data->remainder >= cfg->threshold) {
-        int ret = tap_binding(&cfg->bindings[POSITIVE_BINDING], behavior_event);
-        if (ret < 0) {
-            return ret;
-        }
-        data->remainder -= cfg->threshold;
-    }
+    int ret = tap_binding(&cfg->bindings[negative ? NEGATIVE_BINDING : POSITIVE_BINDING],
+                          behavior_event);
 
-    return ZMK_INPUT_PROC_STOP;
+    return ret < 0 ? ret : ZMK_INPUT_PROC_STOP;
 }
 
 static int axis_keys_init(const struct device *dev) { return 0; }
@@ -95,11 +102,14 @@ static struct zmk_input_processor_driver_api axis_keys_driver_api = {
     BUILD_ASSERT(DT_INST_PROP_LEN(n, bindings) == AXIS_KEY_BINDINGS,                              \
                  "axis-keys requires exactly two bindings");                                      \
     BUILD_ASSERT(DT_INST_PROP(n, threshold) > 0, "axis-keys threshold must be greater than zero"); \
+    BUILD_ASSERT(DT_INST_PROP(n, min_interval_ms) > 0,                                            \
+                 "axis-keys min-interval-ms must be greater than zero");                           \
     static const struct axis_keys_config axis_keys_config_##n = {                                  \
         .index = n,                                                                                \
         .type = DT_INST_PROP(n, type),                                                             \
         .code = DT_INST_PROP(n, code),                                                             \
         .threshold = DT_INST_PROP(n, threshold),                                                   \
+        .min_interval_ms = DT_INST_PROP(n, min_interval_ms),                                       \
         .bindings = {ZMK_KEYMAP_EXTRACT_BINDING(0, DT_DRV_INST(n)),                               \
                      ZMK_KEYMAP_EXTRACT_BINDING(1, DT_DRV_INST(n))},                               \
     };                                                                                             \

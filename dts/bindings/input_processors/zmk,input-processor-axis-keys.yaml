@@ -18,6 +18,10 @@ properties:
     type: int
     required: true
     description: Accumulated movement required for one key tap
+  min-interval-ms:
+    type: int
+    required: true
+    description: Minimum time between generated key taps
   bindings:
     type: phandle-array
     required: true

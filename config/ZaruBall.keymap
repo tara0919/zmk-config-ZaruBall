@@ -92,6 +92,7 @@
         type = <INPUT_EV_REL>;
         code = <INPUT_REL_X>;
         threshold = <80>;
+        min-interval-ms = <35>;
         bindings = <&kp LS(LEFT)>, <&kp LS(RIGHT)>;
     };
 };
