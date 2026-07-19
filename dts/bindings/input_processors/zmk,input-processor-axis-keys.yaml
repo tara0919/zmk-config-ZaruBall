@@ -22,6 +22,10 @@ properties:
     type: int
     required: true
     description: Minimum time between generated key taps
+  tap-ms:
+    type: int
+    required: true
+    description: Time between each generated key press and release
   bindings:
     type: phandle-array
     required: true

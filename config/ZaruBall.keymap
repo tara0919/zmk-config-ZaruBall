@@ -93,6 +93,7 @@
         code = <INPUT_REL_X>;
         threshold = <80>;
         min-interval-ms = <35>;
+        tap-ms = <10>;
         bindings = <&kp LS(LEFT)>, <&kp LS(RIGHT)>;
     };
 };

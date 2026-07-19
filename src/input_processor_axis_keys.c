@@ -14,6 +14,7 @@
 
 #include <drivers/input_processor.h>
 #include <zmk/behavior.h>
+#include <zmk/behavior_queue.h>
 #include <zmk/keymap.h>
 #include <zmk/virtual_key_position.h>
 
@@ -27,6 +28,7 @@ struct axis_keys_config {
     uint16_t code;
     int16_t threshold;
     uint16_t min_interval_ms;
+    uint16_t tap_ms;
     struct zmk_behavior_binding bindings[AXIS_KEY_BINDINGS];
 };
 
@@ -36,15 +38,14 @@ struct axis_keys_data {
     bool has_tapped;
 };
 
-static int tap_binding(const struct zmk_behavior_binding *binding,
-                       struct zmk_behavior_binding_event event) {
-    int ret = zmk_behavior_invoke_binding(binding, event, true);
+static int queue_tap(const struct zmk_behavior_binding *binding,
+                     const struct zmk_behavior_binding_event *event, uint16_t tap_ms) {
+    int ret = zmk_behavior_queue_add(event, *binding, true, tap_ms);
     if (ret < 0) {
         return ret;
     }
 
-    event.timestamp = k_uptime_get();
-    return zmk_behavior_invoke_binding(binding, event, false);
+    return zmk_behavior_queue_add(event, *binding, false, 0);
 }
 
 static int axis_keys_handle_event(const struct device *dev, struct input_event *event,
@@ -86,8 +87,8 @@ static int axis_keys_handle_event(const struct device *dev, struct input_event *
     data->last_tap_at = now;
     data->has_tapped = true;
 
-    int ret = tap_binding(&cfg->bindings[negative ? NEGATIVE_BINDING : POSITIVE_BINDING],
-                          behavior_event);
+    int ret = queue_tap(&cfg->bindings[negative ? NEGATIVE_BINDING : POSITIVE_BINDING],
+                        &behavior_event, cfg->tap_ms);
 
     return ret < 0 ? ret : ZMK_INPUT_PROC_STOP;
 }
@@ -104,12 +105,15 @@ static struct zmk_input_processor_driver_api axis_keys_driver_api = {
     BUILD_ASSERT(DT_INST_PROP(n, threshold) > 0, "axis-keys threshold must be greater than zero"); \
     BUILD_ASSERT(DT_INST_PROP(n, min_interval_ms) > 0,                                            \
                  "axis-keys min-interval-ms must be greater than zero");                           \
+    BUILD_ASSERT(DT_INST_PROP(n, tap_ms) > 0,                                                     \
+                 "axis-keys tap-ms must be greater than zero");                                   \
     static const struct axis_keys_config axis_keys_config_##n = {                                  \
         .index = n,                                                                                \
         .type = DT_INST_PROP(n, type),                                                             \
         .code = DT_INST_PROP(n, code),                                                             \
         .threshold = DT_INST_PROP(n, threshold),                                                   \
         .min_interval_ms = DT_INST_PROP(n, min_interval_ms),                                       \
+        .tap_ms = DT_INST_PROP(n, tap_ms),                                                         \
         .bindings = {ZMK_KEYMAP_EXTRACT_BINDING(0, DT_DRV_INST(n)),                               \
                      ZMK_KEYMAP_EXTRACT_BINDING(1, DT_DRV_INST(n))},                               \
     };                                                                                             \
