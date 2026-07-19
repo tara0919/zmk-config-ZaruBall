@@ -26,6 +26,10 @@ properties:
     type: int
     required: true
     description: Time between each generated key press and release
+  consume-codes:
+    type: array
+    required: true
+    description: Input codes to consume so they do not produce pointing reports
   bindings:
     type: phandle-array
     required: true

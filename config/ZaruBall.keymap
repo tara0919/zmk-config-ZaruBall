@@ -91,6 +91,7 @@
         #input-processor-cells = <0>;
         type = <INPUT_EV_REL>;
         code = <INPUT_REL_X>;
+        consume-codes = <INPUT_REL_X INPUT_REL_Y>;
         threshold = <80>;
         min-interval-ms = <35>;
         tap-ms = <10>;
@@ -124,7 +125,6 @@
         layers = <RAISE>;
         input-processors = <
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
-                            &zip_y_scaler 0 1
                             &task_axis_keys
         >;
     };

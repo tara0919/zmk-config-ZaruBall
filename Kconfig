@@ -29,3 +29,13 @@ config ZARUBALL_AXIS_KEYS
     depends on ZMK_POINTING
     depends on ZMK_SPLIT_ROLE_CENTRAL
     depends on INPUT
+
+config ZARUBALL_AXIS_KEYS_THREAD_STACK_SIZE
+    int "ZaruBall axis-to-key worker thread stack size"
+    default 1536
+    depends on ZARUBALL_AXIS_KEYS
+
+config ZARUBALL_AXIS_KEYS_THREAD_PRIORITY
+    int "ZaruBall axis-to-key worker thread priority"
+    default 8
+    depends on ZARUBALL_AXIS_KEYS
