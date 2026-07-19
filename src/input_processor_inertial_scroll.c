@@ -365,9 +365,6 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
 
     if (data->locked_axis != SCROLL_AXIS_NONE) {
         if (event_axis != data->locked_axis) {
-            if (event->value != 0) {
-                stop_inertia(data);
-            }
             event->value = 0;
             return false;
         }
