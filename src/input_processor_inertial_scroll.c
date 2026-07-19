@@ -302,7 +302,14 @@ static void prime_first_step(struct inertial_scroll_data *data) {
 }
 
 static bool layer_cancels_inertia(const struct inertial_scroll_config *cfg) {
-    return cfg->cancel_layer >= 0 && zmk_keymap_layer_active(cfg->cancel_layer);
+    if (cfg->cancel_layer < 0 || !zmk_keymap_layer_active(cfg->cancel_layer)) {
+        return false;
+    }
+
+    // A temporary mouse layer can still be active when a higher-priority scroll layer starts.
+    // Cancel only when the mouse layer is the layer currently controlling the trackball.
+    zmk_keymap_layer_index_t highest_layer = zmk_keymap_highest_layer_active();
+    return zmk_keymap_layer_index_to_id(highest_layer) == cfg->cancel_layer;
 }
 
 static enum scroll_axis axis_for_code(uint16_t code) {
