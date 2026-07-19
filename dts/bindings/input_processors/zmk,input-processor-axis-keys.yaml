@@ -1,0 +1,24 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: Input processor that converts signed relative-axis movement into key taps
+
+compatible: "zmk,input-processor-axis-keys"
+
+include: ip_zero_param.yaml
+
+properties:
+  type:
+    type: int
+    required: true
+  code:
+    type: int
+    required: true
+  threshold:
+    type: int
+    required: true
+    description: Accumulated movement required for one key tap
+  bindings:
+    type: phandle-array
+    required: true
+    description: Negative-direction binding followed by positive-direction binding
