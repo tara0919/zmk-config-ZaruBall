@@ -288,12 +288,16 @@ static void clear_pending_scroll(struct inertial_scroll_data *data) {
     debug_reset(data);
 }
 
-static void clear_axis_lock(struct inertial_scroll_data *data) {
-    data->locked_axis = SCROLL_AXIS_NONE;
+static void clear_axis_samples(struct inertial_scroll_data *data) {
     data->pending_x = 0;
     data->pending_y = 0;
     data->pending_abs_x = 0;
     data->pending_abs_y = 0;
+}
+
+static void clear_axis_lock(struct inertial_scroll_data *data) {
+    data->locked_axis = SCROLL_AXIS_NONE;
+    clear_axis_samples(data);
     data->last_axis_input_ms = 0;
 }
 
@@ -332,18 +336,40 @@ static uint16_t output_code_for_input(const struct inertial_scroll_config *cfg,
     return input_code == INPUT_REL_X ? INPUT_REL_HWHEEL : INPUT_REL_WHEEL;
 }
 
+static void record_axis_sample(struct inertial_scroll_data *data, enum scroll_axis axis,
+                               int32_t value) {
+    if (axis == SCROLL_AXIS_X) {
+        data->pending_x += value;
+        data->pending_abs_x += abs32(value);
+    } else if (axis == SCROLL_AXIS_Y) {
+        data->pending_y += value;
+        data->pending_abs_y += abs32(value);
+    }
+}
+
+static bool axis_is_dominant(const struct inertial_scroll_config *cfg,
+                             const struct inertial_scroll_data *data,
+                             enum scroll_axis axis) {
+    int32_t primary =
+        axis == SCROLL_AXIS_X ? data->pending_abs_x : data->pending_abs_y;
+    int32_t secondary =
+        axis == SCROLL_AXIS_X ? data->pending_abs_y : data->pending_abs_x;
+
+    return primary >= cfg->axis_lock_threshold &&
+           (int64_t)primary * 100 >=
+               (int64_t)secondary * cfg->axis_lock_ratio_percent;
+}
+
 static enum scroll_axis choose_axis(const struct inertial_scroll_config *cfg,
                                     const struct inertial_scroll_data *data) {
     int32_t x = data->pending_abs_x;
     int32_t y = data->pending_abs_y;
 
-    if (x >= cfg->axis_lock_threshold &&
-        (int64_t)x * 100 >= (int64_t)y * cfg->axis_lock_ratio_percent) {
+    if (axis_is_dominant(cfg, data, SCROLL_AXIS_X)) {
         return SCROLL_AXIS_X;
     }
 
-    if (y >= cfg->axis_lock_threshold &&
-        (int64_t)y * 100 >= (int64_t)x * cfg->axis_lock_ratio_percent) {
+    if (axis_is_dominant(cfg, data, SCROLL_AXIS_Y)) {
         return SCROLL_AXIS_Y;
     }
 
@@ -371,24 +397,52 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
     }
 
     if (data->locked_axis != SCROLL_AXIS_NONE) {
-        if (event_axis != data->locked_axis) {
+        enum scroll_axis locked_axis = data->locked_axis;
+        enum scroll_axis other_axis =
+            locked_axis == SCROLL_AXIS_X ? SCROLL_AXIS_Y : SCROLL_AXIS_X;
+        bool event_is_locked_axis = event_axis == locked_axis;
+
+        record_axis_sample(data, event_axis, event->value);
+
+        if (event_is_locked_axis && event->value != 0) {
+            data->last_axis_input_ms = now;
+        }
+
+        // Keep observing both axes after locking. If the rejected axis becomes clearly
+        // dominant, recover from an incorrect initial lock without requiring a pause.
+        if (event->sync && axis_is_dominant(cfg, data, other_axis)) {
+            int32_t switched_value =
+                other_axis == SCROLL_AXIS_X ? data->pending_x : data->pending_y;
+
+            if (switched_value != 0) {
+                data->locked_axis = other_axis;
+                clear_axis_samples(data);
+                data->last_axis_input_ms = now;
+                clear_pending_scroll(data);
+                event->code =
+                    other_axis == SCROLL_AXIS_X ? INPUT_REL_X : INPUT_REL_Y;
+                event->value = switched_value;
+                return true;
+            }
+        }
+
+        // Use a bounded observation window so old diagonal noise cannot accumulate
+        // until it eventually forces an axis switch.
+        if (event->sync &&
+            data->pending_abs_x + data->pending_abs_y >=
+                cfg->axis_lock_max_pending) {
+            clear_axis_samples(data);
+        }
+
+        if (!event_is_locked_axis) {
             event->value = 0;
             return false;
         }
 
-        if (event->value != 0) {
-            data->last_axis_input_ms = now;
-        }
         return true;
     }
 
-    if (event_axis == SCROLL_AXIS_X) {
-        data->pending_x += event->value;
-        data->pending_abs_x += abs32(event->value);
-    } else {
-        data->pending_y += event->value;
-        data->pending_abs_y += abs32(event->value);
-    }
+    record_axis_sample(data, event_axis, event->value);
 
     if (event->value != 0) {
         data->last_axis_input_ms = now;
