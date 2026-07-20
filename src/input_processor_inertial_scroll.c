@@ -408,9 +408,12 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
             data->last_axis_input_ms = now;
         }
 
-        // Keep observing both axes after locking. If the rejected axis becomes clearly
-        // dominant, recover from an incorrect initial lock without requiring a pause.
-        if (event->sync && axis_is_dominant(cfg, data, other_axis)) {
+        // Upward vertical motion on this trackball can begin with a strong horizontal
+        // component, so allow an incorrect horizontal lock to recover to vertical.
+        // Keep a vertical lock sticky until it becomes idle; otherwise brief horizontal
+        // noise during vertical scrolling leaks through as unwanted horizontal scroll.
+        if (event->sync && locked_axis == SCROLL_AXIS_X &&
+            axis_is_dominant(cfg, data, SCROLL_AXIS_Y)) {
             int32_t switched_value =
                 other_axis == SCROLL_AXIS_X ? data->pending_x : data->pending_y;
 
