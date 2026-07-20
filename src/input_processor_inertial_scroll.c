@@ -83,6 +83,8 @@ struct inertial_scroll_data {
     int32_t pending_y;
     int32_t pending_abs_x;
     int32_t pending_abs_y;
+    int32_t pending_peak_x;
+    int32_t pending_peak_y;
     int64_t last_axis_input_ms;
 #if IS_ENABLED(CONFIG_ZARUBALL_INERTIAL_SCROLL_DEBUG)
     int32_t debug_pos_accum;
@@ -140,7 +142,7 @@ static void debug_reset(struct inertial_scroll_data *data) {
 
 static void debug_record_input(const struct inertial_scroll_config *cfg,
                                struct inertial_scroll_data *data, uint16_t code, int8_t dir,
-                               int32_t amount, int64_t now) {
+                               int32_t accum, int32_t peak, int64_t now) {
     (void)cfg;
 
     if (!data->debug_active || data->debug_code != code) {
@@ -152,16 +154,16 @@ static void debug_record_input(const struct inertial_scroll_config *cfg,
 
     data->debug_last_ms = now;
     if (dir > 0) {
-        data->debug_pos_accum += amount;
+        data->debug_pos_accum += accum;
         data->debug_pos_count++;
-        if (amount > data->debug_pos_peak) {
-            data->debug_pos_peak = amount;
+        if (peak > data->debug_pos_peak) {
+            data->debug_pos_peak = peak;
         }
     } else {
-        data->debug_neg_accum += amount;
+        data->debug_neg_accum += accum;
         data->debug_neg_count++;
-        if (amount > data->debug_neg_peak) {
-            data->debug_neg_peak = amount;
+        if (peak > data->debug_neg_peak) {
+            data->debug_neg_peak = peak;
         }
     }
 }
@@ -203,12 +205,13 @@ static void debug_log_touch_stop(uint16_t code, int8_t dir, int32_t amount, int3
 static void debug_reset(struct inertial_scroll_data *data) { (void)data; }
 static void debug_record_input(const struct inertial_scroll_config *cfg,
                                struct inertial_scroll_data *data, uint16_t code, int8_t dir,
-                               int32_t amount, int64_t now) {
+                               int32_t accum, int32_t peak, int64_t now) {
     (void)cfg;
     (void)data;
     (void)code;
     (void)dir;
-    (void)amount;
+    (void)accum;
+    (void)peak;
     (void)now;
 }
 static void debug_log_window(const struct inertial_scroll_config *cfg,
@@ -291,6 +294,8 @@ static void clear_axis_samples(struct inertial_scroll_data *data) {
     data->pending_y = 0;
     data->pending_abs_x = 0;
     data->pending_abs_y = 0;
+    data->pending_peak_x = 0;
+    data->pending_peak_y = 0;
 }
 
 static void clear_axis_lock(struct inertial_scroll_data *data) {
@@ -336,12 +341,20 @@ static uint16_t output_code_for_input(const struct inertial_scroll_config *cfg,
 
 static void record_axis_sample(struct inertial_scroll_data *data, enum scroll_axis axis,
                                int32_t value) {
+    int32_t amount = abs32(value);
+
     if (axis == SCROLL_AXIS_X) {
         data->pending_x += value;
-        data->pending_abs_x += abs32(value);
+        data->pending_abs_x += amount;
+        if (amount > data->pending_peak_x) {
+            data->pending_peak_x = amount;
+        }
     } else if (axis == SCROLL_AXIS_Y) {
         data->pending_y += value;
-        data->pending_abs_y += abs32(value);
+        data->pending_abs_y += amount;
+        if (amount > data->pending_peak_y) {
+            data->pending_peak_y = amount;
+        }
     }
 }
 
@@ -360,8 +373,12 @@ static enum scroll_axis choose_axis(const struct inertial_scroll_config *cfg,
 
 static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
                             struct inertial_scroll_data *data, struct input_event *event,
-                            int64_t now) {
+                            int64_t now, int32_t *inertia_accum,
+                            int32_t *inertia_peak) {
     enum scroll_axis event_axis = axis_for_code(event->code);
+
+    *inertia_accum = abs32(event->value);
+    *inertia_peak = *inertia_accum;
 
     if (!cfg->axis_lock || event_axis == SCROLL_AXIS_NONE) {
         return true;
@@ -407,6 +424,12 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
 
     event->code = data->locked_axis == SCROLL_AXIS_X ? INPUT_REL_X : INPUT_REL_Y;
     event->value = data->locked_axis == SCROLL_AXIS_X ? data->pending_x : data->pending_y;
+    // Flush the full movement to scrolling, but preserve the largest raw sample
+    // separately so the buffered total is not mistaken for a single sharp flick.
+    *inertia_accum =
+        data->locked_axis == SCROLL_AXIS_X ? data->pending_abs_x : data->pending_abs_y;
+    *inertia_peak =
+        data->locked_axis == SCROLL_AXIS_X ? data->pending_peak_x : data->pending_peak_y;
     clear_axis_lock(data);
     data->locked_axis = axis_for_code(event->code);
     data->last_axis_input_ms = now;
@@ -582,8 +605,10 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     }
 
     const int64_t now = k_uptime_get();
+    int32_t inertia_accum;
+    int32_t inertia_peak;
 
-    if (!apply_axis_lock(cfg, data, event, now)) {
+    if (!apply_axis_lock(cfg, data, event, now, &inertia_accum, &inertia_peak)) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
@@ -592,10 +617,9 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     }
 
     const int8_t input_dir = sign32(event->value);
-    const int32_t input_amount = abs32(event->value);
 
     if (data->velocity != 0) {
-        debug_log_touch_stop(event->code, input_dir, input_amount, data->velocity);
+        debug_log_touch_stop(event->code, input_dir, inertia_accum, data->velocity);
         k_work_cancel_delayable(&data->work);
         stop_inertia(data);
         reset_burst_tracking(data);
@@ -605,11 +629,11 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
         data->last_input_ms = 0;
     }
 
-    if (input_amount < cfg->start_threshold) {
+    if (inertia_peak < cfg->start_threshold) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    debug_record_input(cfg, data, event->code, input_dir, input_amount, now);
+    debug_record_input(cfg, data, event->code, input_dir, inertia_accum, inertia_peak, now);
 
     if (data->burst_dir != input_dir || data->input_code != event->code ||
         now - data->last_input_ms > cfg->burst_timeout_ms) {
@@ -624,9 +648,9 @@ static int inertial_scroll_handle_event(const struct device *dev, struct input_e
     data->last_input_ms = now;
     data->input_code = event->code;
     data->code = output_code_for_input(cfg, event->code);
-    data->burst_accum += input_amount;
-    if (input_amount > data->burst_peak) {
-        data->burst_peak = input_amount;
+    data->burst_accum += inertia_accum;
+    if (inertia_peak > data->burst_peak) {
+        data->burst_peak = inertia_peak;
     }
     update_best_burst(cfg, data, now);
 
