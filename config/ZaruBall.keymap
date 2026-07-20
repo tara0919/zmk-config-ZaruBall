@@ -60,9 +60,7 @@
         codes = <INPUT_REL_X INPUT_REL_Y>;
         output-code = <INPUT_REL_WHEEL>;
         axis-lock;
-        axis-lock-threshold = <8>;
-        axis-lock-ratio-percent = <150>;
-        axis-lock-max-pending = <12>;
+        axis-lock-max-pending = <20>;
         axis-lock-release-ms = <80>;
         interval-ms = <12>;
         gain-percent = <2>;

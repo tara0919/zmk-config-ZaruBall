@@ -29,8 +29,6 @@ struct inertial_scroll_config {
     uint8_t type;
     size_t codes_len;
     bool axis_lock;
-    int16_t axis_lock_threshold;
-    uint16_t axis_lock_ratio_percent;
     int16_t axis_lock_max_pending;
     uint16_t axis_lock_release_ms;
     uint16_t interval_ms;
@@ -347,31 +345,10 @@ static void record_axis_sample(struct inertial_scroll_data *data, enum scroll_ax
     }
 }
 
-static bool axis_is_dominant(const struct inertial_scroll_config *cfg,
-                             const struct inertial_scroll_data *data,
-                             enum scroll_axis axis) {
-    int32_t primary =
-        axis == SCROLL_AXIS_X ? data->pending_abs_x : data->pending_abs_y;
-    int32_t secondary =
-        axis == SCROLL_AXIS_X ? data->pending_abs_y : data->pending_abs_x;
-
-    return primary >= cfg->axis_lock_threshold &&
-           (int64_t)primary * 100 >=
-               (int64_t)secondary * cfg->axis_lock_ratio_percent;
-}
-
 static enum scroll_axis choose_axis(const struct inertial_scroll_config *cfg,
                                     const struct inertial_scroll_data *data) {
     int32_t x = data->pending_abs_x;
     int32_t y = data->pending_abs_y;
-
-    if (axis_is_dominant(cfg, data, SCROLL_AXIS_X)) {
-        return SCROLL_AXIS_X;
-    }
-
-    if (axis_is_dominant(cfg, data, SCROLL_AXIS_Y)) {
-        return SCROLL_AXIS_Y;
-    }
 
     if (x + y < cfg->axis_lock_max_pending) {
         return SCROLL_AXIS_NONE;
@@ -397,47 +374,13 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
     }
 
     if (data->locked_axis != SCROLL_AXIS_NONE) {
-        enum scroll_axis locked_axis = data->locked_axis;
-        enum scroll_axis other_axis =
-            locked_axis == SCROLL_AXIS_X ? SCROLL_AXIS_Y : SCROLL_AXIS_X;
-        bool event_is_locked_axis = event_axis == locked_axis;
-
-        record_axis_sample(data, event_axis, event->value);
-
-        if (event_is_locked_axis && event->value != 0) {
+        // Any movement keeps the current gesture active. This prevents a rejected
+        // cross-axis tail from being mistaken for the start of a new gesture.
+        if (event->value != 0) {
             data->last_axis_input_ms = now;
         }
 
-        // Upward vertical motion on this trackball can begin with a strong horizontal
-        // component, so allow an incorrect horizontal lock to recover to vertical.
-        // Keep a vertical lock sticky until it becomes idle; otherwise brief horizontal
-        // noise during vertical scrolling leaks through as unwanted horizontal scroll.
-        if (event->sync && locked_axis == SCROLL_AXIS_X &&
-            axis_is_dominant(cfg, data, SCROLL_AXIS_Y)) {
-            int32_t switched_value =
-                other_axis == SCROLL_AXIS_X ? data->pending_x : data->pending_y;
-
-            if (switched_value != 0) {
-                data->locked_axis = other_axis;
-                clear_axis_samples(data);
-                data->last_axis_input_ms = now;
-                clear_pending_scroll(data);
-                event->code =
-                    other_axis == SCROLL_AXIS_X ? INPUT_REL_X : INPUT_REL_Y;
-                event->value = switched_value;
-                return true;
-            }
-        }
-
-        // Use a bounded observation window so old diagonal noise cannot accumulate
-        // until it eventually forces an axis switch.
-        if (event->sync &&
-            data->pending_abs_x + data->pending_abs_y >=
-                cfg->axis_lock_max_pending) {
-            clear_axis_samples(data);
-        }
-
-        if (!event_is_locked_axis) {
+        if (event_axis != data->locked_axis) {
             event->value = 0;
             return false;
         }
@@ -716,8 +659,6 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
         .type = DT_INST_PROP_OR(n, type, INPUT_EV_REL),                                            \
         .codes_len = DT_INST_PROP_LEN(n, codes),                                                   \
         .axis_lock = DT_INST_PROP_OR(n, axis_lock, false),                                         \
-        .axis_lock_threshold = DT_INST_PROP_OR(n, axis_lock_threshold, 4),                         \
-        .axis_lock_ratio_percent = DT_INST_PROP_OR(n, axis_lock_ratio_percent, 150),               \
         .axis_lock_max_pending = DT_INST_PROP_OR(n, axis_lock_max_pending, 12),                    \
         .axis_lock_release_ms = DT_INST_PROP_OR(n, axis_lock_release_ms, 80),                      \
         .interval_ms = DT_INST_PROP_OR(n, interval_ms, 16),                                        \
@@ -749,10 +690,6 @@ static struct zmk_input_processor_driver_api inertial_scroll_driver_api = {
                  "gain-percent must be greater than 0");                                          \
     BUILD_ASSERT(DT_INST_PROP_OR(n, velocity_percent, 100) > 0,                                    \
                  "velocity-percent must be greater than 0");                                      \
-    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_threshold, 4) > 0,                                  \
-                 "axis-lock-threshold must be greater than 0");                                   \
-    BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_ratio_percent, 150) >= 100,                          \
-                 "axis-lock-ratio-percent must be at least 100");                                 \
     BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_max_pending, 12) > 0,                               \
                  "axis-lock-max-pending must be greater than 0");                                 \
     BUILD_ASSERT(DT_INST_PROP_OR(n, axis_lock_release_ms, 80) > 0,                                \
