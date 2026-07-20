@@ -440,6 +440,19 @@ static bool apply_axis_lock(const struct inertial_scroll_config *cfg,
         }
 
         if (!event_is_locked_axis) {
+            if (event->value != 0) {
+                if (data->velocity != 0) {
+                    // Touching the ball on either axis stops active inertia, even when
+                    // that axis is rejected by the current lock.
+                    k_work_cancel_delayable(&data->work);
+                    clear_pending_scroll(data);
+                } else if (data->burst_accum > 0 || data->best_burst_accum > 0) {
+                    // Rejected cross-axis motion still means the finger is active.
+                    // Delay release without adding this motion to the flick candidate.
+                    k_work_reschedule(&data->work, K_MSEC(cfg->release_ms));
+                }
+            }
+
             event->value = 0;
             return false;
         }
