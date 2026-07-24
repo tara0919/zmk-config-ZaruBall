@@ -8,6 +8,8 @@ manifest:
       url-base: https://github.com/caksoylar
     - name: kot149
       url-base: https://github.com/kot149
+    - name: mjmjm0101
+      url-base: https://github.com/mjmjm0101
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -22,5 +24,8 @@ manifest:
     - name: zmk-mouse-gesture
       remote: kot149
       revision: v1
+    - name: zmk-input-processor-scroll-inertia
+      remote: mjmjm0101
+      revision: main
   self:
     path: config
