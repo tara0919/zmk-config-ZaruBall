@@ -656,7 +656,7 @@
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
 &kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &lt RAISE L  &lt SLOW MINUS  &kp SLASH
 &kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp LG(TAB)                &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
-&kp LEFT_WIN    &kp C_MUTE                 &kp LS(LG(S))  &lt RAISE GRAVE  &lt LOWER ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
+&kp LEFT_WIN    &kp C_MUTE            &lt SLOW LS(LG(S))  &lt RAISE GRAVE  &lt LOWER ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &lt RAISE SPACE                                                      &jm_bslash
             >;
         };
 
