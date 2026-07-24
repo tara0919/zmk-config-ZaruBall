@@ -71,7 +71,9 @@
         compatible = "zmk,input-processor-ime-activity";
         #input-processor-cells = <0>;
         layer = <2>;
-        keycode = <LANGUAGE_1>;
+        enter-keycode = <LANGUAGE_2>;
+        exit-keycode = <LANGUAGE_1>;
+        ignored-positions = <46 72>;
     };
 
     scroll_inertia_v: scroll_inertia_v {

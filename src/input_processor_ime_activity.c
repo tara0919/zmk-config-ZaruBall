@@ -9,46 +9,42 @@
 #include <zephyr/device.h>
 #include <zephyr/input/input.h>
 #include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/sys/util.h>
 
 #include <drivers/input_processor.h>
 #include <zmk/behavior.h>
 #include <zmk/behavior_queue.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/layer_state_changed.h>
-#include <zmk/keymap.h>
+#include <zmk/events/position_state_changed.h>
 #include <zmk/virtual_key_position.h>
+
+LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #define KEY_WAIT_MS 10
 
 struct ime_activity_config {
     uint8_t index;
     uint8_t layer;
-    uint32_t keycode;
+    uint32_t enter_keycode;
+    uint32_t exit_keycode;
+    const uint32_t *ignored_positions;
+    size_t ignored_positions_count;
 };
 
 struct ime_activity_data {
-    bool armed;
+    bool active;
+    bool used;
 };
 
-static int ime_activity_handle_event(const struct device *dev, struct input_event *event,
-                                     uint32_t param1, uint32_t param2,
-                                     struct zmk_input_processor_state *state) {
-    const struct ime_activity_config *config = dev->config;
-    struct ime_activity_data *data = dev->data;
-
-    if (event->type != INPUT_EV_REL || event->value == 0 || !data->armed) {
-        return ZMK_INPUT_PROC_CONTINUE;
-    }
-
-    data->armed = false;
-
+static int queue_keycode(const struct ime_activity_config *config, uint32_t keycode) {
     const struct zmk_behavior_binding binding = {
         .behavior_dev = DEVICE_DT_NAME(DT_NODELABEL(kp)),
-        .param1 = config->keycode,
+        .param1 = keycode,
     };
     const struct zmk_behavior_binding_event behavior_event = {
-        .position = ZMK_VIRTUAL_KEY_POSITION_BEHAVIOR_INPUT_PROCESSOR(
-            state->input_device_index, config->index),
+        .position = ZMK_VIRTUAL_KEY_POSITION_BEHAVIOR_INPUT_PROCESSOR(0, config->index),
         .timestamp = k_uptime_get(),
 #if IS_ENABLED(CONFIG_ZMK_SPLIT)
         .source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
@@ -60,8 +56,29 @@ static int ime_activity_handle_event(const struct device *dev, struct input_even
         return ret;
     }
 
-    ret = zmk_behavior_queue_add(&behavior_event, binding, false, KEY_WAIT_MS);
-    return ret < 0 ? ret : ZMK_INPUT_PROC_CONTINUE;
+    return zmk_behavior_queue_add(&behavior_event, binding, false, KEY_WAIT_MS);
+}
+
+static bool position_is_ignored(const struct ime_activity_config *config, uint32_t position) {
+    for (size_t i = 0; i < config->ignored_positions_count; i++) {
+        if (config->ignored_positions[i] == position) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static int ime_activity_handle_event(const struct device *dev, struct input_event *event,
+                                     uint32_t param1, uint32_t param2,
+                                     struct zmk_input_processor_state *state) {
+    struct ime_activity_data *data = dev->data;
+
+    if (data->active && event->type == INPUT_EV_REL && event->value != 0) {
+        data->used = true;
+    }
+
+    return ZMK_INPUT_PROC_CONTINUE;
 }
 
 static const struct zmk_input_processor_driver_api ime_activity_driver_api = {
@@ -71,11 +88,16 @@ static const struct zmk_input_processor_driver_api ime_activity_driver_api = {
 static int ime_activity_init(const struct device *dev) { return 0; }
 
 #define IME_ACTIVITY_INST(n)                                                        \
+    static const uint32_t ime_activity_ignored_positions_##n[] =                    \
+        DT_INST_PROP(n, ignored_positions);                                         \
     static struct ime_activity_data ime_activity_data_##n;                         \
     static const struct ime_activity_config ime_activity_config_##n = {             \
         .index = n,                                                                 \
         .layer = DT_INST_PROP(n, layer),                                             \
-        .keycode = DT_INST_PROP(n, keycode),                                         \
+        .enter_keycode = DT_INST_PROP(n, enter_keycode),                            \
+        .exit_keycode = DT_INST_PROP(n, exit_keycode),                              \
+        .ignored_positions = ime_activity_ignored_positions_##n,                    \
+        .ignored_positions_count = ARRAY_SIZE(ime_activity_ignored_positions_##n),  \
     };                                                                              \
     DEVICE_DT_INST_DEFINE(n, ime_activity_init, NULL, &ime_activity_data_##n,        \
                           &ime_activity_config_##n, POST_KERNEL,                     \
@@ -83,21 +105,54 @@ static int ime_activity_init(const struct device *dev) { return 0; }
 
 DT_INST_FOREACH_STATUS_OKAY(IME_ACTIVITY_INST)
 
-#define IME_ACTIVITY_SET_ARMED(n)                                                   \
-    if (ime_activity_config_##n.layer == event->layer) {                            \
-        ime_activity_data_##n.armed = event->state;                                 \
+#define IME_ACTIVITY_LAYER_EVENT(n)                                                 \
+    if (ime_activity_config_##n.layer == layer_event->layer) {                      \
+        if (layer_event->state) {                                                   \
+            ime_activity_data_##n.active = true;                                    \
+            ime_activity_data_##n.used = false;                                     \
+            int ret = queue_keycode(&ime_activity_config_##n,                       \
+                                    ime_activity_config_##n.enter_keycode);          \
+            if (ret < 0) {                                                          \
+                LOG_WRN("Failed to queue IME enter keycode: %d", ret);              \
+            }                                                                       \
+        } else {                                                                    \
+            bool restore_ime = ime_activity_data_##n.active &&                      \
+                               ime_activity_data_##n.used;                           \
+            ime_activity_data_##n.active = false;                                   \
+            ime_activity_data_##n.used = false;                                     \
+            if (restore_ime) {                                                      \
+                int ret = queue_keycode(&ime_activity_config_##n,                   \
+                                        ime_activity_config_##n.exit_keycode);       \
+                if (ret < 0) {                                                      \
+                    LOG_WRN("Failed to queue IME exit keycode: %d", ret);           \
+                }                                                                   \
+            }                                                                       \
+        }                                                                           \
     }
 
-static int ime_activity_layer_listener(const zmk_event_t *eh) {
-    const struct zmk_layer_state_changed *event = as_zmk_layer_state_changed(eh);
+#define IME_ACTIVITY_POSITION_EVENT(n)                                              \
+    if (ime_activity_data_##n.active && position_event->state &&                    \
+        !position_is_ignored(&ime_activity_config_##n, position_event->position)) { \
+        ime_activity_data_##n.used = true;                                          \
+    }
 
-    if (event == NULL) {
+static int ime_activity_event_listener(const zmk_event_t *eh) {
+    const struct zmk_layer_state_changed *layer_event = as_zmk_layer_state_changed(eh);
+
+    if (layer_event != NULL) {
+        DT_INST_FOREACH_STATUS_OKAY(IME_ACTIVITY_LAYER_EVENT)
         return ZMK_EV_EVENT_BUBBLE;
     }
 
-    DT_INST_FOREACH_STATUS_OKAY(IME_ACTIVITY_SET_ARMED)
+    const struct zmk_position_state_changed *position_event =
+        as_zmk_position_state_changed(eh);
+    if (position_event != NULL) {
+        DT_INST_FOREACH_STATUS_OKAY(IME_ACTIVITY_POSITION_EVENT)
+    }
+
     return ZMK_EV_EVENT_BUBBLE;
 }
 
-ZMK_LISTENER(ime_activity, ime_activity_layer_listener);
+ZMK_LISTENER(ime_activity, ime_activity_event_listener);
 ZMK_SUBSCRIPTION(ime_activity, zmk_layer_state_changed);
+ZMK_SUBSCRIPTION(ime_activity, zmk_position_state_changed);

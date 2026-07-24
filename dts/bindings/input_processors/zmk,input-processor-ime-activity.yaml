@@ -1,4 +1,4 @@
-description: Restore an IME keycode on the first relative input after layer activation
+description: Track layer activity and restore the IME when the layer exits
 
 compatible: "zmk,input-processor-ime-activity"
 
@@ -9,6 +9,14 @@ properties:
     type: int
     required: true
 
-  keycode:
+  enter-keycode:
     type: int
+    required: true
+
+  exit-keycode:
+    type: int
+    required: true
+
+  ignored-positions:
+    type: array
     required: true
