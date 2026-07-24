@@ -70,6 +70,8 @@
         #input-processor-cells = <0>;
         axis = <1>;
         layer = <2>;
+        start = <24>;
+        move = <48>;
         scale = <1>;
         scale-div = <20>;
         stop = <1>;
@@ -80,6 +82,8 @@
         #input-processor-cells = <0>;
         axis = <2>;
         layer = <3>;
+        start = <24>;
+        move = <48>;
         scale = <1>;
         scale-div = <20>;
         stop = <1>;
