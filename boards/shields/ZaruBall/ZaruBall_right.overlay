@@ -40,7 +40,7 @@
                             &zip_x_scaler 0 1
                             &zip_xy_to_scroll_mapper
                             &scroll_inertia_v
-                            &zip_scroll_scaler 1 25
+                            &zip_scroll_scaler 1 70
         >;
     };
 
@@ -51,7 +51,7 @@
                             &zip_y_scaler 0 1
                             &zip_xy_to_scroll_mapper
                             &scroll_inertia_h
-                            &zip_scroll_scaler 1 25
+                            &zip_scroll_scaler 1 20
         >;
     };
 
@@ -73,8 +73,8 @@
         start = <18>;
         move = <36>;
         scale = <1>;
-        scale-div = <25>;
-        stop = <1>;
+        scale-div = <70>;
+        stop = <3>;
     };
 
     scroll_inertia_h: scroll_inertia_h {
@@ -85,7 +85,7 @@
         start = <18>;
         move = <36>;
         scale = <1>;
-        scale-div = <25>;
+        scale-div = <20>;
         stop = <1>;
     };
 };
