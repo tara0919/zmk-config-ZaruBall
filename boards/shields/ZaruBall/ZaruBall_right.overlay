@@ -40,7 +40,7 @@
                             &zip_x_scaler 0 1
                             &zip_xy_to_scroll_mapper
                             &scroll_inertia_v
-                            &zip_scroll_scaler 1 20
+                            &zip_scroll_scaler 1 25
         >;
     };
 
@@ -51,7 +51,7 @@
                             &zip_y_scaler 0 1
                             &zip_xy_to_scroll_mapper
                             &scroll_inertia_h
-                            &zip_scroll_scaler 1 20
+                            &zip_scroll_scaler 1 25
         >;
     };
 
@@ -70,10 +70,10 @@
         #input-processor-cells = <0>;
         axis = <1>;
         layer = <2>;
-        start = <24>;
-        move = <48>;
+        start = <18>;
+        move = <36>;
         scale = <1>;
-        scale-div = <20>;
+        scale-div = <25>;
         stop = <1>;
     };
 
@@ -82,10 +82,10 @@
         #input-processor-cells = <0>;
         axis = <2>;
         layer = <3>;
-        start = <24>;
-        move = <48>;
+        start = <18>;
+        move = <36>;
         scale = <1>;
-        scale-div = <20>;
+        scale-div = <25>;
         stop = <1>;
     };
 };
