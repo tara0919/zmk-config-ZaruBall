@@ -1,5 +1,6 @@
 #include "ZaruBall.dtsi"
 #include <dt-bindings/zmk/input_transform.h>
+#include <dt-bindings/zmk/keys.h>
 
 &xiao_serial { status = "disabled"; };
 
@@ -39,6 +40,7 @@
                             &zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)
                             &zip_x_scaler 0 1
                             &zip_xy_to_scroll_mapper
+                            &ime_on_scroll_activity
                             &scroll_inertia_v
                             &zip_scroll_scaler 1 50
         >;
@@ -65,6 +67,13 @@
 };
 
 / {
+    ime_on_scroll_activity: ime_on_scroll_activity {
+        compatible = "zmk,input-processor-ime-activity";
+        #input-processor-cells = <0>;
+        layer = <2>;
+        keycode = <LANGUAGE_1>;
+    };
+
     scroll_inertia_v: scroll_inertia_v {
         compatible = "zmk,input-processor-scroll-inertia";
         #input-processor-cells = <0>;

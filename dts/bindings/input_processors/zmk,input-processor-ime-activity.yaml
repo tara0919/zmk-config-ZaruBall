@@ -1,0 +1,14 @@
+description: Restore an IME keycode on the first relative input after layer activation
+
+compatible: "zmk,input-processor-ime-activity"
+
+include: ip_zero_param.yaml
+
+properties:
+  layer:
+    type: int
+    required: true
+
+  keycode:
+    type: int
+    required: true
