@@ -87,7 +87,7 @@
         compatible = "zmk,input-processor-temp-layer";
         #input-processor-cells = <2>;
         require-prior-idle-ms = <300>;
-        excluded-positions = <45 46 47>;
+        excluded-positions = <45>;
     };
 
     conditional_layers {
@@ -295,6 +295,24 @@
             bindings = <&raise_ime_hold>, <&kp>;
         };
 
+        lower_eisu: lower_eisu {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&lower_eisu_hold>, <&kp>;
+        };
+
+        nav_kana: nav_kana {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&kp>, <&kana_key>;
+        };
+
         numht: numht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -331,6 +349,21 @@
                 <&mo RAISE>,
                 <&macro_tap>,
                 <&kp JP_KANA>;
+        };
+
+        lower_eisu_hold: lower_eisu_hold {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings =
+                <&macro_press>,
+                <&mo LOWER>,
+                <&macro_tap>,
+                <&kp JP_EISU>,
+                <&macro_pause_for_release>,
+                <&macro_release>,
+                <&mo LOWER>;
         };
 
         // When in AML, move to default layer when key (except mouse button) pressed
@@ -457,6 +490,14 @@
             wait-ms = <10>;
             tap-ms = <10>;
             bindings = <&macro_tap &kp JP_EISU>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+        };
+
+        kana_key: kana_key {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings = <&macro_tap &kp JP_KANA>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
         };
 
         // 左クリック×2（ダブル左クリック）
@@ -656,6 +697,18 @@
             key-positions = <36 73>;
         };
 
+        combo_exclamation_aenter {
+            timeout-ms = <50>;
+            key-positions = <33 72>; // A + Enter
+            bindings = <&kp LS(N1)>;
+        };
+
+        combo_at_senter {
+            timeout-ms = <50>;
+            key-positions = <34 72>; // S + Enter
+            bindings = <&kp JP_AT>;
+        };
+
         combo_gesture {
             timeout-ms = <50>;
             key-positions = <45 47>; // J + L
@@ -678,9 +731,9 @@
             bindings = <
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
-&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &raise_ime 0 L  &lt SLOW MINUS  &kp SLASH
+&kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lower_eisu 0 K  &raise_ime 0 L  &lt SLOW MINUS  &kp SLASH
 &kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp LG(TAB)                &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
-&kp LEFT_WIN    &kp C_MUTE            &lt SLOW LS(LG(S))  &raise_ime 0 GRAVE  &lt LOWER ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &raise_ime 0 SPACE                                                      &jm_bslash
+&kp LEFT_WIN    &kp C_MUTE            &lt SLOW LS(LG(S))  &raise_ime 0 GRAVE  &lower_eisu 0 ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &raise_ime 0 SPACE                                                      &jm_bslash
             >;
         };
 
@@ -690,7 +743,7 @@
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans            &trans  &trans    &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &lt_mkp LOWER MB2  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &mkp MB1  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans    &trans  &trans  &trans    &trans  &trans  &trans  &trans
 &trans  &trans          &trans  &trans  &trans  &trans                                      &trans  &trans                                    &trans
             >;
@@ -701,8 +754,8 @@
             sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
             bindings = <
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
-&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
-&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &trans         &mt LG(LEFT) LEFT  &mt LG(DOWN) DOWN  &mt LG(RIGHT) RIGHT  &trans  &trans
+&trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &nav_kana LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
+&trans  &mt LC(NUMBER_1) LG(NUMBER_1)  &mt LC(NUMBER_2) LG(NUMBER_2)  &mt LC(NUMBER_3) LG(NUMBER_3)  &mt LC(NUMBER_4) LG(NUMBER_4)  &mt LC(NUMBER_5) LG(NUMBER_5)  &mt LC(NUMBER_6) LG(NUMBER_6)    &trans  &trans  &trans  &trans    &trans      &trans         &nav_kana LG(LEFT) LEFT  &nav_kana LG(DOWN) DOWN  &nav_kana LG(RIGHT) RIGHT  &trans  &trans
 &trans  &kp LA(NUMBER_1)               &kp LA(NUMBER_2)               &kp LA(NUMBER_3)               &kp LA(NUMBER_4)               &trans                         &trans                           &trans  &trans  &trans  &trans    &trans      &trans         &kp LG(LS(LEFT))   &trans             &kp LG(LS(RIGHT))    &trans  &trans
 &trans  &trans                                                        &trans                         &trans                         &trans                         &trans                                                             &mt LA(LC(DELETE)) DELETE  &kp LS(SPACE)                                                                     &trans
             >;
