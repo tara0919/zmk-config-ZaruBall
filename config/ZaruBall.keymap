@@ -313,6 +313,21 @@
             bindings = <&mo>, <&jm_minus>;
         };
 
+        amical_td: amical_td {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&mt LC(F13) F13>, <&kp LS(F13)>;
+        };
+
+        pa_strings: pa_strings {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&type_tara_base>, <&type_tara_dart2>;
+        };
+
         numht: numht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -631,13 +646,7 @@
         combo_tara_dart2 {
             timeout-ms = <50>;
             key-positions = <30 33>; // P + A
-            bindings = <&type_tara_dart2>;
-        };
-
-        combo_tara_base {
-            timeout-ms = <50>;
-            key-positions = <30 33 34>; // P + A + S
-            bindings = <&type_tara_base>;
+            bindings = <&pa_strings 0 0>;
         };
 
         combo_parens {
@@ -731,7 +740,7 @@
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
 &kp LEFT_SHIFT  &mt LC(A) A   &mt LC(S) S  &mt LC(D) D    &mt LEFT_ALT F   &kp G            &jm_lbkt        &kp KP_N1     &kp KP_N2  &kp KP_N3   &kp KP_MINUS       &jm_rbkt                   &mt LC(H) H      &kp J        &lt LOWER K  &raise_ime 0 L  &slow_minus SLOW 0  &kp SLASH
-&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &kp INSERT      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp LG(TAB)                &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
+&kp LCTRL       &mt LC(Z) Z   &mt LC(X) X  &mt LC(C) C    &mt LC(V) V      &mt LC(B) B      &amical_td      &kp KP_ENTER  &kp KP_N0  &kp KP_DOT  &kp KP_PLUS        &kp LG(TAB)                &mt LC(N) N      &kp M        &kp COMMA    &kp DOT      &jm_semi     &jm_sqt
 &kp LEFT_WIN    &kp C_MUTE            &lt SLOW LS(LG(S))  &raise_ime 0 GRAVE  &lt LOWER ENTER  &mt LEFT_SHIFT TAB                                                       &kp BACKSPACE              &raise_ime 0 SPACE                                                      &jm_bslash
             >;
         };
