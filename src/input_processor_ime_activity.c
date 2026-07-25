@@ -10,6 +10,7 @@
 #include <zephyr/input/input.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/sys/util.h>
 
 #include <drivers/input_processor.h>
 #include <zmk/behavior.h>
