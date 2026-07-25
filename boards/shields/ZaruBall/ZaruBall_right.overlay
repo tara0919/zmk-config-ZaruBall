@@ -90,7 +90,7 @@
         layer = <2>;
         start = <18>;
         move = <36>;
-        min-events = <5>;
+        min-events = <4>;
         scale = <1>;
         scale-div = <50>;
         stop = <2>;
@@ -103,7 +103,7 @@
         layer = <3>;
         start = <18>;
         move = <36>;
-        min-events = <5>;
+        min-events = <4>;
         scale = <1>;
         scale-div = <20>;
         stop = <1>;
