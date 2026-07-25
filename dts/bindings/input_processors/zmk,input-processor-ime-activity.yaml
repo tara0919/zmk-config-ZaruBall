@@ -16,11 +16,3 @@ properties:
   exit-keycode:
     type: int
     required: true
-
-  restore-delay-ms:
-    type: int
-    default: 40
-
-  ignored-positions:
-    type: array
-    required: true

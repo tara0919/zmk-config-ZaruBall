@@ -73,8 +73,6 @@
         layer = <2>;
         enter-keycode = <LANGUAGE_2>;
         exit-keycode = <LANGUAGE_1>;
-        restore-delay-ms = <40>;
-        ignored-positions = <46 72>;
     };
 
     scroll_inertia_v: scroll_inertia_v {
