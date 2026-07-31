@@ -704,7 +704,7 @@
 
         base_layer {
             display-name = "Base";
-            sensor-bindings = <&scroll_down_up>;
+            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
             bindings = <
 &kp ESCAPE      &numht F1 N1  &jm_n2       &numht F3 N3   &numht F4 N4     &numht F5 N5                     &kp KP_N7     &kp KP_N8  &kp KP_N9   &kp KP_DIVIDE                                 &jm_n6           &jm_n7       &jm_n8       &jm_n9       &jm_n0       &jm_sqt_tilde
 &kp LEFT_ALT    &kp Q         &mt LC(W) W  &kp E          &mt LC(R) R      &mt LC(T) T                      &kp KP_N4     &kp KP_N5  &kp KP_N6   &kp KP_MULTIPLY                               &mt LC(Y) Y      &mt LC(U) U  &mt LC(I) I  &kp O        &mt LC(P) P  &jm_equal
@@ -728,7 +728,7 @@
 
         lower_layer {
             display-name = "Lower";
-            sensor-bindings = <&inc_dec_kp LS(LEFT) LS(RIGHT)>;
+            sensor-bindings = <&inc_dec_kp LC(JP_PLUS) LC(MINUS)>;
             bindings = <
 &trans  &trans                         &trans                         &trans                         &trans                         &trans                                                          &trans  &trans  &trans  &trans                &trans         &trans             &trans             &trans               &trans  &trans
 &trans  &trans                         &kp LS(LC(TAB))                &kp LC(W)                      &kp LC(TAB)                    &kp LC(T)                                                       &trans  &trans  &trans  &trans                &trans         &kp LS(LEFT)       &mt LG(UP) UP      &kp LS(RIGHT)        &trans  &trans
